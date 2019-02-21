@@ -1,5 +1,7 @@
 package ictandroid.youtube.com.Profile;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -12,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import ictandroid.youtube.com.Profile.history.HistoryActivity;
 import ictandroid.youtube.com.R;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -54,8 +57,12 @@ public class ProfileActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_history:
+                startActivity(new Intent(ProfileActivity.this, HistoryActivity.class));
                 break;
             case R.id.rl_contacadmin:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:huynhquachphi12@gmail.com"));
+                startActivity(Intent.createChooser(emailIntent, "Send feedback"));
                 break;
             case R.id.tv_logout:
                 break;
