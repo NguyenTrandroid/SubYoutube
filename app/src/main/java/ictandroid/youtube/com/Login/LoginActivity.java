@@ -22,9 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
 
-import ictandroid.youtube.com.Activity.MainActivity;
+
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
+import ictandroid.youtube.com.MainActivity;
 import ictandroid.youtube.com.R;
 
 public class LoginActivity extends AppCompatActivity {

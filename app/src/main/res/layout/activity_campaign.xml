@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Campaign.CampaignActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:background="@color/red1">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp50"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:src="@drawable/ic_back" />
+
+        <ImageView
+            android:id="@+id/iv_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:src="@drawable/coin" />
+
+        <TextView
+            android:id="@+id/tv_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_toLeftOf="@id/iv_coin"
+            android:text="15,000"
+            android:textColor="#FFFF"
+            android:textSize="@dimen/sp20" />
+
+        <ImageView
+            android:src="#A5A1A1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp0.5"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_searchcamp"
+        android:background="@color/red1"
+        android:layout_below="@id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50">
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+

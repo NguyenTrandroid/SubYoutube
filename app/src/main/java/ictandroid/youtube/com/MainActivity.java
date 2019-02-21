@@ -1,5 +1,6 @@
 package ictandroid.youtube.com;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,9 @@ import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ictandroid.youtube.com.Campaign.CampaignActivity;
+import ictandroid.youtube.com.MyApp.MyAppActivity;
+import ictandroid.youtube.com.Profile.ProfileActivity;
 import ictandroid.youtube.com.Viewpager.OnPageSelect;
 import ictandroid.youtube.com.Viewpager.PagerAdapter;
 import ictandroid.youtube.com.Viewpager.ZoomOutPageTransformer;
@@ -48,10 +52,14 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     public void sendPageSelect(int page) {
         switch (page) {
             case 0:
+                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
                 break;
             case 1:
+                startActivity(new Intent(MainActivity.this, MyAppActivity.class));
                 break;
             case 2:
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
                 break;
         }
     }
