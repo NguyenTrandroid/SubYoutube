@@ -1,10 +1,9 @@
-package ictandroid.youtube.com;
+package ictandroid.youtube.com.Login;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -12,24 +11,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.functions.HttpsCallableResult;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import ictandroid.youtube.com.Activity.MainActivity;
+import ictandroid.youtube.com.CloudFunction;
+import ictandroid.youtube.com.ICloundFunction;
+import ictandroid.youtube.com.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         icAddNewUser= new ICloundFunction() {
             @Override
             public void onSuccess() {
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
             @Override
