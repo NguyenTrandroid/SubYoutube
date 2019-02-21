@@ -1,9 +1,17 @@
 package ictandroid.youtube.com.Login;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.CalendarView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,7 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     private ICloundFunction icAddNewUser;
     private ICloundFunction icAddUserSub;
     private CloudFunction cloudFunction;
-
+    private ImageView imageView;
+    private RelativeLayout relativeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,51 +54,69 @@ public class LoginActivity extends AppCompatActivity {
         /**
          *
          */
-        cloudFunction= new CloudFunction();
-        icAddNewUser= new ICloundFunction() {
-            @Override
-            public void onSuccess() {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            }
-
-            @Override
-            public void onFailed() {
-                Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
-            }
-        };
-        icAddUserSub = new ICloundFunction() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailed() {
-
-                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
-            }
-        };
-        /**
-         *
-         */
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        mFunctions = FirebaseFunctions.getInstance();
-//        signOut();
-        if(auth!=null){
-            cloudFunction.addUserSub("adsasdasd",icAddUserSub);
-            kiemtrakhoitao();
-        }else{
-            signIn();
-        }
+        initView();
+//        cloudFunction= new CloudFunction();
+//        icAddNewUser= new ICloundFunction() {
+//            @Override
+//            public void onSuccess() {
+//                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//                Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        icAddUserSub = new ICloundFunction() {
+//            @Override
+//            public void onSuccess() {
+//                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//
+//                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        /**
+//         *
+//         */
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//        // [END config_signin]
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        auth = FirebaseAuth.getInstance();
+//        db = FirebaseFirestore.getInstance();
+//        mFunctions = FirebaseFunctions.getInstance();
+////        signOut();
+//        if(auth!=null){
+//            cloudFunction.addUserSub("adsasdasd",icAddUserSub);
+//            kiemtrakhoitao();
+//        }else{
+//            signIn();
+//        }
 
     }
+
+    private void initView() {
+        imageView = findViewById(R.id.iv_login);
+        relativeLayout = findViewById(R.id.rl_login);
+        Animation animation = AnimationUtils.loadAnimation(this,R.anim.animation);
+        imageView.setAnimation(animation);
+        CountDownTimer countDownTimer = new CountDownTimer(4000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
+        }.start();
+    }
+
     private void kiemtrakhoitao() {
         db.collection("USER").document(auth.getUid())
                 .get().addOnFailureListener(new OnFailureListener() {
@@ -184,6 +211,14 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    public void logIn(View view) {
+        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+    }
+
+    public void signUp(View view) {
+        startActivity(new Intent(LoginActivity.this,MainActivity.class));
     }
 //    private void kiemtra() {
 //        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());

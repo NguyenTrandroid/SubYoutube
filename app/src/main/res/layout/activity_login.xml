@@ -1,9 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login.LoginActivity">
-
-</android.support.constraint.ConstraintLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Login.LoginActivity"
+    android:background="@drawable/background">
+    <ImageView
+        android:id="@+id/iv_login"
+        android:layout_marginTop="@dimen/dp140"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo"
+        android:layout_width="@dimen/dp140"
+        android:layout_height="@dimen/dp140" />
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_login"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp100">
+        <android.support.v7.widget.CardView
+            android:onClick="logIn"
+            android:id="@+id/cv_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            app:cardBackgroundColor="@color/redd"
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_marginRight="@dimen/dp30"
+            app:cardCornerRadius="@dimen/dp5"
+            >
+            <TextView
+                android:textAllCaps="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/avant_garde"
+                android:text="log in viva google account"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp18" />
+        </android.support.v7.widget.CardView>
+        <RelativeLayout
+            android:id="@+id/rl_signup"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/cv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_signup"
+                android:fontFamily="@font/avant_garde"
+                android:textSize="@dimen/dp18"
+                android:textColor="@color/textred"
+                android:text="Don't have an account?"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:onClick="signUp"
+                android:layout_toRightOf="@id/tv_signup"
+                android:textColor="@color/white"
+                android:fontFamily="@font/avant_garde"
+                android:textSize="@dimen/dp18"
+                android:text="Sign Up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
