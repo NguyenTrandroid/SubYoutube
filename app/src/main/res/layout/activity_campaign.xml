@@ -41,21 +41,55 @@
             android:textSize="@dimen/sp20" />
 
         <ImageView
-            android:src="#A5A1A1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp0.5"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:src="#A5A1A1" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_searchcamp"
-        android:background="@color/red1"
-        android:layout_below="@id/rl_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp50">
+        android:layout_height="@dimen/dp50"
+        android:layout_below="@id/rl_toolbar"
+        android:background="@color/red1"></RelativeLayout>
 
-        </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        app:tabSelectedTextColor="#fff"
+        android:background="@color/red"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:layout_alignParentBottom="true">
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TẤT CẢ KÊNH" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="KÊNH CỦA TÔI" />
 
 
-    </RelativeLayout>
+
+    </android.support.design.widget.TabLayout>
+    <ImageView
+        android:layout_marginBottom="@dimen/dp7"
+        android:src="@color/gray"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="@dimen/dp2"
+        android:layout_height="@dimen/dp35" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_below="@id/rl_searchcamp"
+        android:layout_above="@id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+
+</RelativeLayout>
 
 
