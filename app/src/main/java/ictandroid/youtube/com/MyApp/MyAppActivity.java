@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ictandroid.youtube.com.Campaign.PagerAdapter;
 import ictandroid.youtube.com.R;
 
 public class MyAppActivity extends AppCompatActivity {
@@ -34,8 +33,8 @@ public class MyAppActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewpager.setAdapter(pagerAdapter);
+        PagerMyAppAdapter pagerMyAppAdapter = new PagerMyAppAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewpager.setAdapter(pagerMyAppAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

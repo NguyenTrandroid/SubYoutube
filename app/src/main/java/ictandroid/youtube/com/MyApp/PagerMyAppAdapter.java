@@ -4,16 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import ictandroid.youtube.com.Campaign.AllChannel.FragmentAllChannel;
-import ictandroid.youtube.com.Campaign.MyChannel.FragmentMyChannel;
 import ictandroid.youtube.com.MyApp.InCampaign.FragmentInCampaign;
 import ictandroid.youtube.com.MyApp.Other.FragmentOther;
 
-;
 
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerMyAppAdapter extends FragmentPagerAdapter {
     private int numOfTabs;
-    public PagerAdapter(FragmentManager fm, int numOfTabs) {
+    public PagerMyAppAdapter(FragmentManager fm, int numOfTabs) {
         super(fm);
         this.numOfTabs = numOfTabs;
     }

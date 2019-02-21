@@ -45,8 +45,8 @@ public class CampaignActivity extends AppCompatActivity {
     }
 
     private void InitViewPager() {
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewpager.setAdapter(pagerAdapter);
+        PagerCampaignAdapter pagerCampaignAdapter = new PagerCampaignAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewpager.setAdapter(pagerCampaignAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
