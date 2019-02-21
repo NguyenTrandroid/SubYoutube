@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     ViewPager viewPager;
     @BindView(R.id.dots_indicator)
     WormDotsIndicator dotsIndicator;
+    CloudFunction cloudFunction;
 
 
     @Override
@@ -35,6 +37,19 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
+//        cloudFunction = new CloudFunction();
+//        cloudFunction.addPointMyChannel("nhat2", 40, new ICloundFunction() {
+//            @Override
+//            public void onSuccess() {
+//                Toast.makeText(MainActivity.this, "add point success", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//                Toast.makeText(MainActivity.this, "add point fail", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
     }
 
