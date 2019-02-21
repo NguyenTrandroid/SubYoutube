@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "414566880411",
+    "firebase_url": "https://youtobe-3f914.firebaseio.com",
+    "project_id": "youtobe-3f914",
+    "storage_bucket": "youtobe-3f914.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414566880411:android:77936907e889b1c3",
+        "android_client_info": {
+          "package_name": "ictandroid.youtube.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414566880411-iagj1udd21k2uguned5hbkpaosq9m9nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "91c102f025afee76f088c53bbf21baf9e4513fb7"
+          }
+        },
+        {
+          "client_id": "414566880411-8kkhuog1mdl1nj7ab4tjjvt3j6ern9d9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz218wd-KaxTurRr5hr1FR9_V0j-0JLzc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414566880411-8kkhuog1mdl1nj7ab4tjjvt3j6ern9d9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

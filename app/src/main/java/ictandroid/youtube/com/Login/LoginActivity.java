@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFunctions mFunctions;
     private GoogleSignInClient mGoogleSignInClient;
     private ICloundFunction icAddNewUser;
+    private ICloundFunction icAddUserSub;
     private CloudFunction cloudFunction;
 
     @Override
@@ -56,6 +57,18 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
             }
         };
+        icAddUserSub = new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed() {
+
+                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
+            }
+        };
         /**
          *
          */
@@ -70,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         mFunctions = FirebaseFunctions.getInstance();
 //        signOut();
         if(auth!=null){
+            cloudFunction.addUserSub("adsasdasd",icAddUserSub);
             kiemtrakhoitao();
         }else{
             signIn();
