@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginBottom="@dimen/dp1"
+        app:cardElevation="@dimen/dp3">
+
+        <RelativeLayout
+            android:padding="@dimen/dp15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_avatarChanel"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="@dimen/dp60"
+                android:src="@drawable/aa" />
+            <RelativeLayout
+                android:layout_marginLeft="@dimen/dp15"
+                android:id="@+id/rl_infoChanel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/iv_avatarChanel">
+                <TextView
+                    android:textColor="@color/red1"
+                    android:textSize="@dimen/dp20"
+                    android:singleLine="true"
+                    android:id="@+id/tv_nameChanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avant_garde"
+                    android:text="Sang Đẹp Trai"/>
+
+                <TextView
+                    android:textSize="@dimen/dp14"
+                    android:singleLine="true"
+                    android:id="@+id/tv_subscribers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_nameChanel"
+                    android:fontFamily="@font/avant_garde"
+                    android:text="100000000 subscribers" />
+            </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_bellV"
+                android:layout_width="@dimen/dp25"
+                android:layout_height="@dimen/dp25"
+                android:layout_below="@id/rl_infoChanel"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/bell"
+                android:visibility="gone" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_remove"
+                android:layout_width="@dimen/dp25"
+                android:layout_height="@dimen/dp25"
+                android:layout_below="@id/rl_infoChanel"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/cancel" />
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/dp5"
+                android:id="@+id/iv_edit"
+                android:layout_width="@dimen/dp25"
+                android:layout_height="@dimen/dp25"
+                android:layout_below="@id/rl_infoChanel"
+                android:layout_toLeftOf="@id/iv_remove"
+                android:src="@drawable/expand" />
+
+            <ImageView
+                android:id="@+id/iv_bellD"
+                android:layout_width="@dimen/dp25"
+                android:layout_height="@dimen/dp25"
+                android:layout_below="@id/rl_infoChanel"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/Group"
+                android:visibility="gone" />
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_bellX"
+                android:layout_width="@dimen/dp25"
+                android:layout_height="@dimen/dp25"
+                android:layout_below="@id/rl_infoChanel"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_campaign" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
