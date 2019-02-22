@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ public class CampaignActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
+    @BindView(R.id.svCamp)
+    SearchView svCamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,11 @@ public class CampaignActivity extends AppCompatActivity {
     }
 
     private void init() {
+        svCamp.setQueryHint(Html.fromHtml("<font color = #ffffff>" + "Find a chanel..." + "</font>"));
+        svCamp.onActionViewExpanded();
+        svCamp.setFocusable(false);
+        svCamp.clearFocus();
+
 
 
     }
@@ -52,9 +61,9 @@ public class CampaignActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewpager.setCurrentItem(tab.getPosition());
                 if (tab.getPosition() == 1) {
-                   // tabSeclec = 1;
+                    // tabSeclec = 1;
                 } else {
-                   // tabSeclec = 0;
+                    // tabSeclec = 0;
                 }
             }
 
