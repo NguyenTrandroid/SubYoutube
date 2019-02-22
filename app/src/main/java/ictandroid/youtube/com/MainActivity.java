@@ -36,19 +36,21 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
-//        cloudFunction = new CloudFunction();
-//        cloudFunction.addPointMyChannel("nhat2", -40, new ICloundFunction() {
-//            @Override
-//            public void onSuccess() {
-//                Toast.makeText(MainActivity.this, "add point success", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//                Toast.makeText(MainActivity.this, "add point fail", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
+        cloudFunction = new CloudFunction();
+        cloudFunction.addChannel("UCejGjkkZ1y_WeI3fX87eD_Q","https://yt3.ggpht.com/a-/AAuE7mB-dmJKMzvpYGrDWmoqKG43inAga8M1TDzHdA=s288-mo-c-c0xffffffff-rj-k-no","nhattran","20","1");
+////        cloudFunction = new CloudFunction();
+////        cloudFunction.addPointMyChannel("nhat2", -40, new ICloundFunction() {
+////            @Override
+////            public void onSuccess() {
+////                Toast.makeText(MainActivity.this, "add point success", Toast.LENGTH_SHORT).show();
+////            }
+////
+////            @Override
+////            public void onFailed() {
+////                Toast.makeText(MainActivity.this, "add point fail", Toast.LENGTH_SHORT).show();
+////
+////            }
+////        });
 //        Intent intent;
 //        String url ="http://www.youtube.com/channel/UC_SJaHSpmDQYqoZQAnH8XNQ";
 //        try {

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,10 +27,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.functions.FirebaseFunctions;
 
+
+import javax.annotation.Nullable;
 
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
@@ -47,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
     private CloudFunction cloudFunction;
     private ImageView imageView;
     private RelativeLayout relativeLayout;
+    public static int userpoint =0;
+    public static String username="username";
+    public static String useravt="avt";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,21 +108,26 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         imageView = findViewById(R.id.iv_login);
         relativeLayout = findViewById(R.id.rl_login);
-        Animation animation = AnimationUtils.loadAnimation(this,R.anim.animation);
-        imageView.setAnimation(animation);
-        CountDownTimer countDownTimer = new CountDownTimer(4000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-            @Override
-            public void onFinish() {
-                if(auth.getCurrentUser()!=null){
-                    kiemtrakhoitao();
-                }else{
-                    relativeLayout.setVisibility(View.VISIBLE);
+        if(getIntent().getStringExtra("action")!=null){
+                relativeLayout.setVisibility(View.VISIBLE);
+        }else {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
+            imageView.setAnimation(animation);
+            CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
                 }
-            }
-        }.start();
+
+                @Override
+                public void onFinish() {
+                    if (auth.getCurrentUser() != null) {
+                        kiemtrakhoitao();
+                    } else {
+                        relativeLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }.start();
+        }
     }
 
     private void kiemtrakhoitao() {
@@ -128,8 +142,9 @@ public class LoginActivity extends AppCompatActivity {
                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                          if (task.isSuccessful()) {
                                              if (task.getResult().exists()) {
+                                                 kiemtrataikhoan();
                                                  startActivity(new Intent(LoginActivity.this,MainActivity.class));
-
+                                                    finish();
                                              }else {
                                                  cloudFunction.addNewUser(icAddNewUser);
                                              }
@@ -143,6 +158,29 @@ public class LoginActivity extends AppCompatActivity {
 
                                  }
         );
+    }
+    private void kiemtrataikhoan() {
+        DocumentReference reference = db.collection("USER").document(auth.getUid());
+        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        if (Integer.parseInt(String.valueOf(documentSnapshot.get("enable"))) == 0) {
+                            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("action","account disable");
+                            Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
+//                            finishAffinity();
+                            startActivity(intent);
+                            finish();
+                        }
+                        userpoint=Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
+                        username=String.valueOf(documentSnapshot.get("name"));
+                        useravt=String.valueOf(documentSnapshot.get("Linkavt"));
+
+                    }
+            }
+        });
     }
 
     @Override

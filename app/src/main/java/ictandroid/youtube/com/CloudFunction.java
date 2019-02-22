@@ -84,6 +84,17 @@ public class CloudFunction {
                     }
                 });
     }
+    public Task<String> addPointUser(int Point) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("points",Point);
+        return mFunctions
+                .getHttpsCallable("addPoint")
+                .call(data)
+                .addOnSuccessListener(httpsCallableResult -> {
+                })
+                .addOnFailureListener(e -> {
+                }).continueWith(task -> null);
+    }
     public Task<String> addPointChannel(String channelid,int Point, final ICloundFunction iCloundFunction) {
         // Create the arguments to the callable function.
         /**
@@ -95,24 +106,12 @@ public class CloudFunction {
         return mFunctions
                 .getHttpsCallable("addPointChannel")
                 .call(data)
-                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-                    @Override
-                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                        Log.d("tesss","success");
-                        iCloundFunction.onSuccess();
-                    }
+                .addOnSuccessListener(httpsCallableResult -> {
+                    Log.d("tesss","success");
+                    iCloundFunction.onSuccess();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        iCloundFunction.onFailed();
-                    }
-                }).continueWith(new Continuation<HttpsCallableResult, String>() {
-                    @Override
-                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        return null;
-                    }
-                });
+                .addOnFailureListener(e -> iCloundFunction.onFailed())
+                .continueWith(task -> null);
     }
     public Task<String> addPointMyChannel(String channelid,int Point, final ICloundFunction iCloundFunction) {
         // Create the arguments to the callable function.
@@ -183,10 +182,10 @@ public class CloudFunction {
         Map<String,Object> data = new HashMap<>();
         data.put("channelid",channelid);
         data.put("linkanh",linkanh);
-        data.put("tenchannel",channelid);
+        data.put("tenchannel",tenchannel);
         data.put("points",point);
         data.put("douutien",douutien);
-        data.put("time",System.currentTimeMillis());
+        data.put("time",System.currentTimeMillis()+"");
         data.put("userid",auth.getCurrentUser().getUid());
         return mFunctions
                 .getHttpsCallable("addChannelList")
@@ -212,7 +211,7 @@ public class CloudFunction {
         Map<String,Object> data = new HashMap<>();
         data.put("channelid",channelid);
         data.put("linkanh",linkanh);
-        data.put("tenchannel",channelid);
+        data.put("tenchannel",tenchannel);
         data.put("points",point);
         return mFunctions
                 .getHttpsCallable("addChannelUser")
