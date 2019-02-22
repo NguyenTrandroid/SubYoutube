@@ -174,14 +174,16 @@ public class CloudFunction {
                     }
                 });
     }
-    public void addChannel(String channelid,String point,String douutien){
-        addChannelList(channelid,point,douutien);
-        addChannelUser(channelid,point);
+    public void addChannel(String channelid,String linkanh,String tenchannel,String point,String douutien){
+        addChannelList(channelid,linkanh,tenchannel,point,douutien);
+        addChannelUser(channelid,linkanh,tenchannel,point);
     }
-    public Task<String> addChannelList(String channelid,String point,String douutien) {
+    public Task<String> addChannelList(String channelid,String linkanh,String tenchannel,String point,String douutien) {
         // Create the arguments to the callable function.
         Map<String,Object> data = new HashMap<>();
         data.put("channelid",channelid);
+        data.put("linkanh",linkanh);
+        data.put("tenchannel",channelid);
         data.put("points",point);
         data.put("douutien",douutien);
         data.put("time",System.currentTimeMillis());
@@ -205,10 +207,12 @@ public class CloudFunction {
                     }
                 });
     }
-    public Task<String> addChannelUser(String channelid,String point) {
+    public Task<String> addChannelUser(String channelid,String linkanh,String tenchannel,String point) {
         // Create the arguments to the callable function.
         Map<String,Object> data = new HashMap<>();
         data.put("channelid",channelid);
+        data.put("linkanh",linkanh);
+        data.put("tenchannel",channelid);
         data.put("points",point);
         return mFunctions
                 .getHttpsCallable("addChannelUser")

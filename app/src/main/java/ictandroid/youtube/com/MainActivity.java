@@ -1,6 +1,8 @@
 package ictandroid.youtube.com;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,13 +10,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
+
+import org.reactivestreams.Subscription;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ictandroid.youtube.com.Campaign.CampaignActivity;
 import ictandroid.youtube.com.MyApp.MyAppActivity;
 import ictandroid.youtube.com.Profile.ProfileActivity;
+import ictandroid.youtube.com.Utils.GetData.Models.ResourceId;
 import ictandroid.youtube.com.Viewpager.OnPageSelect;
 import ictandroid.youtube.com.Viewpager.PagerAdapter;
 import ictandroid.youtube.com.Viewpager.ZoomOutPageTransformer;
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
         ButterKnife.bind(this);
         init();
 //        cloudFunction = new CloudFunction();
-//        cloudFunction.addPointMyChannel("nhat2", 40, new ICloundFunction() {
+//        cloudFunction.addPointMyChannel("nhat2", -40, new ICloundFunction() {
 //            @Override
 //            public void onSuccess() {
 //                Toast.makeText(MainActivity.this, "add point success", Toast.LENGTH_SHORT).show();
@@ -50,6 +58,18 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
 //
 //            }
 //        });
+//        Intent intent;
+//        String url ="http://www.youtube.com/channel/UC_SJaHSpmDQYqoZQAnH8XNQ";
+//        try {
+//            intent =new Intent(Intent.ACTION_VIEW);
+//            intent.setPackage("com.google.android.youtube");
+//            intent.setData(Uri.parse(url));
+//            startActivity(intent);
+//        } catch (ActivityNotFoundException e) {
+//            intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(url));
+//            startActivity(intent);
+//        }
 
     }
 
