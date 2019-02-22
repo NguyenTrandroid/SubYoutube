@@ -10,7 +10,7 @@
         android:id="@+id/iv_login"
         android:layout_marginTop="@dimen/dp140"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo"
+        app:srcCompat="@drawable/ic_yt"
         android:layout_width="@dimen/dp140"
         android:layout_height="@dimen/dp140" />
     <RelativeLayout
