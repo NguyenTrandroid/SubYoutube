@@ -12,7 +12,8 @@ import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestInfoChanel;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestListSub;
-import ictandroid.youtube.com.Utils.GetData.Models.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -25,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataChannel {
     private CompositeDisposable compositeDisposable;
     private ChanelItem chanelItem;
+    private SubItem subItem;
     private Context context;
     GetInfoChanelListener getInfoChanelListener;
     GetListSubListener getListSubListener;
@@ -60,6 +62,7 @@ public class DataChannel {
     {
         compositeDisposable = new CompositeDisposable();
         chanelItem = new ChanelItem();
+        subItem = new SubItem();
         this.context = context;
 
         getListSubListener = (GetListSubListener) context;
@@ -87,9 +90,9 @@ public class DataChannel {
     private void successGetListSub() {
         Log.d("GETLISTSUB","COMPLETED");
     }
-    private void responseGetListSub(ChanelItem itemChanel) {
-        chanelItem = itemChanel;
-        getListSubListener.onSubCompleted(chanelItem);
+    private void responseGetListSub(SubItem itemSub) {
+        subItem = itemSub;
+        getListSubListener.onSubCompleted(subItem);
 
     }
     private void errorGetListSub(Throwable error) {

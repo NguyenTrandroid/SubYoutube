@@ -1,6 +1,6 @@
 package ictandroid.youtube.com.Utils.GetData.Interface;
 
-import ictandroid.youtube.com.Utils.GetData.Models.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 
 public interface GetInfoChanelListener {
     void onInfoCompleted(ChanelItem chanelItem);

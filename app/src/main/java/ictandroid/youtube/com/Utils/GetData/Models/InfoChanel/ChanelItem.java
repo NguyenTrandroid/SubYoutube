@@ -1,4 +1,4 @@
-package ictandroid.youtube.com.Utils.GetData.Models;
+package ictandroid.youtube.com.Utils.GetData.Models.InfoChanel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

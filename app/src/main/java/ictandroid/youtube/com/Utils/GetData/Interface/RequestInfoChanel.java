@@ -1,6 +1,6 @@
 package ictandroid.youtube.com.Utils.GetData.Interface;
 
-import ictandroid.youtube.com.Utils.GetData.Models.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

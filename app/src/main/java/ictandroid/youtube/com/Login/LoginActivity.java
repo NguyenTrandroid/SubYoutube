@@ -82,22 +82,17 @@ public class LoginActivity extends AppCompatActivity {
 //        /**
 //         *
 //         */
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//        // [END config_signin]
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-//        auth = FirebaseAuth.getInstance();
-//        db = FirebaseFirestore.getInstance();
-//        mFunctions = FirebaseFunctions.getInstance();
-////        signOut();
-//        if(auth!=null){
-//            cloudFunction.addUserSub("adsasdasd",icAddUserSub);
-//            kiemtrakhoitao();
-//        }else{
-//            signIn();
-//        }
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
+//        signOut();
+
 
     }
 
@@ -112,7 +107,11 @@ public class LoginActivity extends AppCompatActivity {
             }
             @Override
             public void onFinish() {
-                relativeLayout.setVisibility(View.VISIBLE);
+                if(auth.getCurrentUser()!=null){
+                    kiemtrakhoitao();
+                }else{
+                    relativeLayout.setVisibility(View.VISIBLE);
+                }
             }
         }.start();
     }
@@ -214,7 +213,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void logIn(View view) {
-        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        signIn();
+//        startActivity(new Intent(LoginActivity.this,MainActivity.class));
     }
 
     public void signUp(View view) {

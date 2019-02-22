@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
         ButterKnife.bind(this);
         init();
 //        cloudFunction = new CloudFunction();
-//        cloudFunction.addPointMyChannel("nhat2", 40, new ICloundFunction() {
+//        cloudFunction.addPointMyChannel("nhat2", -40, new ICloundFunction() {
 //            @Override
 //            public void onSuccess() {
 //                Toast.makeText(MainActivity.this, "add point success", Toast.LENGTH_SHORT).show();
@@ -50,6 +49,18 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
 //
 //            }
 //        });
+//        Intent intent;
+//        String url ="http://www.youtube.com/channel/UC_SJaHSpmDQYqoZQAnH8XNQ";
+//        try {
+//            intent =new Intent(Intent.ACTION_VIEW);
+//            intent.setPackage("com.google.android.youtube");
+//            intent.setData(Uri.parse(url));
+//            startActivity(intent);
+//        } catch (ActivityNotFoundException e) {
+//            intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(url));
+//            startActivity(intent);
+//        }
 
     }
 
