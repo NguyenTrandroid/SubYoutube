@@ -10,15 +10,31 @@
         android:layout_width="@dimen/dp200"
         android:layout_height="wrap_content">
         <TextView
-            android:gravity="center"
             android:textColor="@color/red"
             android:textSize="@dimen/dp12"
             android:layout_marginTop="@dimen/dp10"
             android:layout_gravity="center"
             android:textAllCaps="true"
-            android:text="Gỡ bỏ kênh"
-            android:layout_width="@dimen/dp100"
+            android:text="Thêm kênh"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <TextView
+            android:textSize="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_gravity="center"
+            android:text="Địa chỉ kênh:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_marginTop="@dimen/dp3"
+            android:id="@+id/ed_input"
+            android:layout_width="@dimen/dp150"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/custom_button_black"
+            android:fontFamily="@font/avant_garde"
+            android:gravity="center" />
+
         <LinearLayout
             android:layout_marginBottom="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
@@ -34,7 +50,7 @@
                 android:layout_height="@dimen/dp20"
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="CÓ"
+                android:text="OK"
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 

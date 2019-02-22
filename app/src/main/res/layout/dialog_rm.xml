@@ -16,7 +16,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:layout_gravity="center"
             android:textAllCaps="true"
-            android:text="Gỡ bỏ kênh"
+            android:text="Gỡ bỏ kênh ra khỏi chiến dịch"
             android:layout_width="@dimen/dp100"
             android:layout_height="wrap_content" />
         <LinearLayout
