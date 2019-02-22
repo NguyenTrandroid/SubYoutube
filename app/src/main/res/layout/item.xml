@@ -80,7 +80,7 @@
                 android:layout_height="@dimen/dp25"
                 android:layout_below="@id/rl_infoChanel"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/Group"
+                android:src="@drawable/group"
                 android:visibility="gone" />
             <ImageView
                 android:visibility="gone"
