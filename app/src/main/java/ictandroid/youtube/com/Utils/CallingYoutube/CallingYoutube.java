@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -26,6 +27,7 @@ import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.Subscription;
 import com.google.api.services.youtube.model.SubscriptionListResponse;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -101,7 +103,8 @@ public class CallingYoutube {
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                getChannelFromApi();
+//                getChannelFromApi();
+                checkSubscriberFromApi(idChannel);
             } else {
                 activity.startActivityForResult(
                         mCredential.newChooseAccountIntent(),
@@ -227,6 +230,7 @@ public class CallingYoutube {
             }
         }
 
+
         private void checkSubscriber() throws IOException {
             SubscriptionListResponse result = mService.subscriptions().list("id")
                     .setMine(true)
@@ -239,7 +243,7 @@ public class CallingYoutube {
             }
             else
             {
-                getResultApiListener.onCheckSub(false);
+                getResultApiListener.onCheckSub(true);
             }
         }
 
