@@ -24,14 +24,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ictandroid.youtube.com.Campaign.AdapterChanel;
+import ictandroid.youtube.com.Campaign.AllChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
 
 public class FragmentAllChannel extends Fragment {
     View view;
     RecyclerView recyclerView;
-    AdapterChanel adapterChanel;
+    AllChanelAdapter allChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
     ArrayList<String> myapp = new ArrayList<>();
@@ -94,14 +94,11 @@ public class FragmentAllChannel extends Fragment {
                                 return itemApp.getNameChanel().compareTo(t1.getNameChanel());
                             }
                         });
-                        for (int i = 0; i <appArrayListAllChanel.size() ; i++) {
-                            Log.d("AAA", "AdapterChanel: "+appArrayListAllChanel.get(i).getNameChanel());
-                        }
-                        adapterChanel = new AdapterChanel(getContext(),appArrayListAllChanel);
+                        allChanelAdapter = new AllChanelAdapter(getContext(),appArrayListAllChanel);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        adapterChanel.notifyDataSetChanged();
-                        recyclerView.setAdapter(adapterChanel);
+                        allChanelAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(allChanelAdapter);
                     }
                 } catch (Exception s) {
 
