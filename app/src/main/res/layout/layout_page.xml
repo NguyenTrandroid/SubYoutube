@@ -28,7 +28,7 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_marginTop="@dimen/dp35"
+            android:layout_marginTop="@dimen/dp60"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -46,10 +46,10 @@
             android:textColor="@color/gray"
             android:layout_marginTop="@dimen/dp20"
             android:gravity="center"
-            android:textSize="@dimen/sp17"
+            android:textSize="@dimen/sp20"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/tv_name"
-            android:layout_width="@dimen/dp170"
+            android:layout_width="@dimen/dp190"
             android:layout_height="wrap_content" />
 
 
