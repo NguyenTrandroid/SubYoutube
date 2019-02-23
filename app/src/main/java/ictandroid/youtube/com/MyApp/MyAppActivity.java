@@ -11,11 +11,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ictandroid.youtube.com.CloudFunction;
+import ictandroid.youtube.com.Dialog.SLoading;
+import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.R;
 
-public class MyAppActivity extends AppCompatActivity {
+public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -27,6 +32,9 @@ public class MyAppActivity extends AppCompatActivity {
     ViewPager viewpager;
     @BindView(R.id.svMyapp)
     SearchView svMyapp;
+    CloudFunction cloudFunction;
+    FirebaseAuth auth;
+    SLoading sEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,9 @@ public class MyAppActivity extends AppCompatActivity {
         init();
         initViewPager();
         initAction();
+        cloudFunction= new CloudFunction();
+        auth = FirebaseAuth.getInstance();
+        sEdit = new SLoading(this);
     }
 
     private void initViewPager() {
@@ -77,5 +88,37 @@ public class MyAppActivity extends AppCompatActivity {
     }
     public void backvip(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void delete(String channelid) {
+        sEdit.show();
+        cloudFunction.removeMyChannel(channelid, new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                sEdit.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+                sEdit.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void addpoint(String channelid, int point) {
+        sEdit.show();
+        cloudFunction.addPointMyChannel(channelid, point, new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                sEdit.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+                sEdit.dismiss();
+            }
+        });
     }
 }

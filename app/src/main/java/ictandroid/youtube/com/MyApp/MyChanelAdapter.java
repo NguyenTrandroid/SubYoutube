@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import ictandroid.youtube.com.Campaign.ItemChanel;
+import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.R;
 
 public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHolder>  {
@@ -29,8 +30,10 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
     Dialog dialogRemove;
     Dialog dialogEdit;
     Dialog dialogAdd;
+    MyChannelInterface myChannelInterface;
     public MyChanelAdapter(Context context, ArrayList<ItemMyChanel> arrayList) {
         this.context = context;
+        myChannelInterface = (MyChannelInterface) context;
         this.arrayList = arrayList;
     }
 
@@ -105,6 +108,8 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          *gõ bỏ kênh
                          */
+                        myChannelInterface.delete(itemChanel.getChanelId());
+                        dialogRemove.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -161,8 +166,8 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          *cộng điểm
                          */
-                        tvDiem.setText("+");
-                    }
+                        tvDiem.setText("+"+Integer.parseInt(tvDiem.getText().toString())+1);
+                          }
                 });
                 ivTru.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -170,7 +175,8 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          *trừ điểm
                          */
-                        tvDiem.setText("-");
+                        tvDiem.setText("-"+Integer.parseInt(tvDiem.getText().toString())+1);
+
                     }
                 });
                 btOk.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +185,8 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          *cập nhật điểm
                          */
+                        myChannelInterface.addpoint(itemChanel.getChanelId(),Integer.parseInt(tvDiem.getText().toString()));
+                        dialogEdit.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +240,8 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          * đưa app vào chiến dịch
                          */
+                        myChannelInterface.addpoint(itemChanel.getChanelId(),Integer.parseInt(tvDiem.getText().toString()));
+                        dialogAdd.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -289,5 +299,9 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
             ivChienDich = itemView.findViewById(R.id.iv_bellX);
             rlCarView = itemView.findViewById(R.id.rl_item);
         }
+    }
+    public interface MyChannelInterface{
+        void delete(String channelid);
+        void addpoint(String channelid,int point);
     }
 }

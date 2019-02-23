@@ -176,6 +176,35 @@ public class CloudFunction {
                     }
                 });
     }
+    public Task<String> removeMyChannel(String channelid, final ICloundFunction iCloundFunction) {
+        // Create the arguments to the callable function.
+        /**
+         * Remove point trong myChannel
+         */
+        Map<String,Object> data = new HashMap<>();
+        data.put("channelid",channelid);
+        return mFunctions
+                .getHttpsCallable("removeMyChannel")
+                .call(data)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        Log.d("tesss","success");
+                        iCloundFunction.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        iCloundFunction.onFailed();
+                    }
+                }).continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        return null;
+                    }
+                });
+    }
     public void addChannel(String channelid,String linkanh,String tenchannel,String point,String douutien){
         addChannelList(channelid,linkanh,tenchannel,point,douutien);
         addChannelUser(channelid,linkanh,tenchannel,point);

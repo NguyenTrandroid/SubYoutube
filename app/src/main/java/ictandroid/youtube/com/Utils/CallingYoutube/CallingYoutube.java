@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -43,7 +44,7 @@ public class CallingYoutube {
     GetResultApiListener getResultApiListener;
     private String idChannel;
     //
-    private GoogleAccountCredential mCredential;
+    public static GoogleAccountCredential mCredential;
     private final int REQUEST_ACCOUNT_PICKER = 1000;
     private final int REQUEST_AUTHORIZATION = 1001;
     private final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -57,6 +58,11 @@ public class CallingYoutube {
         mCredential = GoogleAccountCredential.usingOAuth2(
                 activity, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+        sLoading = new SLoading(activity);
+        getResultApiListener = (GetResultApiListener) activity;
+    }
+    public CallingYoutube(Activity activity,int a) {
+        this.activity = activity;
         sLoading = new SLoading(activity);
         getResultApiListener = (GetResultApiListener) activity;
     }
@@ -97,21 +103,21 @@ public class CallingYoutube {
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
+        Log.d("checkpermisss", "chooseAccount: ");
         if (EasyPermissions.hasPermissions(
                 activity, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = activity.getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-//                getChannelFromApi();
-                checkSubscriberFromApi(idChannel);
+                getChannelFromApi();
+//                checkSubscriberFromApi(idChannel);
             } else {
                 activity.startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
-
             EasyPermissions.requestPermissions(
                     activity,
                     "This app needs to access your Google account (via Contacts).",
@@ -121,6 +127,7 @@ public class CallingYoutube {
     }
 
     public void activityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("permissionx12312",requestCode+""+"/"+resultCode+"");
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != activity.RESULT_OK) {
@@ -152,8 +159,10 @@ public class CallingYoutube {
                     getChannelFromApi();
                 }
                 break;
+
         }
     }
+
 
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =

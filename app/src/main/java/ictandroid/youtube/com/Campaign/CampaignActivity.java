@@ -67,7 +67,7 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
         InitViewPager();
         initAction();
 //
-        callingYoutube = new CallingYoutube(this);
+        callingYoutube = new CallingYoutube(this,1);
 //        callingYoutube.checkSubscriberFromApi("UCnSMr4hcl6E3Yh2n1MTNnhg");
 //        openYoutube("UCJXs5fI5Xa5S9d1cimdI9_A");
 //        cloudFunction.addChannel("UCJXs5fI5Xa5S9d1cimdI9_A","https://yt3.ggpht.com/a-/AAuE7mBC4jpqCO5STDy74-FQsLZBwHnZxFINdR1edg=s288-mo-c-c0xffffffff-rj-k-no","kitchen","15","1");

@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.services.youtube.model.Channel;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,14 +36,18 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.functions.FirebaseFunctions;
 
 
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.MainActivity;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
+import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GetResultApiListener {
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -56,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
     public static int userpoint = 0;
     public static String username = "username";
     public static String useravt = "avt";
+    private CallingYoutube callingYoutube;
+    String idchannelchecking="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
          */
         initView();
         cloudFunction = new CloudFunction();
+        callingYoutube=new CallingYoutube(this);
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
@@ -105,6 +114,35 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+    private void kiemtra() {
+        DocumentReference docRef = db.collection("USERSUB").document(auth.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Boolean haves=false;
+                        for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
+                            if(String.valueOf(entry.getValue()).equals("finished")){
+                            }else if (String.valueOf(entry.getValue()).equals("break")) {
+                            } else {
+                                String idchannel =String.valueOf(entry.getKey());
+                                idchannelchecking=idchannel;
+                                Log.d("xawjndqw", idchannel);
+                                callingYoutube.checkSubscriberFromApi(idchannel);
+
+                            }
+
+                        }
+                    }else {
+                        /////////////////////
+
+                    }
+                }
+            }
+        });
+    }
 
     private void initView() {
         imageView = findViewById(R.id.iv_login);
@@ -143,9 +181,9 @@ public class LoginActivity extends AppCompatActivity {
                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                          if (task.isSuccessful()) {
                                              if (task.getResult().exists()) {
+                                                 callingYoutube.getChannelFromApi();
                                                  kiemtrataikhoan();
-                                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                                 finish();
+
                                              } else {
                                                  cloudFunction.addNewUser(icAddNewUser);
                                              }
@@ -199,6 +237,8 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
             }
+        }else {
+            callingYoutube.activityResult(requestCode,resultCode,data);
         }
     }
 
@@ -261,6 +301,42 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signUp(View view) {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void onGetInfoChannel(Channel infoChannel) {
+        kiemtra();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onCheckSub(boolean existed) {
+        Log.d("xawjndqw", existed+"");
+        if(existed){
+            cloudFunction.addPointUser(1);
+            cloudFunction.addUserSub(idchannelchecking, "finished", new ICloundFunction() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+            });
+        }else {
+            cloudFunction.addUserSub(idchannelchecking,"break",null);
+            cloudFunction.addPointChannel(idchannelchecking, 1, new ICloundFunction() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailed() {
+                }
+            });
+        }
     }
 //    private void kiemtra() {
 //        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());

@@ -15,6 +15,38 @@
       },
       "oauth_client": [
         {
+          "client_id": "414566880411-fbh2479gh4gr1u4pnpesssut5vpss4l8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "8581f65c689bf47b32589c9017d27caa6885d877"
+          }
+        },
+        {
+          "client_id": "414566880411-og117kja8l2mm8qg91gdsbnqmf77vhk0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "99a2830714c68532e059d209e8356964f528fcc8"
+          }
+        },
+        {
+          "client_id": "414566880411-igha9bqpse85c5j1kl16e2ome81jvj2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "803555e5495182da318fcf836229ebb5fa98b6ae"
+          }
+        },
+        {
+          "client_id": "414566880411-5atjsq7tp3l732t213c2q5ib9nesjbgt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "dc50d67a3fd77982d8777ce8fe67ee3d62a8365c"
+          }
+        },
+        {
           "client_id": "414566880411-iagj1udd21k2uguned5hbkpaosq9m9nd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -23,7 +55,7 @@
           }
         },
         {
-          "client_id": "414566880411-8kkhuog1mdl1nj7ab4tjjvt3j6ern9d9.apps.googleusercontent.com",
+          "client_id": "414566880411-iqsr9h47adinh70kiifjc1jcls2dsi4d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -40,7 +72,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "414566880411-8kkhuog1mdl1nj7ab4tjjvt3j6ern9d9.apps.googleusercontent.com",
+              "client_id": "414566880411-iqsr9h47adinh70kiifjc1jcls2dsi4d.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
