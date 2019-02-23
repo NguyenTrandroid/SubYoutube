@@ -3,6 +3,8 @@ package ictandroid.youtube.com.Campaign;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,16 +14,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import ictandroid.youtube.com.R;
 
-public class AllChanelAdapter extends RecyclerView.Adapter<AllChanelAdapter.ViewHolder>  {
+public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAdapter.ViewHolder>  {
     Context context;
     ArrayList<ItemChanel> arrayList;
     String uid;
@@ -29,7 +31,7 @@ public class AllChanelAdapter extends RecyclerView.Adapter<AllChanelAdapter.View
     Dialog dialogEdit;
 
 
-    public AllChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
+    public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
         FirebaseAuth firebaseAuth;
@@ -43,7 +45,7 @@ public class AllChanelAdapter extends RecyclerView.Adapter<AllChanelAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item, parent, false);
-        return new AllChanelAdapter.ViewHolder(view);
+        return new CampaignChanelAdapter.ViewHolder(view);
     }
 
     @Override
@@ -116,6 +118,7 @@ public class AllChanelAdapter extends RecyclerView.Adapter<AllChanelAdapter.View
             @Override
             public void onClick(View v) {
                 dialogEdit = new Dialog(context);
+                Objects.requireNonNull(dialogEdit.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogEdit.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
