@@ -53,9 +53,10 @@ public class LoginActivity extends AppCompatActivity {
     private CloudFunction cloudFunction;
     private ImageView imageView;
     private RelativeLayout relativeLayout;
-    public static int userpoint =0;
-    public static String username="username";
-    public static String useravt="avt";
+    public static int userpoint = 0;
+    public static String username = "username";
+    public static String useravt = "avt";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,33 +65,33 @@ public class LoginActivity extends AppCompatActivity {
          *
          */
         initView();
-//        cloudFunction= new CloudFunction();
-//        icAddNewUser= new ICloundFunction() {
-//            @Override
-//            public void onSuccess() {
-//                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//                Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        icAddUserSub = new ICloundFunction() {
-//            @Override
-//            public void onSuccess() {
-//                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//
-//                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        /**
-//         *
-//         */
+        cloudFunction = new CloudFunction();
+        icAddNewUser = new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
+            }
+        };
+        icAddUserSub = new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed() {
+
+                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
+            }
+        };
+        /**
+         *
+         */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -108,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
         imageView = findViewById(R.id.iv_login);
         relativeLayout = findViewById(R.id.rl_login);
-        if(getIntent().getStringExtra("action")!=null){
-                relativeLayout.setVisibility(View.VISIBLE);
-        }else {
+        if (getIntent().getStringExtra("action") != null) {
+            relativeLayout.setVisibility(View.VISIBLE);
+        } else {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
             imageView.setAnimation(animation);
             CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
@@ -143,10 +144,10 @@ public class LoginActivity extends AppCompatActivity {
                                          if (task.isSuccessful()) {
                                              if (task.getResult().exists()) {
                                                  kiemtrataikhoan();
-                                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                                                    finish();
-                                             }else {
-                                                 cloudFunction.addNewUser(icAddNewUser);
+                                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                 finish();
+                                             } else {
+                                                 //cloudFunction.addNewUser(icAddNewUser);
                                              }
 
 
@@ -159,26 +160,27 @@ public class LoginActivity extends AppCompatActivity {
                                  }
         );
     }
+
     private void kiemtrataikhoan() {
         DocumentReference reference = db.collection("USER").document(auth.getUid());
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        if (Integer.parseInt(String.valueOf(documentSnapshot.get("enable"))) == 0) {
-                            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("action","account disable");
-                            Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    if (Integer.parseInt(String.valueOf(documentSnapshot.get("enable"))) == 0) {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("action", "account disable");
+                        Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
 //                            finishAffinity();
-                            startActivity(intent);
-                            finish();
-                        }
-                        userpoint=Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
-                        username=String.valueOf(documentSnapshot.get("name"));
-                        useravt=String.valueOf(documentSnapshot.get("Linkavt"));
-
+                        startActivity(intent);
+                        finish();
                     }
+                    userpoint = Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
+                    username = String.valueOf(documentSnapshot.get("name"));
+                    useravt = String.valueOf(documentSnapshot.get("Linkavt"));
+
+                }
             }
         });
     }
@@ -199,6 +201,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         // [START_EXCLUDE silent]
 //        showProgressDialog();
@@ -229,6 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
@@ -256,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signUp(View view) {
-        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 //    private void kiemtra() {
 //        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());
@@ -306,7 +310,6 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-
 
 
 }
