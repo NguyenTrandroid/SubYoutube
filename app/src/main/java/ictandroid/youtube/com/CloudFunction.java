@@ -57,11 +57,11 @@ public class CloudFunction {
 
 
     }
-    public Task<String> addUserSub(String channelid, final ICloundFunction iCloundFunction) {
+    public Task<String> addUserSub(String channelid,String time, final ICloundFunction iCloundFunction) {
         // Create the arguments to the callable function.
         Map<String,Object> data = new HashMap<>();
         data.put("channelid",channelid);
-        data.put("time",System.currentTimeMillis());
+        data.put("time",time);
         return mFunctions
                 .getHttpsCallable("addUserSub")
                 .call(data)
@@ -69,13 +69,16 @@ public class CloudFunction {
                     @Override
                     public void onSuccess(HttpsCallableResult httpsCallableResult) {
                         Log.d("tesss","success");
-                        iCloundFunction.onSuccess();
+                        if(iCloundFunction!=null){
+                            iCloundFunction.onSuccess();}
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        iCloundFunction.onFailed();
+
+                        if(iCloundFunction!=null){
+                            iCloundFunction.onFailed();}
                     }
                 }).continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override
