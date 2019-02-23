@@ -4,23 +4,24 @@ public class ItemChanel {
     private String linkIcon;
     private String nameChanel;
     private String soLuotSub;
-    private String idChanel;
+    private String userId;
     private String time;
     private String doUuTien;
     private String diem;
+    private String chanelId;
 
-    public ItemChanel(String linkIcon, String nameChanel, String soLuotSub, String idChanel, String time, String doUuTien, String diem) {
+    public ItemChanel() {
+    }
+
+    public ItemChanel(String linkIcon, String nameChanel, String soLuotSub, String userId, String time, String doUuTien, String diem, String chanelId) {
         this.linkIcon = linkIcon;
         this.nameChanel = nameChanel;
         this.soLuotSub = soLuotSub;
-        this.idChanel = idChanel;
+        this.userId = userId;
         this.time = time;
         this.doUuTien = doUuTien;
         this.diem = diem;
-    }
-
-    public ItemChanel() {
-        soLuotSub = "0";
+        this.chanelId = chanelId;
     }
 
     public String getLinkIcon() {
@@ -47,12 +48,12 @@ public class ItemChanel {
         this.soLuotSub = soLuotSub;
     }
 
-    public String getIdChanel() {
-        return idChanel;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setIdChanel(String idChanel) {
-        this.idChanel = idChanel;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTime() {
@@ -77,5 +78,13 @@ public class ItemChanel {
 
     public void setDiem(String diem) {
         this.diem = diem;
+    }
+
+    public String getChanelId() {
+        return chanelId;
+    }
+
+    public void setChanelId(String chanelId) {
+        this.chanelId = chanelId;
     }
 }

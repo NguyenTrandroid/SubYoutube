@@ -54,7 +54,7 @@ public class AllChanelAdapter extends RecyclerView.Adapter<AllChanelAdapter.View
         holder.ivDelete.setVisibility(View.GONE);
         holder.ivEdit.setVisibility(View.GONE);
         holder.ivChienDich.setVisibility(View.GONE);
-        if(itemChanel.getIdChanel().equals(uid)){
+        if(itemChanel.getUserId().equals(uid)){
             holder.ivEdit.setVisibility(View.VISIBLE);
             holder.ivDelete.setVisibility(View.VISIBLE);
         }

@@ -70,10 +70,11 @@ public class FragmentMyChannel extends Fragment {
                             itemApp.setDoUuTien((String) documentSnapshots.get(i).getData().get("douutien"));
                             itemApp.setLinkIcon((String) documentSnapshots.get(i).getData().get("linkanh"));
                             itemApp.setTime((String) documentSnapshots.get(i).getData().get("time"));
-                            itemApp.setIdChanel((String) documentSnapshots.get(i).getData().get("userid"));
+                            itemApp.setUserId((String) documentSnapshots.get(i).getData().get("userid"));
                             itemApp.setNameChanel((String) documentSnapshots.get(i).getData().get("tenchannel"));
+                            itemApp.setChanelId(documentSnapshots.get(i).getId());
                             if (Integer.parseInt(itemApp.getDiem()) > 0) {
-                                if(itemApp.getIdChanel().equals(uid)){
+                                if(itemApp.getUserId().equals(uid)){
                                     appArrayListAllChanel.add(itemApp);
                                 }
                             }

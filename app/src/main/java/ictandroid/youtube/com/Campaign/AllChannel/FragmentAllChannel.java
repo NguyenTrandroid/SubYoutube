@@ -68,8 +68,9 @@ public class FragmentAllChannel extends Fragment {
                             itemApp.setDoUuTien((String) documentSnapshots.get(i).getData().get("douutien"));
                             itemApp.setLinkIcon((String) documentSnapshots.get(i).getData().get("linkanh"));
                             itemApp.setTime((String) documentSnapshots.get(i).getData().get("time"));
-                            itemApp.setIdChanel((String) documentSnapshots.get(i).getData().get("userid"));
+                            itemApp.setUserId((String) documentSnapshots.get(i).getData().get("userid"));
                             itemApp.setNameChanel((String) documentSnapshots.get(i).getData().get("tenchannel"));
+                            itemApp.setChanelId(documentSnapshots.get(i).getId());
                             if (Integer.parseInt(itemApp.getDiem()) > 0) {
                                 appArrayListAllChanel.add(itemApp);
                             }
@@ -94,6 +95,9 @@ public class FragmentAllChannel extends Fragment {
                                 return itemApp.getNameChanel().compareTo(t1.getNameChanel());
                             }
                         });
+                        for(int i=0; i<appArrayListAllChanel.size(); ++i){
+                            Log.d("AAAAA", "onEvent: "+appArrayListAllChanel.get(i).getChanelId());
+                        }
                         allChanelAdapter = new AllChanelAdapter(getContext(),appArrayListAllChanel);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
