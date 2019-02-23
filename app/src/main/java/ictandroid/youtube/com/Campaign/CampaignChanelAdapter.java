@@ -29,9 +29,11 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
     String uid;
     Dialog dialogRemove;
     Dialog dialogEdit;
+    OnChannelClick onChannelClick;
     public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        onChannelClick= (OnChannelClick) context;
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
@@ -57,6 +59,14 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
             holder.ivEdit.setVisibility(View.VISIBLE);
             holder.ivDelete.setVisibility(View.VISIBLE);
         }
+        holder.rlCarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(itemChanel.getUserId()!=uid){
+                    onChannelClick.OnClicked(itemChanel.getChanelId());
+                }
+            }
+        });
 
         holder.tvName.setText(itemChanel.getNameChanel());
         holder.tvSoSub.setText(itemChanel.getSoLuotSub()+" subscribers");
@@ -218,5 +228,8 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
             ivChienDich = itemView.findViewById(R.id.iv_bellX);
             rlCarView = itemView.findViewById(R.id.rl_item);
         }
+    }
+    public interface OnChannelClick{
+        void OnClicked(String channelid);
     }
 }

@@ -36,7 +36,7 @@ import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
 
-public class CampaignActivity extends AppCompatActivity implements GetResultApiListener {
+public class CampaignActivity extends AppCompatActivity implements GetResultApiListener,CampaignChanelAdapter.OnChannelClick{
 
 
     @BindView(R.id.iv_back)
@@ -103,21 +103,21 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
                     if (document.exists()) {
                         Boolean haves=false;
                         for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
-                                if(String.valueOf(entry.getValue()).equals("finished")){
-                                    skiemtra.dismiss();
-                                }else if (String.valueOf(entry.getValue()).equals("break")) {
-                                    skiemtra.dismiss();
-                                } else {
-                                    String idchannel =String.valueOf(entry.getKey());
-                                    idchannelchecking=idchannel;
-                                    Log.d("xawjndqw", idchannel);
-                                    callingYoutube.checkSubscriberFromApi(idchannel);
-
-                                }
+                            if(String.valueOf(entry.getValue()).equals("finished")){
+                                skiemtra.dismiss();
+                            }else if (String.valueOf(entry.getValue()).equals("break")) {
+                                skiemtra.dismiss();
+                            } else {
+                                String idchannel =String.valueOf(entry.getKey());
+                                idchannelchecking=idchannel;
+                                Log.d("xawjndqw", idchannel);
+                                callingYoutube.checkSubscriberFromApi(idchannel);
 
                             }
+
+                        }
                     }else {
-        /////////////////////
+                        /////////////////////
 
                     }
                 }
@@ -285,5 +285,10 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
                 }
             });
         }
+    }
+
+    @Override
+    public void OnClicked(String channelid) {
+        openYoutube(channelid);
     }
 }
