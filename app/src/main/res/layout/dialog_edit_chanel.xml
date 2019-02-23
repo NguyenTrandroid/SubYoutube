@@ -27,14 +27,14 @@
             <ImageView
                 android:src="@drawable/tru"
                 android:id="@+id/iv_tru"
-                android:layout_width="@dimen/dp10"
-                android:layout_height="@dimen/dp20" />
+                android:layout_width="@dimen/dp20"
+                android:layout_height="@dimen/dp30" />
             <TextView
                 android:textColor="@color/red"
                 android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginRight="@dimen/dp5"
                 android:layout_gravity="center_vertical"
-                android:textSize="@dimen/dp12"
+                android:textSize="@dimen/dp20"
                 android:id="@+id/tv_thay_doi"
                 android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
@@ -45,8 +45,8 @@
             <ImageView
                 android:src="@drawable/cong"
                 android:id="@+id/iv_cong"
-                android:layout_width="@dimen/dp10"
-                android:layout_height="@dimen/dp20" />
+                android:layout_width="@dimen/dp20"
+                android:layout_height="@dimen/dp30" />
         </LinearLayout>
 
         <LinearLayout
