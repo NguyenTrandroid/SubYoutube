@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
-                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
             @Override
