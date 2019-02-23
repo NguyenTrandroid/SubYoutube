@@ -1,5 +1,4 @@
-package ictandroid.youtube.com.Campaign;
-
+package ictandroid.youtube.com.MyApp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,41 +20,42 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
 
-public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAdapter.ViewHolder>  {
+public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHolder>  {
     Context context;
-    ArrayList<ItemChanel> arrayList;
-    String uid;
+    ArrayList<ItemMyChanel> arrayList;
     Dialog dialogRemove;
     Dialog dialogEdit;
-    public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
+    Dialog dialogAdd;
+    public MyChanelAdapter(Context context, ArrayList<ItemMyChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-        FirebaseAuth firebaseAuth;
-        firebaseAuth = FirebaseAuth.getInstance();
-        uid = firebaseAuth.getUid();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyChanelAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item, parent, false);
-        return new CampaignChanelAdapter.ViewHolder(view);
+        return new MyChanelAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemChanel itemChanel = arrayList.get(position);
+    public void onBindViewHolder(@NonNull MyChanelAdapter.ViewHolder holder, int position) {
+        ItemMyChanel itemChanel = arrayList.get(position);
         holder.ivBellD.setVisibility(View.GONE);
         holder.ivBellV.setVisibility(View.GONE);
         holder.ivDelete.setVisibility(View.GONE);
         holder.ivEdit.setVisibility(View.GONE);
         holder.ivChienDich.setVisibility(View.GONE);
-        if(itemChanel.getUserId().equals(uid)){
-            holder.ivEdit.setVisibility(View.VISIBLE);
+
+        if(itemChanel.getDiem().equals("0")){
+            holder.ivChienDich.setVisibility(View.VISIBLE);
+        } else {
             holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.ivEdit.setVisibility(View.VISIBLE);
         }
 
         holder.tvName.setText(itemChanel.getNameChanel());
@@ -66,7 +66,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
             @Override
             public void onClick(View v) {
                 /**
-                 * gỡ bỏ kênh ra khỏi chiến dịch
+                 * gõ bỏ kênh ra khỏi chiến dịch
                  */
                 dialogRemove = new Dialog(context);
                 Objects.requireNonNull(dialogRemove.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -103,7 +103,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                     @Override
                     public void onClick(View v) {
                         /**
-                         *gỡ bỏ kênh
+                         *gõ bỏ kênh
                          */
                     }
                 });
@@ -185,6 +185,77 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                     @Override
                     public void onClick(View v) {
                         dialogEdit.dismiss();
+                    }
+                });
+            }
+        });
+        holder.ivChienDich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * đưa app vào chiến dịch
+                 */
+                dialogAdd = new Dialog(context);
+                Objects.requireNonNull(dialogAdd.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialogAdd.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        holder.ivChienDich.setEnabled(false);
+                        holder.rlCarView.setEnabled(false);
+                    }
+                });
+                dialogAdd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        holder.ivChienDich.setEnabled(true);
+                        holder.rlCarView.setEnabled(true);
+                    }
+                });
+                dialogAdd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        holder.ivChienDich.setEnabled(true);
+                        holder.rlCarView.setEnabled(true);
+                    }
+                });
+                dialogAdd.setContentView(R.layout.dialog_chien_dich);
+                dialogAdd.setCanceledOnTouchOutside(false);
+                Button btOk = dialogAdd.findViewById(R.id.bt_thaydoi);
+                Button btCancle = dialogAdd.findViewById(R.id.bt_cancel);
+                TextView tvDiem = dialogAdd.findViewById(R.id.tv_thay_doi);
+                ImageView ivCong = dialogAdd.findViewById(R.id.iv_cong);
+                ImageView ivTru = dialogAdd.findViewById(R.id.iv_tru);
+                dialogAdd.show();
+                btOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /**
+                         * đưa app vào chiến dịch
+                         */
+                    }
+                });
+                btCancle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogAdd.dismiss();
+                    }
+                });
+                ivCong.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /**
+                         * cộng điểm
+                         */
+                        tvDiem.setText("+");
+                    }
+                });
+                ivTru.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /**
+                         * trừ điểm
+                         */
+                        tvDiem.setText("-");
                     }
                 });
             }

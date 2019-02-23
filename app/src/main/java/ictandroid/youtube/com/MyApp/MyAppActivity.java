@@ -6,6 +6,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,5 +74,8 @@ public class MyAppActivity extends AppCompatActivity {
         svMyapp.setFocusable(false);
         svMyapp.clearFocus();
 
+    }
+    public void backvip(View view) {
+        onBackPressed();
     }
 }

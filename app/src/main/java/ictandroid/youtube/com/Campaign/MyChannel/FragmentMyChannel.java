@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -32,7 +33,6 @@ public class FragmentMyChannel extends Fragment {
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
-    ArrayList<String> myapp = new ArrayList<>();
     String uid;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,10 +42,9 @@ public class FragmentMyChannel extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-//        FirebaseAuth firebaseAuth;
-//        firebaseAuth = FirebaseAuth.getInstance();
-//        uid = firebaseAuth.getUid();
-        uid = "sangdeptrai";
+        FirebaseAuth firebaseAuth;
+        firebaseAuth = FirebaseAuth.getInstance();
+        uid = firebaseAuth.getUid();
         loadApp();
         return view;
     }

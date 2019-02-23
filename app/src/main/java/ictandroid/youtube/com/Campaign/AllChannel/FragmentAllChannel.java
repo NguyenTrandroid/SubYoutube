@@ -34,7 +34,6 @@ public class FragmentAllChannel extends Fragment {
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
-    ArrayList<String> myapp = new ArrayList<>();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +55,6 @@ public class FragmentAllChannel extends Fragment {
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 try {
                     if (e != null) {
-                        Log.d("DATAAA", "ERROR");
                         return;
                     }
                     if (queryDocumentSnapshots != null) {
@@ -95,9 +93,6 @@ public class FragmentAllChannel extends Fragment {
                                 return itemApp.getNameChanel().compareTo(t1.getNameChanel());
                             }
                         });
-                        for(int i=0; i<appArrayListAllChanel.size(); ++i){
-                            Log.d("AAAAA", "onEvent: "+appArrayListAllChanel.get(i).getChanelId());
-                        }
                         campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
