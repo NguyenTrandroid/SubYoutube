@@ -8,21 +8,21 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="@dimen/dp200"
+        android:layout_width="@dimen/dp360"
         android:layout_height="wrap_content">
         <TextView
             android:gravity="center"
             android:textColor="@color/red"
-            android:textSize="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp10"
+            android:textSize="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp20"
             android:layout_gravity="center"
             android:textAllCaps="true"
             android:text="Gỡ bỏ kênh ra khỏi chiến dịch"
-            android:layout_width="@dimen/dp100"
+            android:layout_width="@dimen/dp200"
             android:layout_height="wrap_content" />
         <LinearLayout
-            android:layout_marginBottom="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp20"
             android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
@@ -31,22 +31,24 @@
             <Button
                 android:layout_marginRight="@dimen/dp5"
                 android:id="@+id/bt_ok"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp20"
+                android:layout_width="@dimen/dp70"
+                android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="CÓ"
+                android:textSize="@dimen/dp20"
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 
             <Button
                 android:layout_marginLeft="@dimen/dp5"
                 android:id="@+id/bt_cancel"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp20"
+                android:layout_width="@dimen/dp70"
+                android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="HỦY"
+                android:textSize="@dimen/dp20"
                 android:textStyle="bold"
                 android:textColor="@color/black" />
         </LinearLayout>

@@ -1,5 +1,9 @@
 package ictandroid.youtube.com.MyApp.Other;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,9 +11,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
@@ -28,6 +40,7 @@ import ictandroid.youtube.com.R;
 public class FragmentOther extends Fragment {
     View view;
     RecyclerView recyclerView;
+    ImageView imageView;
     MyChanelAdapter myChanelAdapter;
     ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
     ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
@@ -41,11 +54,65 @@ public class FragmentOther extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_channel, container, false);
+        imageView = view.findViewById(R.id.iv_addApp);
+        addApp();
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
         loadApp();
         return view;
+    }
+
+    private void addApp() {
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * thêm kênh
+                 */
+                Dialog dialogAdd = new Dialog(getContext());
+                Objects.requireNonNull(dialogAdd.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialogAdd.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        imageView.setEnabled(false);
+                    }
+                });
+                dialogAdd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        imageView.setEnabled(true);
+                    }
+                });
+                dialogAdd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        imageView.setEnabled(true);
+                    }
+                });
+                dialogAdd.setContentView(R.layout.dialog_add_chanel);
+                dialogAdd.setCanceledOnTouchOutside(false);
+                EditText editText = dialogAdd.findViewById(R.id.ed_input);
+                Button buttonOK = dialogAdd.findViewById(R.id.bt_thaydoi);
+                Button buttonCancle = dialogAdd.findViewById(R.id.bt_cancel);
+                dialogAdd.show();
+                buttonOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /**
+                         * add kênh
+                         */
+                    }
+                });
+                buttonCancle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogAdd.dismiss();
+                    }
+                });
+
+            }
+        });
     }
 
     private void loadApp() {
