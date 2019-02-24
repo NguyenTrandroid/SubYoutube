@@ -180,12 +180,13 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                  *
                  */
 
-                DocumentReference reference = db.collection("USER").document(auth.getUid());
-                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                DocumentReference documentReference = db.collection("USER").document(auth.getUid());
+                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (documentSnapshot != null && documentSnapshot.exists()) {
-                            pointsUser = (long) documentSnapshot.get("points");
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            pointsUser = (long) document.getData().get("points");
                             /**
                              *
                              */
@@ -286,16 +287,14 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 /**
                  *
                  */
-                FirebaseFirestore db;
-                FirebaseAuth auth;
-                db = FirebaseFirestore.getInstance();
-                auth = FirebaseAuth.getInstance();
-                DocumentReference reference = db.collection("USER").document(auth.getUid());
-                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                DocumentReference documentReference = db.collection("USER").document(auth.getUid());
+                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (documentSnapshot != null && documentSnapshot.exists()) {
-                            pointsUser = (long) documentSnapshot.get("points");
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            Log.d("AAAAA", "onClick: điểm: " + document.getData().get("points"));
+                            pointsUser = (long) document.getData().get("points");
                             /**
                              *
                              */

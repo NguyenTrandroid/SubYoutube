@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannel;
 
 public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAdapter.ViewHolder> {
     Context context;
@@ -188,12 +189,13 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 /**
                  *
                  */
-                DocumentReference reference = db.collection("USER").document(auth.getUid());
-                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                DocumentReference documentReference = db.collection("USER").document(auth.getUid());
+                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (documentSnapshot != null && documentSnapshot.exists()) {
-                            pointsUser = (long) documentSnapshot.get("points");
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            pointsUser = (long) document.getData().get("points");
                             /**
                              *
                              */
@@ -201,6 +203,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                             ivCong.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    getDiem();
                                     /**
                                      *cộng điểm
                                      */
@@ -274,6 +277,18 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         });
     }
 
+    private void getDiem(){
+        DocumentReference documentReference = db.collection("USER").document(auth.getUid());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    Log.d("AAAAA", "onClick: điểm: " + document.getData().get("points"));
+                }
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {

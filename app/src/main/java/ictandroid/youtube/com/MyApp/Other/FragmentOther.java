@@ -127,7 +127,7 @@ public class FragmentOther extends Fragment {
                     if (e != null) {
                         return;
                     }
-
+                    arrayListAllChanel.clear();
                     if (snapshot != null && snapshot.exists()) {
                         for (Map.Entry<String, Object> entry : snapshot.getData().entrySet()) {
                             if ("listadd".equals(entry.getKey())) {
