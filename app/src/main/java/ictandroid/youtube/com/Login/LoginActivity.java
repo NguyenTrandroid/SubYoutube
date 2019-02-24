@@ -246,7 +246,6 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         // [START_EXCLUDE silent]
 //        showProgressDialog();
         // [END_EXCLUDE]
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

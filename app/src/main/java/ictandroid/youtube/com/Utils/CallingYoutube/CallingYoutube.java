@@ -43,6 +43,7 @@ public class CallingYoutube {
     private SLoading sLoading;
     GetResultApiListener getResultApiListener;
     private String idChannel;
+    FirebaseAuth auth;
     //
     public static GoogleAccountCredential mCredential;
     private final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -55,6 +56,7 @@ public class CallingYoutube {
 
     public CallingYoutube(Activity activity) {
         this.activity = activity;
+        auth=FirebaseAuth.getInstance();
         mCredential = GoogleAccountCredential.usingOAuth2(
                 activity, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -84,7 +86,7 @@ public class CallingYoutube {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
+//            chooseAccount();
         } else if (!isDeviceOnline()) {
             //mOutputText.setText("No network connection available.");
         } else {
@@ -108,8 +110,8 @@ public class CallingYoutube {
                 activity, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = activity.getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
-                mCredential.setSelectedAccountName(accountName);
+            if (auth.getCurrentUser().getEmail() != null) {
+                mCredential.setSelectedAccountName(auth.getCurrentUser().getEmail());
                 getChannelFromApi();
 //                checkSubscriberFromApi(idChannel);
             } else {
