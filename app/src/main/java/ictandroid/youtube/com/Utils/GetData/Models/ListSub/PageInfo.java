@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class PageInfo {
 
-@SerializedName("totalResults")
-@Expose
-private Integer totalResults;
+    @SerializedName("totalResults")
+    @Expose
+    private Integer totalResults;
 
-public Integer getTotalResults() {
-return totalResults;
-}
+    public Integer getTotalResults() {
+        return totalResults;
+    }
 
-public void setTotalResults(Integer totalResults) {
-this.totalResults = totalResults;
-}
+    public void setTotalResults(Integer totalResults) {
+        this.totalResults = totalResults;
+    }
 
 }

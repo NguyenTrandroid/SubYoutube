@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
@@ -28,8 +30,10 @@ public class DataChannel {
     private ChanelItem chanelItem;
     private SubItem subItem;
     private Context context;
+    private int sizeList;
     GetInfoChanelListener getInfoChanelListener;
     GetSubListener getSubListener;
+    private List<SubItem> listSubItem;
 
     public void getInfo(Context context, String key, String id)
     {
@@ -58,7 +62,16 @@ public class DataChannel {
                 .subscribe(this::responseGetInfo, this::errorGetInfo, this::successGetInfo);
         compositeDisposable.add(disposable);
     }
-    public void getSub(Context context, String key, String id)
+    public void getListSub(Context context, String key, List<String> listIdChannel)
+    {
+        listSubItem = new ArrayList<>();
+        sizeList = listIdChannel.size();
+        for(int i=0;i<listIdChannel.size();i++)
+        {
+            getSub(context,key,listIdChannel.get(i));
+        }
+    }
+    private void getSub(Context context, String key, String id)
     {
         compositeDisposable = new CompositeDisposable();
         chanelItem = new ChanelItem();
@@ -92,7 +105,11 @@ public class DataChannel {
     }
     private void responseGetListSub(SubItem itemSub) {
         subItem = itemSub;
-        getSubListener.onSubCompleted(subItem);
+        listSubItem.add(subItem);
+        if(listSubItem.size() == sizeList)
+        {
+            getSubListener.onListSubCompleted(listSubItem);
+        }
     }
     private void errorGetListSub(Throwable error) {
         getSubListener.onSubError(error.getLocalizedMessage());
