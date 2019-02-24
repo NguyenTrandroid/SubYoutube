@@ -41,7 +41,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
     Dialog dialogEdit;
     OnChannelClick onChannelClick;
     long pointsUser;
-    MyChanelAdapter.MyChannelInterface myChannelInterface;
     public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
@@ -49,7 +48,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
-        myChannelInterface = (MyChanelAdapter.MyChannelInterface) context;
     }
 
     @NonNull
@@ -128,7 +126,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                         /**
                          *gỡ bỏ kênh
                          */
-                        myChannelInterface.delete(itemChanel.getChanelId());
                         dialogRemove.dismiss();
                     }
                 });
