@@ -22,13 +22,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -36,6 +41,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
+import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.Login.LoginActivity;
 import ictandroid.youtube.com.R;
@@ -94,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         listHistory = new ArrayList<>();
         setPoints();
-        loadHistory();
+//        loadHistory();
         tvNameProfile.setText(auth.getCurrentUser().getDisplayName());
         Glide.with(this).load(auth.getCurrentUser().getPhotoUrl()).into(ivAvata);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -118,29 +125,29 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-    private void loadHistory() {
-        listHistory.clear();
-        DocumentReference reference = db.collection("HISTORY").document("1P4y4ITjIFbwGykIQSmuEOwDFyL2");
-        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                ArrayList<String> listChannel = (ArrayList<String>) documentSnapshot.get("listhistory");
-                for (int i = 0; i < listChannel.size(); i++) {
-                    String[] str = listChannel.get(i).split("<ict>");
-                    listHistory.add(new ItemHistory(str[0], str[1], "0"));
-                    Log.d("AAA",str[0]+""+str[1]);
-                }
-                Log.d("AAA",listHistory.size()+"");
-                HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
-                GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
-                rvHistory.setLayoutManager(layoutManager);
-                rvHistory.setItemAnimator(new DefaultItemAnimator());
-                rvHistory.setAdapter(historyAdapter);
-
-
-            }
-        });
-    }
+//    private void loadHistory() {
+//        listHistory.clear();
+//        DocumentReference reference = db.collection("HISTORY").document(auth.getUid());
+//        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                ArrayList<String> listChannel = (ArrayList<String>) documentSnapshot.get("channelid");
+//                for (int i = 0; i < listChannel.size(); i++) {
+//                    String[] str = listChannel.get(i).split("<ict>");
+//                    listHistory.add(new ItemHistory(str[0], str[1], "0"));
+//                    Log.d("AAA",str[0]+""+str[1]);
+//                }
+//                Log.d("AAA",listHistory.size()+"");
+//                HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+//                GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
+//                rvHistory.setLayoutManager(layoutManager);
+//                rvHistory.setItemAnimator(new DefaultItemAnimator());
+//                rvHistory.setAdapter(historyAdapter);
+//
+//
+//            }
+//        });
+//    }
 
     @OnClick({R.id.rl_history, R.id.rl_contacadmin, R.id.tv_logout, R.id.iv_back, R.id.iv_back_red, R.id.tv_clear})
     public void onViewClicked(View view) {

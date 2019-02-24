@@ -32,11 +32,12 @@ import butterknife.ButterKnife;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
+import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
 
-public class CampaignActivity extends AppCompatActivity implements GetResultApiListener,CampaignChanelAdapter.OnChannelClick{
+public class CampaignActivity extends AppCompatActivity implements CampaignChanelAdapter.MyChannelInterface,GetResultApiListener,CampaignChanelAdapter.OnChannelClick{
 
 
     @BindView(R.id.iv_back)
@@ -57,6 +58,7 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
     CloudFunction cloudFunction = new CloudFunction();
     CallingYoutube callingYoutube;
     String idchannelchecking="";
+    SLoading sEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
         init();
         InitViewPager();
         initAction();
+        sEdit=new SLoading(this);
 //
         callingYoutube = new CallingYoutube(this,1);
 //        callingYoutube.checkSubscriberFromApi("UCnSMr4hcl6E3Yh2n1MTNnhg");
@@ -262,6 +265,7 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
             cloudFunction.addUserSub(idchannelchecking, "finished", new ICloundFunction() {
                 @Override
                 public void onSuccess() {
+                    addHistory(idchannelchecking);
                     skiemtra.dismiss();
                 }
 
@@ -286,9 +290,58 @@ public class CampaignActivity extends AppCompatActivity implements GetResultApiL
             });
         }
     }
+    private void addHistory(String channeldi) {
+        DocumentReference docRef = db.collection("LIST").document(channeldi);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        cloudFunction.addHistory(document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
+                    }else {
+                        /////////////////////
+
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void OnClicked(String channelid) {
         openYoutube(channelid);
+    }
+
+    @Override
+    public void delete(String channelid) {
+        sEdit.show();
+        cloudFunction.removeMyChannel(channelid, new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                sEdit.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+                sEdit.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void addpoint(String channelid, int point) {
+        sEdit.show();
+        cloudFunction.addPointMyChannel(channelid, point, new ICloundFunction() {
+            @Override
+            public void onSuccess() {
+                sEdit.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+                sEdit.dismiss();
+            }
+        });
     }
 }

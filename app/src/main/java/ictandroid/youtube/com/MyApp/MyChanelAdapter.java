@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,11 +42,15 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
     Dialog dialogEdit;
     Dialog dialogAdd;
     MyChannelInterface myChannelInterface;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     long pointsUser;
     public MyChanelAdapter(Context context, ArrayList<ItemMyChanel> arrayList) {
         this.context = context;
         myChannelInterface = (MyChannelInterface) context;
         this.arrayList = arrayList;
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -173,10 +179,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 /**
                  *
                  */
-                FirebaseFirestore db;
-                FirebaseAuth auth;
-                db = FirebaseFirestore.getInstance();
-                auth = FirebaseAuth.getInstance();
+
                 DocumentReference reference = db.collection("USER").document(auth.getUid());
                 reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -226,6 +229,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                      *cập nhật điểm
                                      */
                                     int pointsChanel = Integer.parseInt((String) tvDiem.getText());
+                                    capnhatdiem(pointsChanel,itemChanel.getChanelId());
                                     Log.d("AAAAA", "onClick: user:   " + pointsUser);
                                     Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
                                     dialogEdit.dismiss();
@@ -347,6 +351,24 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         }
                     }
                 });
+            }
+        });
+    }
+    private void capnhatdiem(int diem,String channeldi) {
+        DocumentReference docRef = db.collection("LIST").document(channeldi);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        int x=diem-Integer.parseInt(String.valueOf(document.getData().get("points")));
+                        myChannelInterface.addpoint(channeldi,x);
+                    }else {
+                        /////////////////////
+
+                    }
+                }
             }
         });
     }

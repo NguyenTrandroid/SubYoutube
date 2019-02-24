@@ -318,6 +318,8 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             cloudFunction.addUserSub(idchannelchecking, "finished", new ICloundFunction() {
                 @Override
                 public void onSuccess() {
+                    addHistory(idchannelchecking);
+//                    cloudFunction.addHistory(idchannelchecking);
                 }
 
                 @Override
@@ -337,6 +339,23 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 }
             });
         }
+    }
+    private void addHistory(String channeldi) {
+        DocumentReference docRef = db.collection("LIST").document(channeldi);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        cloudFunction.addHistory(document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
+                    }else {
+                        /////////////////////
+
+                    }
+                }
+            }
+        });
     }
 //    private void kiemtra() {
 //        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());
