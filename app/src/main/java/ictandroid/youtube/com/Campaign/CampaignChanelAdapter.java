@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +15,36 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 import ictandroid.youtube.com.R;
 
-public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAdapter.ViewHolder>  {
+public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAdapter.ViewHolder> {
     Context context;
     ArrayList<ItemChanel> arrayList;
     String uid;
     Dialog dialogRemove;
     Dialog dialogEdit;
     OnChannelClick onChannelClick;
+    long pointsUser;
+
     public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-        onChannelClick= (OnChannelClick) context;
+        onChannelClick = (OnChannelClick) context;
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
@@ -55,21 +66,21 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         holder.ivDelete.setVisibility(View.GONE);
         holder.ivEdit.setVisibility(View.GONE);
         holder.ivChienDich.setVisibility(View.GONE);
-        if(itemChanel.getUserId().equals(uid)){
+        if (itemChanel.getUserId().equals(uid)) {
             holder.ivEdit.setVisibility(View.VISIBLE);
             holder.ivDelete.setVisibility(View.VISIBLE);
         }
         holder.rlCarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(itemChanel.getUserId()!=uid){
+                if (itemChanel.getUserId() != uid) {
                     onChannelClick.OnClicked(itemChanel.getChanelId());
                 }
             }
         });
 
         holder.tvName.setText(itemChanel.getNameChanel());
-        holder.tvSoSub.setText(itemChanel.getSoLuotSub()+" subscribers");
+        holder.tvSoSub.setText(itemChanel.getSoLuotSub() + " subscribers");
         Glide.with(context).load(itemChanel.getLinkIcon()).into(holder.ivIcon);
 
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +126,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                         /**
                          *gỡ bỏ kênh
                          */
+                        dialogRemove.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -164,37 +176,75 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 TextView tvDiem = dialogEdit.findViewById(R.id.tv_thay_doi);
                 ImageView ivCong = dialogEdit.findViewById(R.id.iv_cong);
                 ImageView ivTru = dialogEdit.findViewById(R.id.iv_tru);
-                dialogEdit.show();
-                ivCong.setOnClickListener(new View.OnClickListener() {
+                tvDiem.setText(itemChanel.getDiem());
+                /**
+                 *
+                 */
+                FirebaseFirestore db;
+                FirebaseAuth auth;
+                db = FirebaseFirestore.getInstance();
+                auth = FirebaseAuth.getInstance();
+                DocumentReference reference = db.collection("USER").document(auth.getUid());
+                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onClick(View v) {
-                        /**
-                         *cộng điểm
-                         */
-                        tvDiem.setText("+");
-                    }
-                });
-                ivTru.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         *trừ điểm
-                         */
-                        tvDiem.setText("-");
-                    }
-                });
-                btOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         *cập nhật điểm
-                         */
-                    }
-                });
-                btCancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogEdit.dismiss();
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            pointsUser = (long) documentSnapshot.get("points");
+                            /**
+                             *
+                             */
+                            dialogEdit.show();
+                            ivCong.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *cộng điểm
+                                     */
+                                    int a = Integer.parseInt((String) tvDiem.getText());
+                                    if (pointsUser > 0) {
+                                        a++;
+                                        pointsUser--;
+                                    } else {
+                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(a + "");
+                                }
+                            });
+                            ivTru.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *trừ điểm
+                                     */
+                                    int b = Integer.parseInt((String) tvDiem.getText());
+                                    if (b > 0) {
+                                        b--;
+                                        pointsUser++;
+                                    } else {
+                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(b + "");
+                                }
+                            });
+                            btOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *cập nhật điểm
+                                     */
+                                    int pointsChanel = Integer.parseInt((String) tvDiem.getText());
+                                    Log.d("AAAAA", "onClick: user:   " + pointsUser);
+                                    Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
+                                    dialogEdit.dismiss();
+                                }
+                            });
+                            btCancle.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogEdit.dismiss();
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -216,6 +266,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         ImageView ivEdit;
         ImageView ivChienDich;
         RelativeLayout rlCarView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.iv_avatarChanel);
@@ -229,7 +280,8 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
             rlCarView = itemView.findViewById(R.id.rl_item);
         }
     }
-    public interface OnChannelClick{
+
+    public interface OnChannelClick {
         void OnClicked(String channelid);
     }
 }

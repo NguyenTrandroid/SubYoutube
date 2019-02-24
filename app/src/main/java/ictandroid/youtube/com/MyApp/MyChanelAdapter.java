@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.CloudFunction;
@@ -31,6 +40,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
     Dialog dialogEdit;
     Dialog dialogAdd;
     MyChannelInterface myChannelInterface;
+    long pointsUser;
     public MyChanelAdapter(Context context, ArrayList<ItemMyChanel> arrayList) {
         this.context = context;
         myChannelInterface = (MyChannelInterface) context;
@@ -159,40 +169,75 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 TextView tvDiem = dialogEdit.findViewById(R.id.tv_thay_doi);
                 ImageView ivCong = dialogEdit.findViewById(R.id.iv_cong);
                 ImageView ivTru = dialogEdit.findViewById(R.id.iv_tru);
-                dialogEdit.show();
-                ivCong.setOnClickListener(new View.OnClickListener() {
+                tvDiem.setText(itemChanel.getDiem());
+                /**
+                 *
+                 */
+                FirebaseFirestore db;
+                FirebaseAuth auth;
+                db = FirebaseFirestore.getInstance();
+                auth = FirebaseAuth.getInstance();
+                DocumentReference reference = db.collection("USER").document(auth.getUid());
+                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onClick(View v) {
-                        /**
-                         *cộng điểm
-                         */
-                        tvDiem.setText("+"+Integer.parseInt(tvDiem.getText().toString())+1);
-                          }
-                });
-                ivTru.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         *trừ điểm
-                         */
-                        tvDiem.setText("-"+Integer.parseInt(tvDiem.getText().toString())+1);
-
-                    }
-                });
-                btOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         *cập nhật điểm
-                         */
-                        myChannelInterface.addpoint(itemChanel.getChanelId(),Integer.parseInt(tvDiem.getText().toString()));
-                        dialogEdit.dismiss();
-                    }
-                });
-                btCancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogEdit.dismiss();
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            pointsUser = (long) documentSnapshot.get("points");
+                            /**
+                             *
+                             */
+                            dialogEdit.show();
+                            ivCong.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *cộng điểm
+                                     */
+                                    int a = Integer.parseInt((String) tvDiem.getText());
+                                    if (pointsUser > 0) {
+                                        a++;
+                                        pointsUser--;
+                                    } else {
+                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(a + "");
+                                }
+                            });
+                            ivTru.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *trừ điểm
+                                     */
+                                    int b = Integer.parseInt((String) tvDiem.getText());
+                                    if (b > 0) {
+                                        b--;
+                                        pointsUser++;
+                                    } else {
+                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(b + "");
+                                }
+                            });
+                            btOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *cập nhật điểm
+                                     */
+                                    int pointsChanel = Integer.parseInt((String) tvDiem.getText());
+                                    Log.d("AAAAA", "onClick: user:   " + pointsUser);
+                                    Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
+                                    dialogEdit.dismiss();
+                                }
+                            });
+                            btCancle.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogEdit.dismiss();
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -233,39 +278,73 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 TextView tvDiem = dialogAdd.findViewById(R.id.tv_thay_doi);
                 ImageView ivCong = dialogAdd.findViewById(R.id.iv_cong);
                 ImageView ivTru = dialogAdd.findViewById(R.id.iv_tru);
-                dialogAdd.show();
-                btOk.setOnClickListener(new View.OnClickListener() {
+                tvDiem.setText("0");
+                /**
+                 *
+                 */
+                FirebaseFirestore db;
+                FirebaseAuth auth;
+                db = FirebaseFirestore.getInstance();
+                auth = FirebaseAuth.getInstance();
+                DocumentReference reference = db.collection("USER").document(auth.getUid());
+                reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onClick(View v) {
-                        /**
-                         * đưa app vào chiến dịch
-                         */
-                        myChannelInterface.addpoint(itemChanel.getChanelId(),Integer.parseInt(tvDiem.getText().toString()));
-                        dialogAdd.dismiss();
-                    }
-                });
-                btCancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogAdd.dismiss();
-                    }
-                });
-                ivCong.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         * cộng điểm
-                         */
-                        tvDiem.setText("+");
-                    }
-                });
-                ivTru.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         * trừ điểm
-                         */
-                        tvDiem.setText("-");
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            pointsUser = (long) documentSnapshot.get("points");
+                            /**
+                             *
+                             */
+                            dialogAdd.show();
+                            btOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     * đưa app vào chiến dịch
+                                     */
+                                    myChannelInterface.addpoint(itemChanel.getChanelId(),Integer.parseInt(tvDiem.getText().toString()));
+                                    dialogAdd.dismiss();
+                                }
+                            });
+                            btCancle.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialogAdd.dismiss();
+                                }
+                            });
+                            ivCong.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *cộng điểm
+                                     */
+                                    int a = Integer.parseInt((String) tvDiem.getText());
+                                    if (pointsUser > 0) {
+                                        a++;
+                                        pointsUser--;
+                                    } else {
+                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(a + "");
+                                }
+                            });
+                            ivTru.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    /**
+                                     *trừ điểm
+                                     */
+                                    int b = Integer.parseInt((String) tvDiem.getText());
+                                    if (b > 0) {
+                                        b--;
+                                        pointsUser++;
+                                    } else {
+                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                    }
+                                    tvDiem.setText(b + "");
+                                }
+                            });
+                        }
                     }
                 });
             }
