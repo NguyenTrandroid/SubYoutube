@@ -85,7 +85,7 @@ public class DataChannel {
     }
 
     //getSubscribers Channel
-    private void getSubscribers(Context context, String key, String id)
+    public void getSubscribers(Context context, String key, String id)
     {
         compositeDisposable = new CompositeDisposable();
         subChannelItem = new SubChannelItem();
@@ -151,7 +151,7 @@ public class DataChannel {
                 .subscribe(this::responseGetSubcribersOfChannel, this::errorGetSubcribersOfChannel, this::successGetSubcribersOfChannel);
         compositeDisposable.add(disposable);
     }
-    private void getListSubscripbers(Context context, String key, List<String> listIdChannel)
+    public void getListSubscripbers(Context context, String key, List<String> listIdChannel)
     {
         listSubChannelItem = new ArrayList<>();
         sizeListSubscribers = listIdChannel.size();
