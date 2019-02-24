@@ -11,10 +11,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestInfoChanel;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestListSub;
+import ictandroid.youtube.com.Utils.GetData.Interface.RequestSubcribers;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,12 +33,18 @@ public class DataChannel {
     private CompositeDisposable compositeDisposable;
     private ChanelItem chanelItem;
     private SubItem subItem;
+    private SubChannelItem subChannelItem;
     private Context context;
     private int sizeList;
     GetInfoChanelListener getInfoChanelListener;
     GetSubListener getSubListener;
+    GetSubscriberListener getSubscriberListener;
     private List<SubItem> listSubItem;
+    private List<SubChannelItem> listSubChannelItem;
+    private int sizeListSubscribers;
+    GetListSubscriberListener getListSubscriberListener;
 
+    //GetInfoChannel
     public void getInfo(Context context, String key, String id)
     {
         compositeDisposable = new CompositeDisposable();
@@ -62,19 +72,114 @@ public class DataChannel {
                 .subscribe(this::responseGetInfo, this::errorGetInfo, this::successGetInfo);
         compositeDisposable.add(disposable);
     }
-    public void getListSub(Context context, String key, List<String> listIdChannel)
+    private void successGetInfo() {
+        Log.d("GETINFO","Completed");
+    }
+    private void responseGetInfo(ChanelItem itemChanel) {
+        chanelItem = itemChanel;
+        getInfoChanelListener.onInfoCompleted(chanelItem);
+    }
+    private void errorGetInfo(Throwable error) {
+        getInfoChanelListener.onInfoError(error.getLocalizedMessage());
+        Log.d("GETINFO","ERROR: "+error.getLocalizedMessage());
+    }
+
+    //getSubscribers Channel
+    private void getSubscribers(Context context, String key, String id)
     {
-        listSubItem = new ArrayList<>();
-        sizeList = listIdChannel.size();
-        for(int i=0;i<listIdChannel.size();i++)
+        compositeDisposable = new CompositeDisposable();
+        subChannelItem = new SubChannelItem();
+        this.context = context;
+
+        getSubscriberListener = (GetSubscriberListener) context;
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10,TimeUnit.SECONDS)
+                .connectTimeout(10,TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                .build();
+        RequestSubcribers requestListSub = new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl("https://www.googleapis.com/youtube/v3/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RequestSubcribers.class);
+        Disposable disposable = requestListSub.register("statistics",id,key)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::responseGetSubcribers, this::errorGetSubcribers, this::successGetSubcribers);
+        compositeDisposable.add(disposable);
+    }
+    private void successGetSubcribers() {
+        Log.d("GETSUBer","COMPLETED");
+    }
+    private void responseGetSubcribers(SubChannelItem itemSub) {
+        subChannelItem = itemSub;
+        getSubscriberListener.onCompletedSubcriber(subChannelItem);
+    }
+    private void errorGetSubcribers(Throwable error) {
+        getSubListener.onSubError(error.getLocalizedMessage());
+    }
+
+    //getListSubscribers
+    private void getSubscribersOfChannel(Context context, String key, String id)
+    {
+        compositeDisposable = new CompositeDisposable();
+        subChannelItem = new SubChannelItem();
+        this.context = context;
+
+        getListSubscriberListener = (GetListSubscriberListener) context;
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10,TimeUnit.SECONDS)
+                .connectTimeout(10,TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                .build();
+        RequestSubcribers requestListSub = new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl("https://www.googleapis.com/youtube/v3/")
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RequestSubcribers.class);
+        Disposable disposable = requestListSub.register("statistics",id,key)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::responseGetSubcribersOfChannel, this::errorGetSubcribersOfChannel, this::successGetSubcribersOfChannel);
+        compositeDisposable.add(disposable);
+    }
+    private void getListSubscripbers(Context context, String key, List<String> listIdChannel)
+    {
+        listSubChannelItem = new ArrayList<>();
+        sizeListSubscribers = listIdChannel.size();
+        for(int i = 0; i<listIdChannel.size();i++)
         {
-            getSub(context,key,listIdChannel.get(i));
+            getSubscribersOfChannel(context,key,listIdChannel.get(i));
         }
     }
+    private void successGetSubcribersOfChannel() {
+        Log.d("GETSUBer","COMPLETED");
+    }
+    private void responseGetSubcribersOfChannel(SubChannelItem itemSub) {
+        subChannelItem = itemSub;
+        listSubChannelItem.add(subChannelItem);
+        if(listSubChannelItem.size()==sizeListSubscribers)
+        {
+            getListSubscriberListener.onCompletedListSubcriber(listSubChannelItem);
+        }
+    }
+    private void errorGetSubcribersOfChannel(Throwable error) {
+        getListSubscriberListener.onErrorListSubcripber(error.getLocalizedMessage());
+    }
+
+
+    //getSubscription
     private void getSub(Context context, String key, String id)
     {
         compositeDisposable = new CompositeDisposable();
-        chanelItem = new ChanelItem();
         subItem = new SubItem();
         this.context = context;
 
@@ -100,8 +205,18 @@ public class DataChannel {
         compositeDisposable.add(disposable);
     }
 
+    //GetListSubscription
+    public void getListSub(Context context, String key, List<String> listIdChannel)
+    {
+        listSubItem = new ArrayList<>();
+        sizeList = listIdChannel.size();
+        for(int i=0;i<listIdChannel.size();i++)
+        {
+            getSub(context,key,listIdChannel.get(i));
+        }
+    }
     private void successGetListSub() {
-        Log.d("GETLISTSUB","COMPLETED");
+        Log.d("GETSUBer","COMPLETED");
     }
     private void responseGetListSub(SubItem itemSub) {
         subItem = itemSub;
@@ -114,18 +229,6 @@ public class DataChannel {
     private void errorGetListSub(Throwable error) {
         getSubListener.onSubError(error.getLocalizedMessage());
         Log.d("GETLISTSUB","ERROR: "+error.getLocalizedMessage());
-    }
-
-    private void successGetInfo() {
-        Log.d("GETINFO","Completed");
-    }
-    private void responseGetInfo(ChanelItem itemChanel) {
-        chanelItem = itemChanel;
-        getInfoChanelListener.onInfoCompleted(chanelItem);
-    }
-    private void errorGetInfo(Throwable error) {
-        getInfoChanelListener.onInfoError(error.getLocalizedMessage());
-        Log.d("GETINFO","ERROR: "+error.getLocalizedMessage());
     }
 
 }
