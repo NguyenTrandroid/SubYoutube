@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,15 +43,19 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
     Dialog dialogEdit;
     OnChannelClick onChannelClick;
     long pointsUser;
-    MyChanelAdapter.MyChannelInterface myChannelInterface;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
+    MyChannelInterface myChannelInterface;
     public CampaignChanelAdapter(Context context, ArrayList<ItemChanel> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        myChannelInterface= (MyChannelInterface) context;
         onChannelClick = (OnChannelClick) context;
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
-        myChannelInterface = (MyChanelAdapter.MyChannelInterface) context;
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -129,7 +135,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                          *gỡ bỏ kênh
                          */
                         myChannelInterface.delete(itemChanel.getChanelId());
-                        dialogRemove.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -183,10 +188,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 /**
                  *
                  */
-                FirebaseFirestore db;
-                FirebaseAuth auth;
-                db = FirebaseFirestore.getInstance();
-                auth = FirebaseAuth.getInstance();
                 DocumentReference reference = db.collection("USER").document(auth.getUid());
                 reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -236,6 +237,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                                      *cập nhật điểm
                                      */
                                     int pointsChanel = Integer.parseInt((String) tvDiem.getText());
+                                    capnhatdiem(pointsChanel,itemChanel.getChanelId());
                                     Log.d("AAAAA", "onClick: user:   " + pointsUser);
                                     Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
                                     dialogEdit.dismiss();
@@ -253,6 +255,25 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
             }
         });
     }
+    private void capnhatdiem(int diem,String channeldi) {
+        DocumentReference docRef = db.collection("LIST").document(channeldi);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        int x=diem-Integer.parseInt(String.valueOf(document.getData().get("points")));
+                        myChannelInterface.addpoint(channeldi,x);
+                    }else {
+                        /////////////////////
+
+                    }
+                }
+            }
+        });
+    }
+
 
     @Override
     public int getItemCount() {
@@ -286,5 +307,8 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
 
     public interface OnChannelClick {
         void OnClicked(String channelid);
+    } public interface MyChannelInterface{
+        void delete(String channelid);
+        void addpoint(String channelid,int point);
     }
 }

@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
@@ -27,14 +28,18 @@ import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannel;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
+import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
 
-public class FragmentInCampaign extends Fragment {
+public class FragmentInCampaign extends Fragment implements GetSubListener {
     View view;
     RecyclerView recyclerView;
     MyChanelAdapter myChanelAdapter;
     ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
     ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
     String uid;
+    DataChannel dataChannel;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,7 @@ public class FragmentInCampaign extends Fragment {
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
+        dataChannel=new DataChannel();
         loadApp();
         return view;
     }
@@ -92,5 +98,17 @@ public class FragmentInCampaign extends Fragment {
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onListSubCompleted(List<SubItem> listSubItem) {
+
+    }
+
+    @Override
+    public void onSubError(String error) {
+        Log.d("tststa", "onSubCompleted: "+error);
+
     }
 }
