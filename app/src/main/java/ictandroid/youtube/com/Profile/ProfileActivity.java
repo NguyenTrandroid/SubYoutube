@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,6 +27,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
@@ -78,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseFirestore db;
+    private ArrayList<ItemHistory> listHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +92,9 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        listHistory = new ArrayList<>();
         setPoints();
+        loadHistory();
         tvNameProfile.setText(auth.getCurrentUser().getDisplayName());
         Glide.with(this).load(auth.getCurrentUser().getPhotoUrl()).into(ivAvata);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -107,6 +115,29 @@ public class ProfileActivity extends AppCompatActivity {
 
                     tvCoin.setText(String.valueOf(documentSnapshot.get("points")));
                 }
+            }
+        });
+    }
+    private void loadHistory() {
+        listHistory.clear();
+        DocumentReference reference = db.collection("HISTORY").document("1P4y4ITjIFbwGykIQSmuEOwDFyL2");
+        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                ArrayList<String> listChannel = (ArrayList<String>) documentSnapshot.get("listhistory");
+                for (int i = 0; i < listChannel.size(); i++) {
+                    String[] str = listChannel.get(i).split("<ict>");
+                    listHistory.add(new ItemHistory(str[0], str[1], "0"));
+                    Log.d("AAA",str[0]+""+str[1]);
+                }
+                Log.d("AAA",listHistory.size()+"");
+                HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
+                rvHistory.setLayoutManager(layoutManager);
+                rvHistory.setItemAnimator(new DefaultItemAnimator());
+                rvHistory.setAdapter(historyAdapter);
+
+
             }
         });
     }
