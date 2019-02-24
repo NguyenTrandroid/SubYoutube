@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Profile.history.HistoryActivity"></activity>
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".MyApp.MyAppActivity" />
         <activity android:name=".Campaign.CampaignActivity" />

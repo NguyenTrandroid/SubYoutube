@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,7 +33,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.Login.LoginActivity;
-import ictandroid.youtube.com.Profile.history.HistoryActivity;
 import ictandroid.youtube.com.R;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -64,6 +63,18 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivLine3;
     @BindView(R.id.cv_info)
     CardView cvInfo;
+    @BindView(R.id.rl_info)
+    RelativeLayout rlInfo;
+    @BindView(R.id.tv_clear)
+    TextView tvClear;
+    @BindView(R.id.rl_history1)
+    RelativeLayout rlHistory1;
+    @BindView(R.id.tv_title)
+    ImageView tvTitle;
+    @BindView(R.id.iv_back_red)
+    ImageView ivBackRed;
+    @BindView(R.id.rv_history)
+    RecyclerView rvHistory;
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseFirestore db;
@@ -84,8 +95,9 @@ public class ProfileActivity extends AppCompatActivity {
                 .build();
         // [END config_signin]
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        
+
     }
+
     private void setPoints() {
         DocumentReference reference = db.collection("USER").document(auth.getUid());
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -99,11 +111,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.rl_history, R.id.rl_contacadmin, R.id.tv_logout,R.id.iv_back})
+    @OnClick({R.id.rl_history, R.id.rl_contacadmin, R.id.tv_logout, R.id.iv_back, R.id.iv_back_red, R.id.tv_clear})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_history:
-                startActivity(new Intent(ProfileActivity.this, HistoryActivity.class));
+                rlInfo.setVisibility(View.INVISIBLE);
+                rlHistory1.setVisibility(View.VISIBLE);
+
                 break;
             case R.id.rl_contacadmin:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -120,8 +134,8 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 sLoading.dismiss();
-                                Intent intent = new Intent(ProfileActivity.this,LoginActivity.class);
-                                intent.putExtra("action","nosplash");
+                                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                                intent.putExtra("action", "nosplash");
                                 startActivity(intent);
                                 finish();
 
@@ -130,6 +144,11 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.iv_back:
                 finish();
+            case R.id.iv_back_red:
+                rlHistory1.setVisibility(View.INVISIBLE);
+                rlInfo.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_clear:
                 break;
         }
     }
