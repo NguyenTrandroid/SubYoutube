@@ -203,7 +203,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                             ivCong.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    getDiem();
                                     /**
                                      *cộng điểm
                                      */
@@ -272,19 +271,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                         /////////////////////
 
                     }
-                }
-            }
-        });
-    }
-
-    private void getDiem(){
-        DocumentReference documentReference = db.collection("USER").document(auth.getUid());
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    Log.d("AAAAA", "onClick: điểm: " + document.getData().get("points"));
                 }
             }
         });
