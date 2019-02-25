@@ -104,13 +104,13 @@ public class CallingYoutube {
     }
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private void chooseAccount() {
+    public void chooseAccount() {
         Log.d("checkpermisss", "chooseAccount: ");
-        if (EasyPermissions.hasPermissions(
-                activity, Manifest.permission.GET_ACCOUNTS)) {
+        if (EasyPermissions.hasPermissions(activity, Manifest.permission.GET_ACCOUNTS)) {
             String accountName = activity.getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (auth.getCurrentUser().getEmail() != null) {
+                Log.d("tessstssts", "chooseAccount: "+auth.getCurrentUser().getEmail());
                 mCredential.setSelectedAccountName(auth.getCurrentUser().getEmail());
                 getChannelFromApi();
 //                checkSubscriberFromApi(idChannel);
@@ -127,8 +127,8 @@ public class CallingYoutube {
                     Manifest.permission.GET_ACCOUNTS);
         }
     }
-
     public void activityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("tsttoernus", requestCode+"re");
         Log.d("permissionx12312",requestCode+""+"/"+resultCode+"");
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
@@ -160,6 +160,9 @@ public class CallingYoutube {
                 if (resultCode == activity.RESULT_OK) {
                     getChannelFromApi();
                 }
+                break;
+            case REQUEST_PERMISSION_GET_ACCOUNTS:
+               chooseAccount();
                 break;
 
         }
@@ -243,6 +246,7 @@ public class CallingYoutube {
 
 
         private void checkSubscriber() throws IOException {
+            Log.d("tsdsdsd", mCredential.getSelectedAccountName());
             SubscriptionListResponse result = mService.subscriptions().list("id")
                     .setMine(true)
                     .setForChannelId(idChannel)
@@ -274,6 +278,7 @@ public class CallingYoutube {
         @Override
         protected void onCancelled() {
             sLoading.dismiss();
+            Log.d("tessstssts", "onCancelled: ");
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(

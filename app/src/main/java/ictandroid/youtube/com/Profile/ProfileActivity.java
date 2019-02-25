@@ -119,7 +119,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null && documentSnapshot.exists()) {
-
                     tvCoin.setText(String.valueOf(documentSnapshot.get("points")));
                 }
             }
