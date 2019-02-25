@@ -18,9 +18,13 @@ import butterknife.ButterKnife;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
+import ictandroid.youtube.com.MyApp.Other.FragmentOther;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
 
-public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface {
+public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface, GetInfoChanelListener {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -120,5 +124,26 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                 sEdit.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onInfoCompleted(ChanelItem chanelItem) {
+        cloudFunction = new CloudFunction();
+        Item item = chanelItem.getItems().get(0);
+        cloudFunction.addChannel(item.getId(),item.getSnippet().getThumbnails().getMedium().getUrl(),
+                item.getSnippet().getTitle(),"0","0");
+        if(FragmentOther.sLoadingAddChannel !=null)
+        {
+            FragmentOther.sLoadingAddChannel.dismiss();
+        }
+        if(FragmentOther.dialogAdd !=null)
+        {
+            FragmentOther.dialogAdd.cancel();
+        }
+    }
+
+    @Override
+    public void onInfoError(String error) {
+
     }
 }

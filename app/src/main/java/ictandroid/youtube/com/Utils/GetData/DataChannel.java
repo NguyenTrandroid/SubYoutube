@@ -34,7 +34,6 @@ public class DataChannel {
     private ChanelItem chanelItem;
     private SubItem subItem;
     private SubChannelItem subChannelItem;
-    private Context context;
     private int sizeList;
     GetInfoChanelListener getInfoChanelListener;
     GetSubListener getSubListener;
@@ -49,7 +48,6 @@ public class DataChannel {
     {
         compositeDisposable = new CompositeDisposable();
         chanelItem = new ChanelItem();
-        this.context = context;
 
         getInfoChanelListener = (GetInfoChanelListener) context;
 
@@ -89,7 +87,6 @@ public class DataChannel {
     {
         compositeDisposable = new CompositeDisposable();
         subChannelItem = new SubChannelItem();
-        this.context = context;
 
         getSubscriberListener = (GetSubscriberListener) context;
 
@@ -128,7 +125,6 @@ public class DataChannel {
     {
         compositeDisposable = new CompositeDisposable();
         subChannelItem = new SubChannelItem();
-        this.context = context;
 
         getListSubscriberListener = (GetListSubscriberListener) context;
 
@@ -181,7 +177,6 @@ public class DataChannel {
     {
         compositeDisposable = new CompositeDisposable();
         subItem = new SubItem();
-        this.context = context;
 
         getSubListener = (GetSubListener) context;
 

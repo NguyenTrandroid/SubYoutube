@@ -1,9 +1,12 @@
 package ictandroid.youtube.com.MyApp.Other;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,9 +36,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
+import ictandroid.youtube.com.CloudFunction;
+import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannel;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
 
 public class FragmentOther extends Fragment {
     View view;
@@ -45,14 +54,34 @@ public class FragmentOther extends Fragment {
     ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
     ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
     String uid;
+    public static SLoading sLoadingAddChannel;
+    public static Dialog dialogAdd;
+    DataChannel dataChannel;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getActivity().getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type))
+                handleSendText(intent); // Handle text being sent
+        }
+    }
+    void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            Log.d("SHARE",sharedText);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        dataChannel = new DataChannel();
         view = inflater.inflate(R.layout.fragment_my_channel, container, false);
         imageView = view.findViewById(R.id.iv_addApp);
         addApp();
@@ -70,7 +99,7 @@ public class FragmentOther extends Fragment {
                 /**
                  * thêm kênh
                  */
-                Dialog dialogAdd = new Dialog(getContext());
+                dialogAdd = new Dialog(getContext());
                 Objects.requireNonNull(dialogAdd.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogAdd.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -102,6 +131,14 @@ public class FragmentOther extends Fragment {
                         /**
                          * add kênh
                          */
+                        if(!editText.getText().toString().isEmpty()&&editText.getText()!=null&&!editText.getText().equals(""))
+                        {
+                            sLoadingAddChannel = new SLoading(getContext());
+                            sLoadingAddChannel.show();
+                            Uri uri = Uri.parse(editText.getText().toString());
+                            String idChannel = uri.getLastPathSegment();
+                            dataChannel.getInfo(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",idChannel);
+                        }
                     }
                 });
                 buttonCancle.setOnClickListener(new View.OnClickListener() {
@@ -158,4 +195,6 @@ public class FragmentOther extends Fragment {
             }
         });
     }
+
+
 }
