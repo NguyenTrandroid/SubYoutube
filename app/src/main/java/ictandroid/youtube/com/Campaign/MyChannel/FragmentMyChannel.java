@@ -23,17 +23,22 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannelOnCampaign;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentMyChannel extends Fragment {
+public class FragmentMyChannel extends Fragment implements GetSubFromCampaignListener {
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
     String uid;
+    DataChannelOnCampaign dataChannelOnCampaign;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,10 @@ public class FragmentMyChannel extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
+        String getIDFragment = this.getTag();
+        String[] output = getIDFragment.split(":", 4);
+        CONST.tagFragmentMyChannel = output[2];
+
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
@@ -79,16 +88,45 @@ public class FragmentMyChannel extends Fragment {
                             }
                         }
                         appArrayList = appArrayListAllChanel;
-                        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        campaignChanelAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(campaignChanelAdapter);
+
+                        List<String> listIdChannel = new ArrayList<>();
+                        for(int i=0;i<appArrayList.size();i++)
+                        {
+                            listIdChannel.add(appArrayList.get(i).getChanelId());
+                        }
+                        dataChannelOnCampaign =new DataChannelOnCampaign();
+                        dataChannelOnCampaign.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
+
                     }
                 } catch (Exception s) {
 
                 }
             }
         });
+    }
+
+    @Override
+    public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
+        for(int i=0;i<lisSubChannelItem.size();i++)
+        {
+            for(int j=0;j<appArrayList.size();j++)
+            {
+                if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(appArrayList.get(j).getChanelId()))
+                {
+                    appArrayList.get(j)
+                            .setSoLuotSub(lisSubChannelItem.get(i)
+                                    .getItems()
+                                    .get(0)
+                                    .getStatistics()
+                                    .getSubscriberCount());
+
+                }
+            }
+        }
+        campaignChanelAdapter = new CampaignChanelAdapter(getContext(), appArrayListAllChanel);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        campaignChanelAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(campaignChanelAdapter);
     }
 }

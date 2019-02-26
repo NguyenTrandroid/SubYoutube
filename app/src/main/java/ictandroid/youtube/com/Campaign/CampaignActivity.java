@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,19 +26,29 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ictandroid.youtube.com.CONST;
+import ictandroid.youtube.com.Campaign.AllChannel.FragmentAllChannel;
+import ictandroid.youtube.com.Campaign.AllChannel.GetSubFromCampaignV2Listener;
+import ictandroid.youtube.com.Campaign.MyChannel.FragmentMyChannel;
+import ictandroid.youtube.com.Campaign.MyChannel.GetSubFromCampaignListener;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
-import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnCampaignListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnCampaignV2Listener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class CampaignActivity extends AppCompatActivity implements CampaignChanelAdapter.MyChannelInterface,GetResultApiListener,CampaignChanelAdapter.OnChannelClick{
+public class CampaignActivity extends AppCompatActivity implements CampaignChanelAdapter.MyChannelInterface,GetResultApiListener,
+        CampaignChanelAdapter.OnChannelClick, SubscriberOnCampaignListener, SubscriberOnCampaignV2Listener {
 
 
     @BindView(R.id.iv_back)
@@ -61,6 +70,8 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     CallingYoutube callingYoutube;
     String idchannelchecking="";
     SLoading sEdit;
+    GetSubFromCampaignListener getSubFromCampaignListener;
+    GetSubFromCampaignV2Listener getSubFromCampaignV2Listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,5 +367,38 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                 sEdit.dismiss();
             }
         });
+    }
+
+
+    @Override
+    public void onCompletedListSubcriberCampaign(List<SubChannelItem> listSubscribers) {
+        if (CONST.tagFragmentMyChannel != null) {
+            FragmentMyChannel fragmentMyChannel = (FragmentMyChannel) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentMyChannel + ":1");
+            if (fragmentMyChannel != null) {
+                getSubFromCampaignListener = (GetSubFromCampaignListener) fragmentMyChannel;
+                getSubFromCampaignListener.onCompletedSubFromActivity(listSubscribers);
+            }
+        }
+    }
+
+    @Override
+    public void onErrorListSubcripberCampaign(String error) {
+
+    }
+
+    @Override
+    public void onCompletedListSubcriberCampaignV2(List<SubChannelItem> listSubscribers) {
+        if (CONST.tagFragmentMyChannel != null) {
+            FragmentAllChannel fragmentAllChannel = (FragmentAllChannel) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentMyChannel + ":0");
+            if (fragmentAllChannel != null) {
+                getSubFromCampaignV2Listener = (GetSubFromCampaignV2Listener) fragmentAllChannel;
+                getSubFromCampaignV2Listener.onCompletedSubV2FromActivity(listSubscribers);
+            }
+        }
+    }
+
+    @Override
+    public void onErrorListSubcripberCampaignV2(String error) {
+
     }
 }

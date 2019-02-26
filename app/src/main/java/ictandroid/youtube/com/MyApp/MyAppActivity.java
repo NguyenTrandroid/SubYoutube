@@ -27,14 +27,14 @@ import ictandroid.youtube.com.MyApp.Other.GetSubFomActivityListener;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscribersV2Listener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscribersOnMyAppV2Listener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
 public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface,
-        GetInfoChanelListener, GetListSubscriberListener, GetListSubscribersV2Listener {
+        GetInfoChanelListener, SubscriberOnMyAppListener, SubscribersOnMyAppV2Listener {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;

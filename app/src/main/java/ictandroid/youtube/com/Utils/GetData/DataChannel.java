@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestInfoChanel;
@@ -41,7 +41,7 @@ public class DataChannel {
     private List<SubItem> listSubItem;
     private List<SubChannelItem> listSubChannelItem;
     private int sizeListSubscribers;
-    GetListSubscriberListener getListSubscriberListener;
+    SubscriberOnMyAppListener subscriberOnMyAppListener;
 
     //GetInfoChannel
     public void getInfo(Context context, String key, String id)
@@ -126,7 +126,7 @@ public class DataChannel {
         compositeDisposable = new CompositeDisposable();
         subChannelItem = new SubChannelItem();
 
-        getListSubscriberListener = (GetListSubscriberListener) context;
+        subscriberOnMyAppListener = (SubscriberOnMyAppListener) context;
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -164,11 +164,11 @@ public class DataChannel {
         listSubChannelItem.add(subChannelItem);
         if(listSubChannelItem.size()==sizeListSubscribers)
         {
-            getListSubscriberListener.onCompletedListSubcriber(listSubChannelItem);
+            subscriberOnMyAppListener.onCompletedListSubcriber(listSubChannelItem);
         }
     }
     private void errorGetSubcribersOfChannel(Throwable error) {
-        getListSubscriberListener.onErrorListSubcripber(error.getLocalizedMessage());
+        subscriberOnMyAppListener.onErrorListSubcripber(error.getLocalizedMessage());
     }
 
 

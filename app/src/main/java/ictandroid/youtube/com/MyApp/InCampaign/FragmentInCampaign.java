@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
-import ictandroid.youtube.com.Utils.GetData.SubscibersData;
+import ictandroid.youtube.com.Utils.GetData.SubscribersOnMyApp;
 
 public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2Listener {
     //view
@@ -40,7 +39,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
     ArrayList<ItemMyChanel> arrayListAllChanel;
     ArrayList<ItemMyChanel> arrayList;
     String uid;
-    SubscibersData subscibersData;
+    SubscribersOnMyApp subscribersOnMyApp;
     //api
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
@@ -70,7 +69,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
         uid = firebaseAuth.getUid();
         arrayListAllChanel = new ArrayList<>();
         arrayList = new ArrayList<>();
-        subscibersData = new SubscibersData();
+        subscribersOnMyApp = new SubscribersOnMyApp();
     }
     private void InitView()
     {
@@ -130,13 +129,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        subscibersData.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
-
-                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        myChanelAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(myChanelAdapter);
+                        subscribersOnMyApp.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
                     }
                 } catch (Exception s) {
 
@@ -153,13 +146,11 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
             {
                 if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
                 {
-                    arrayList.get(j)
-                            .setSoLuotSub(lisSubChannelItem.get(i)
-                                    .getItems()
-                                    .get(0)
-                                    .getStatistics()
-                                    .getSubscriberCount());
-
+                    arrayList.get(j).setSoLuotSub(lisSubChannelItem.get(i)
+                    .getItems()
+                    .get(0)
+                    .getStatistics()
+                    .getSubscriberCount());
                 }
             }
         }

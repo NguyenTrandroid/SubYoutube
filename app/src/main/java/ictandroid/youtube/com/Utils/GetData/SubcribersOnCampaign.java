@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscribersV2Listener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnCampaignV2Listener;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscribersOnMyAppV2Listener;
 import ictandroid.youtube.com.Utils.GetData.Interface.RequestSubcribers;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,12 +23,12 @@ import okhttp3.Protocol;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SubscibersData {
+public class SubcribersOnCampaign {
     private CompositeDisposable compositeDisposable;
     private SubChannelItem subChannelItem;
     private List<SubChannelItem> listSubChannelItem;
     private int sizeListSubscribers;
-    GetListSubscribersV2Listener getListSubscriberListenerV2;
+    SubscriberOnCampaignV2Listener subscriberOnCampaignV2Listener;
 
     //getListSubscribers
     private void getSubscribersOfChannel(Context context, String key, String id)
@@ -35,7 +36,7 @@ public class SubscibersData {
         compositeDisposable = new CompositeDisposable();
         subChannelItem = new SubChannelItem();
 
-        getListSubscriberListenerV2 = (GetListSubscribersV2Listener) context;
+        subscriberOnCampaignV2Listener = (SubscriberOnCampaignV2Listener) context;
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -73,10 +74,10 @@ public class SubscibersData {
         listSubChannelItem.add(subChannelItem);
         if(listSubChannelItem.size()==sizeListSubscribers)
         {
-            getListSubscriberListenerV2.onCompletedListSubcriberV2(listSubChannelItem);
+            subscriberOnCampaignV2Listener.onCompletedListSubcriberCampaignV2(listSubChannelItem);
         }
     }
     private void errorGetSubcribersOfChannel(Throwable error) {
-        getListSubscriberListenerV2.onErrorListSubcripberV2(error.getLocalizedMessage());
+        subscriberOnCampaignV2Listener.onErrorListSubcripberCampaignV2(error.getLocalizedMessage());
     }
 }

@@ -24,21 +24,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
-import ictandroid.youtube.com.Utils.GetData.DataChannel;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetSubscriberListener;
+import ictandroid.youtube.com.Utils.GetData.SubcribersOnCampaign;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentAllChannel extends Fragment implements GetListSubscriberListener {
+public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2Listener {
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemChanel> appArrayList = new ArrayList<>();
-    DataChannel dataChannel = new DataChannel();
+    ArrayList<ItemChanel> appArrayList;
+    SubcribersOnCampaign subcribersOnCampaign;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class FragmentAllChannel extends Fragment implements GetListSubscriberLis
         loadApp();
         return view;
     }
+
     private void loadApp() {
         recyclerView = view.findViewById(R.id.rv_listCampaign);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -104,12 +106,15 @@ public class FragmentAllChannel extends Fragment implements GetListSubscriberLis
                         /**
                          *
                          */
-                        List<String> chanelID = new ArrayList<>();
-                        chanelID.clear();
-                        for (int i=0; i<appArrayListAllChanel.size(); ++i){
-                            chanelID.add(appArrayListAllChanel.get(i).getChanelId());
+                        appArrayList  = new ArrayList<>();
+                        appArrayList = appArrayListAllChanel;
+                        List<String> listIdChannel = new ArrayList<>();
+                        for (int i = 0; i < appArrayListAllChanel.size(); i++) {
+                            listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
                         }
-                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",chanelID);
+                        Log.d("TTTT",listIdChannel.size()+" - "+listIdChannel.get(0));
+                        subcribersOnCampaign = new SubcribersOnCampaign();
+                        subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
                     }
                 } catch (Exception s) {
 
@@ -118,22 +123,24 @@ public class FragmentAllChannel extends Fragment implements GetListSubscriberLis
         });
     }
 
-
     @Override
-    public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
-        for(int i=0; i<listSubscribers.size(); ++i){
-            appArrayListAllChanel.get(i).setSoLuotSub(listSubscribers.get(i).getItems().get(i).getStatistics().getSubscriberCount());
+    public void onCompletedSubV2FromActivity(List<SubChannelItem> lisSubChannelItem) {
+        Log.d("AADDDD",appArrayList.size()+"");
+        for (int i = 0; i < lisSubChannelItem.size(); i++) {
+            for (int j = 0; j < appArrayList.size(); j++) {
+                if (lisSubChannelItem.get(i).getItems().get(0).getId().equals(appArrayList.get(j).getChanelId())) {
+                    Log.d("AADDDD","yes+");
+                    appArrayList.get(j)
+                            .setSoLuotSub(lisSubChannelItem.get(i)
+                            .getItems()
+                            .get(0)
+                            .getStatistics()
+                            .getSubscriberCount());
+
+                }
+            }
         }
-        initView();
-
-    }
-
-    @Override
-    public void onErrorListSubcripber(String error) {
-        Log.d("AAAAA", "error ");
-    }
-    private  void initView(){
-        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
+        campaignChanelAdapter = new CampaignChanelAdapter(getContext(), appArrayList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         campaignChanelAdapter.notifyDataSetChanged();
