@@ -100,14 +100,16 @@ public class FragmentAllChannel extends Fragment implements GetListSubscriberLis
                         /**
                          *
                          */
+//                        initView();
+                        /**
+                         *
+                         */
                         List<String> chanelID = new ArrayList<>();
                         chanelID.clear();
                         for (int i=0; i<appArrayListAllChanel.size(); ++i){
                             chanelID.add(appArrayListAllChanel.get(i).getChanelId());
                         }
-                        Log.d("AAAAA", "onEvent: getsub1 ");
                         dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",chanelID);
-                        Log.d("AAAAA", "onEvent: getsub2 ");
                     }
                 } catch (Exception s) {
 
@@ -119,11 +121,22 @@ public class FragmentAllChannel extends Fragment implements GetListSubscriberLis
 
     @Override
     public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
-        Log.d("LISTTTT",listSubscribers.size()+"");
+        for(int i=0; i<listSubscribers.size(); ++i){
+            appArrayListAllChanel.get(i).setSoLuotSub(listSubscribers.get(i).getItems().get(i).getStatistics().getSubscriberCount());
+        }
+        initView();
+
     }
 
     @Override
     public void onErrorListSubcripber(String error) {
-
+        Log.d("AAAAA", "error ");
+    }
+    private  void initView(){
+        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        campaignChanelAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(campaignChanelAdapter);
     }
 }

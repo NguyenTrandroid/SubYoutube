@@ -31,23 +31,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import ictandroid.youtube.com.CONST;
-import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
-import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
-import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
 public class FragmentOther extends Fragment implements GetDataOtherListener, GetSubFomActivityListener {
@@ -75,14 +68,6 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
         super.onCreate(savedInstanceState);
 
         InitOnCreate();
-//        Intent intent = getActivity().getIntent();
-//        String action = intent.getAction();
-//        String type = intent.getType();
-//
-//        if (Intent.ACTION_SEND.equals(action) && type != null) {
-//            if ("text/plain".equals(type))
-//                handleSendText(intent); // Handle text being sent
-//        }
     }
 
     void handleSendText(Intent intent) {
@@ -210,6 +195,7 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
                                 }
                             }
                         }
+                        arrayList.clear();
                         arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
                         for(int i=0;i<arrayList.size();i++)
@@ -228,17 +214,6 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
 
     @Override
     public void onCompletedDataOther(List<String> lisIdChannel) {
-
-//        for (int i =0; i<lisIdChannel.size();i++)
-//        {
-//            arrayList.get(i).setChanelId(lisIdChannel.get(i));
-//        }
-//
-//        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        myChanelAdapter.notifyDataSetChanged();
-//        recyclerView.setAdapter(myChanelAdapter);
         dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
     }
 
