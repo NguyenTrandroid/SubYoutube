@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -192,6 +193,18 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
                                     itemMyChanel.setLinkIcon(allData.get("linkanh"));
                                     if (itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
+                                }
+                            }
+                            TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
+                            if(CONST.COIN!=-1)
+                            {
+                                txtCoin = getActivity().findViewById(R.id.tv_coin);
+                                txtCoin.setText(CONST.COIN+"");
+                            }
+                            else {
+                                if ("points".equals(entry.getKey())) {
+                                    String coin = entry.getValue().toString();
+                                    txtCoin.setText(coin);
                                 }
                             }
                         }

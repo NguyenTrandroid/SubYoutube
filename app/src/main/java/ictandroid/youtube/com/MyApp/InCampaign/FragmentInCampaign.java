@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,47 +24,66 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
-import ictandroid.youtube.com.MyApp.Other.GetDataOtherListener;
-import ictandroid.youtube.com.MyApp.Other.GetSubFomActivityListener;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
-import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
 
-public class FragmentInCampaign extends Fragment implements GetDataOtherListener, GetSubFomActivityListener {
+public class FragmentInCampaign extends Fragment implements GetSubListener {
+    //view
     View view;
     RecyclerView recyclerView;
+    //variable
     MyChanelAdapter myChanelAdapter;
-    ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
+    ArrayList<ItemMyChanel> arrayListAllChanel;
+    ArrayList<ItemMyChanel> arrayList;
     String uid;
     DataChannel dataChannel;
-    GetDataOtherListener getDataOtherListener;
+    //api
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore db;
+    DocumentReference docRef;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        InitOnCreate();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-        FirebaseAuth firebaseAuth;
-        firebaseAuth = FirebaseAuth.getInstance();
-        uid = firebaseAuth.getUid();
-        dataChannel=new DataChannel();
-        loadApp();
+
+        InitView();
+        InitAction();
+
         return view;
     }
-    private void loadApp() {
+    private void InitOnCreate()
+    {
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        uid = firebaseAuth.getUid();
+        arrayListAllChanel = new ArrayList<>();
+        arrayList = new ArrayList<>();
+        dataChannel =new DataChannel();
+    }
+    private void InitView()
+    {
         recyclerView = view.findViewById(R.id.rv_listCampaign);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("USER").document(uid);
+    }
+    private void InitAction()
+    {
+        loadApp();
+    }
+    private void loadApp() {
+        docRef = db.collection("USER").document(uid);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -84,20 +104,31 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
                                     itemMyChanel.setNameChanel(allData.get("tenchannel"));
                                     itemMyChanel.setDiem(allData.get("points"));
                                     itemMyChanel.setLinkIcon(allData.get("linkanh"));
+                                    itemMyChanel.setSoLuotSub("9999");
                                     if (!itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
                             }
+                            TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
+                            if(CONST.COIN!=-1)
+                            {
+
+                                txtCoin.setText(CONST.COIN+"");
+                            }
+                            else
+                            {
+                                if ("points".equals(entry.getKey())) {
+                                    String coin = entry.getValue().toString();
+                                    txtCoin.setText(coin);
+                                }
+                            }
                         }
-                        arrayList.clear();
                         arrayList = arrayListAllChanel;
-                        List<String> listIdChannel = new ArrayList<>();
-                        for(int i=0;i<arrayList.size();i++)
-                        {
-                            listIdChannel.add(arrayList.get(i).getChanelId());
-                        }
-                        getDataOtherListener = (GetDataOtherListener) getContext();
-                        getDataOtherListener.onCompletedDataOther(listIdChannel);
+                        myChanelAdapter = new MyChanelAdapter(getContext(),arrayListAllChanel);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        myChanelAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(myChanelAdapter);
                     }
                 } catch (Exception s) {
 
@@ -106,34 +137,15 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
         });
     }
 
+
     @Override
-    public void onCompletedDataOther(List<String> lisIdChannel) {
-        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
+    public void onListSubCompleted(List<SubItem> listSubItem) {
+
     }
 
     @Override
-    public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
-        for(int i=0;i<lisSubChannelItem.size();i++)
-        {
-            for(int j=0;j<arrayList.size();j++)
-            {
-                if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
-                {
-                    arrayList.get(j)
-                            .setSoLuotSub(lisSubChannelItem.get(i)
-                                    .getItems()
-                                    .get(0)
-                                    .getStatistics()
-                                    .getSubscriberCount());
-
-                }
-            }
-        }
-        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        myChanelAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(myChanelAdapter);
+    public void onSubError(String error) {
+        Log.d("tststa", "onSubCompleted: "+error);
 
     }
 }
