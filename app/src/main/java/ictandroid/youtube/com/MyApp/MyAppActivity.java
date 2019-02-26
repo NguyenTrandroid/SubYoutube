@@ -2,6 +2,7 @@ package ictandroid.youtube.com.MyApp;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -13,18 +14,28 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.MyApp.Other.FragmentOther;
+import ictandroid.youtube.com.MyApp.Other.GetDataOtherListener;
+import ictandroid.youtube.com.MyApp.Other.GetSubFomActivityListener;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface, GetInfoChanelListener {
+public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.MyChannelInterface,
+        GetInfoChanelListener, GetDataOtherListener, GetListSubscriberListener {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
@@ -39,6 +50,8 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     CloudFunction cloudFunction;
     FirebaseAuth auth;
     SLoading sEdit;
+    GetSubFomActivityListener getSubFomActivityListener;
+    DataChannel dataChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +157,29 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onInfoError(String error) {
+
+    }
+
+    @Override
+    public void onCompletedDataOther(List<String> listIdChannel) {
+        dataChannel = new DataChannel();
+        dataChannel.getListSubscripbers(MyAppActivity.this,"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
+
+    }
+
+    @Override
+    public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
+        if (CONST.tagFragmentOther != null) {
+            FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
+            if (fragmentOther != null) {
+                getSubFomActivityListener = (GetSubFomActivityListener) fragmentOther;
+                getSubFomActivityListener.onCompletedSubFromActivity(listSubscribers);
+            }
+        }
+    }
+
+    @Override
+    public void onErrorListSubcripber(String error) {
 
     }
 }

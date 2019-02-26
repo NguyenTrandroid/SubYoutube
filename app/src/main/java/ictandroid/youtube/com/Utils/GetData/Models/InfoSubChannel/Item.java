@@ -5,16 +5,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class Item {
 
-@SerializedName("statistics")
-@Expose
-private Statistics statistics;
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("statistics")
+    @Expose
+    private Statistics statistics;
 
-public Statistics getStatistics() {
-return statistics;
-}
+    public String getId() {
+        return id;
+    }
 
-public void setStatistics(Statistics statistics) {
-this.statistics = statistics;
-}
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+    }
 
 }

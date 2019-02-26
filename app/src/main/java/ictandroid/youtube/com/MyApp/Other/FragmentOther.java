@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
@@ -49,50 +50,78 @@ import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentOther extends Fragment implements GetListSubscriberListener {
+public class FragmentOther extends Fragment implements GetDataOtherListener, GetSubFomActivityListener {
+    //view
     View view;
     RecyclerView recyclerView;
     ImageView imageView;
-    MyChanelAdapter myChanelAdapter;
-    ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
-    String uid;
     public static SLoading sLoadingAddChannel;
     public static Dialog dialogAdd;
+    //variable
+    MyChanelAdapter myChanelAdapter;
+    ArrayList<ItemMyChanel> arrayListAllChanel;
+    ArrayList<ItemMyChanel> arrayList;
+    String uid;
     DataChannel dataChannel;
+    //api
+    DocumentReference docRef;
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    //interface
+    GetDataOtherListener getDataOtherListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getActivity().getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type))
-                handleSendText(intent); // Handle text being sent
-        }
+        InitOnCreate();
+//        Intent intent = getActivity().getIntent();
+//        String action = intent.getAction();
+//        String type = intent.getType();
+//
+//        if (Intent.ACTION_SEND.equals(action) && type != null) {
+//            if ("text/plain".equals(type))
+//                handleSendText(intent); // Handle text being sent
+//        }
     }
+
     void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
-            Log.d("SHARE",sharedText);
+            Log.d("SHARE", sharedText);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        dataChannel = new DataChannel();
         view = inflater.inflate(R.layout.fragment_my_channel, container, false);
-        imageView = view.findViewById(R.id.iv_addApp);
-        addApp();
-        FirebaseAuth firebaseAuth;
-        firebaseAuth = FirebaseAuth.getInstance();
-        uid = firebaseAuth.getUid();
-        loadApp();
+        String getIDFragment = this.getTag();
+        String[] output = getIDFragment.split(":", 4);
+        CONST.tagFragmentOther = output[2];
+        //
+        InitView();
+        InitAction();
         return view;
+    }
+
+    private void InitView() {
+        imageView = view.findViewById(R.id.iv_addApp);
+        recyclerView = view.findViewById(R.id.rv_listMyApp);
+    }
+
+    private void InitOnCreate() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        uid = firebaseAuth.getUid();
+        dataChannel = new DataChannel();
+        arrayListAllChanel = new ArrayList<>();
+        arrayList = new ArrayList<>();
+    }
+
+    private void InitAction() {
+        loadApp();
+        addApp();
     }
 
     private void addApp() {
@@ -134,13 +163,12 @@ public class FragmentOther extends Fragment implements GetListSubscriberListener
                         /**
                          * add kênh
                          */
-                        if(!editText.getText().toString().isEmpty()&&editText.getText()!=null&&!editText.getText().equals(""))
-                        {
+                        if (!editText.getText().toString().isEmpty() && editText.getText() != null && !editText.getText().equals("")) {
                             sLoadingAddChannel = new SLoading(getContext());
                             sLoadingAddChannel.show();
                             Uri uri = Uri.parse(editText.getText().toString());
                             String idChannel = uri.getLastPathSegment();
-                            dataChannel.getInfo(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",idChannel);
+                            dataChannel.getInfo(getContext(), "AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M", idChannel);
                         }
                     }
                 });
@@ -156,9 +184,7 @@ public class FragmentOther extends Fragment implements GetListSubscriberListener
     }
 
     private void loadApp() {
-        recyclerView = view.findViewById(R.id.rv_listMyApp);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("USER").document(uid);
+        docRef = db.collection("USER").document(uid);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -179,7 +205,6 @@ public class FragmentOther extends Fragment implements GetListSubscriberListener
                                     itemMyChanel.setNameChanel(allData.get("tenchannel"));
                                     itemMyChanel.setDiem(allData.get("points"));
                                     itemMyChanel.setLinkIcon(allData.get("linkanh"));
-                                    //itemMyChanel.setSoLuotSub("9999");
                                     if (itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
@@ -187,19 +212,12 @@ public class FragmentOther extends Fragment implements GetListSubscriberListener
                         }
                         arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
-
-                        for (int i=0;i<arrayList.size();i++)
+                        for(int i=0;i<arrayList.size();i++)
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
-                        //Need add
-                        myChanelAdapter = new MyChanelAdapter(getContext(),arrayListAllChanel);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        myChanelAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(myChanelAdapter);
-                        //
+                        getDataOtherListener = (GetDataOtherListener) getContext();
+                        getDataOtherListener.onCompletedDataOther(listIdChannel);
                     }
                 } catch (Exception s) {
 
@@ -208,14 +226,45 @@ public class FragmentOther extends Fragment implements GetListSubscriberListener
         });
     }
 
-
     @Override
-    public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
-        Log.d("LISSSSSSSTTTTT",listSubscribers.size()+"");
+    public void onCompletedDataOther(List<String> lisIdChannel) {
+
+//        for (int i =0; i<lisIdChannel.size();i++)
+//        {
+//            arrayList.get(i).setChanelId(lisIdChannel.get(i));
+//        }
+//
+//        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        myChanelAdapter.notifyDataSetChanged();
+//        recyclerView.setAdapter(myChanelAdapter);
+        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
     }
 
     @Override
-    public void onErrorListSubcripber(String error) {
+    public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
+        for(int i=0;i<lisSubChannelItem.size();i++)
+        {
+            for(int j=0;j<arrayList.size();j++)
+            {
+                if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
+                {
+                    arrayList.get(j)
+                            .setSoLuotSub(lisSubChannelItem.get(i)
+                                    .getItems()
+                                    .get(0)
+                                    .getStatistics()
+                                    .getSubscriberCount());
+
+                }
+            }
+        }
+        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        myChanelAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(myChanelAdapter);
 
     }
 }
