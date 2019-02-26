@@ -25,19 +25,13 @@ import java.util.List;
 import java.util.Map;
 
 import ictandroid.youtube.com.CONST;
-import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
-import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
-import ictandroid.youtube.com.MyApp.Other.GetDataOtherListener;
-import ictandroid.youtube.com.MyApp.Other.GetSubFomActivityListener;
 import ictandroid.youtube.com.R;
-import ictandroid.youtube.com.Utils.GetData.DataChannel;
-import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
-import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
+import ictandroid.youtube.com.Utils.GetData.SubscibersData;
 
-public class FragmentInCampaign extends Fragment implements GetDataOtherListener, GetSubFomActivityListener {
+public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2Listener {
     //view
     View view;
     RecyclerView recyclerView;
@@ -46,13 +40,12 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
     ArrayList<ItemMyChanel> arrayListAllChanel;
     ArrayList<ItemMyChanel> arrayList;
     String uid;
-    DataChannel dataChannel;
+    SubscibersData subscibersData;
     //api
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     DocumentReference docRef;
 
-    GetDataOtherListener getDataOtherListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +70,7 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
         uid = firebaseAuth.getUid();
         arrayListAllChanel = new ArrayList<>();
         arrayList = new ArrayList<>();
-        dataChannel =new DataChannel();
+        subscibersData = new SubscibersData();
     }
     private void InitView()
     {
@@ -130,13 +123,20 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
                         }
                         arrayList.clear();
                         arrayList = arrayListAllChanel;
+
+                        arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
                         for(int i=0;i<arrayList.size();i++)
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        getDataOtherListener = (GetDataOtherListener) getContext();
-                        getDataOtherListener.onCompletedDataOther(listIdChannel);
+                        subscibersData.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
+
+                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        myChanelAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(myChanelAdapter);
                     }
                 } catch (Exception s) {
 
@@ -145,13 +145,8 @@ public class FragmentInCampaign extends Fragment implements GetDataOtherListener
         });
     }
 
-
     @Override
-    public void onCompletedDataOther(List<String> lisIdChannel) {
-        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
-    }
-    @Override
-    public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
+    public void onCompletedSubV2FromActivity(List<SubChannelItem> lisSubChannelItem) {
         for(int i=0;i<lisSubChannelItem.size();i++)
         {
             for(int j=0;j<arrayList.size();j++)

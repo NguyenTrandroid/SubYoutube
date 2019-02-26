@@ -44,7 +44,7 @@ import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentOther extends Fragment implements GetDataOtherListener, GetSubFomActivityListener {
+public class FragmentOther extends Fragment implements GetSubFomActivityListener {
     //view
     View view;
     RecyclerView recyclerView;
@@ -61,8 +61,6 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
     DocumentReference docRef;
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
-    //interface
-    GetDataOtherListener getDataOtherListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,8 +213,7 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        getDataOtherListener = (GetDataOtherListener) getContext();
-                        getDataOtherListener.onCompletedDataOther(listIdChannel);
+                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
                     }
                 } catch (Exception s) {
 
@@ -225,10 +222,6 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
         });
     }
 
-    @Override
-    public void onCompletedDataOther(List<String> lisIdChannel) {
-        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
-    }
 
     @Override
     public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
