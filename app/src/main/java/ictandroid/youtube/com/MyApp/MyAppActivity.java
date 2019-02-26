@@ -51,7 +51,6 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     SLoading sEdit;
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
-    DataChannel dataChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

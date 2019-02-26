@@ -47,9 +47,12 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-        String getIDFragment = this.getTag();
-        String[] output = getIDFragment.split(":", 4);
-        CONST.tagFragmentMyChannel = output[2];
+        if(CONST.tagFragmentMyChannel==null)
+        {
+            String getIDFragment = this.getTag();
+            String[] output = getIDFragment.split(":", 4);
+            CONST.tagFragmentMyChannel = output[2];
+        }
 
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();

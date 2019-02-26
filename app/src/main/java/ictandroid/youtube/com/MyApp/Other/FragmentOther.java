@@ -80,9 +80,12 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_channel, container, false);
-        String getIDFragment = this.getTag();
-        String[] output = getIDFragment.split(":", 4);
-        CONST.tagFragmentOther = output[2];
+        if(CONST.tagFragmentOther==null)
+        {
+            String getIDFragment = this.getTag();
+            String[] output = getIDFragment.split(":", 4);
+            CONST.tagFragmentOther = output[2];
+        }
         //
         InitView();
         InitAction();
@@ -152,7 +155,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                             sLoadingAddChannel.show();
                             Uri uri = Uri.parse(editText.getText().toString());
                             String idChannel = uri.getLastPathSegment();
-                            dataChannel.getInfo(getContext(), "AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M", idChannel);
+                            dataChannel.getInfo(getContext(), CONST.KEY, idChannel);
                         }
                     }
                 });
@@ -213,7 +216,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
+                        dataChannel.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
                     }
                 } catch (Exception s) {
 

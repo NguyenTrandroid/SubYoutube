@@ -56,6 +56,13 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
+        if(CONST.tagFragmentOther==null)
+        {
+            String getIDFragment = this.getTag();
+            String[] output = getIDFragment.split(":", 4);
+            CONST.tagFragmentOther = output[2];
+        }
+
 
         InitView();
         InitAction();
@@ -129,7 +136,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                         {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        subscribersOnMyApp.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
+                        subscribersOnMyApp.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
                     }
                 } catch (Exception s) {
 

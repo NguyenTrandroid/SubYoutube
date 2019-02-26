@@ -49,6 +49,12 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
+        if(CONST.tagFragmentMyChannel==null)
+        {
+            String getIDFragment = this.getTag();
+            String[] output = getIDFragment.split(":", 4);
+            CONST.tagFragmentMyChannel = output[2];
+        }
         loadApp();
         return view;
     }
@@ -112,7 +118,6 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                         for (int i = 0; i < appArrayListAllChanel.size(); i++) {
                             listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
                         }
-                        Log.d("TTTT",listIdChannel.size()+" - "+listIdChannel.get(0));
                         subcribersOnCampaign = new SubcribersOnCampaign();
                         subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
                     }
@@ -125,11 +130,9 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 
     @Override
     public void onCompletedSubV2FromActivity(List<SubChannelItem> lisSubChannelItem) {
-        Log.d("AADDDD",appArrayList.size()+"");
         for (int i = 0; i < lisSubChannelItem.size(); i++) {
             for (int j = 0; j < appArrayList.size(); j++) {
                 if (lisSubChannelItem.get(i).getItems().get(0).getId().equals(appArrayList.get(j).getChanelId())) {
-                    Log.d("AADDDD","yes+");
                     appArrayList.get(j)
                             .setSoLuotSub(lisSubChannelItem.get(i)
                             .getItems()
