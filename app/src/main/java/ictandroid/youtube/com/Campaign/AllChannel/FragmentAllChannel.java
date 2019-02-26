@@ -27,13 +27,17 @@ import java.util.List;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannel;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetSubscriberListener;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentAllChannel extends Fragment {
+public class FragmentAllChannel extends Fragment implements GetSubscriberListener {
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
+    DataChannel dataChannel = new DataChannel();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,6 @@ public class FragmentAllChannel extends Fragment {
                                 appArrayListAllChanel.add(itemApp);
                             }
                         }
-                        appArrayList = appArrayListAllChanel;
                         Collections.sort(appArrayListAllChanel, new Comparator<ItemChanel>() {
                             @Override
                             public int compare(ItemChanel itemApp, ItemChanel t1) {
@@ -93,16 +96,38 @@ public class FragmentAllChannel extends Fragment {
                                 return itemApp.getNameChanel().compareTo(t1.getNameChanel());
                             }
                         });
-                        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        campaignChanelAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(campaignChanelAdapter);
+                        /**
+                         *
+                         */
+                        List<String> chanelID = new ArrayList<>();
+                        chanelID.clear();
+                        for (int i=0; i<appArrayListAllChanel.size(); ++i){
+                            chanelID.add(appArrayListAllChanel.get(i).getChanelId());
+                        }
+                        Log.d("AAAAA", "onEvent: getsub1 ");
+                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",chanelID);
+                        Log.d("AAAAA", "onEvent: getsub2 ");
                     }
                 } catch (Exception s) {
 
                 }
             }
         });
+    }
+
+    @Override
+    public void onCompletedSubcriber(SubChannelItem subChannelItem) {
+        Log.d("AAAAA", "onEvent: getsubok");
+//        appArrayList = appArrayListAllChanel;
+//        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        campaignChanelAdapter.notifyDataSetChanged();
+//        recyclerView.setAdapter(campaignChanelAdapter);
+    }
+
+    @Override
+    public void onErrorSubcripber(String error) {
+        Log.d("AAAAA", "onEvent: getsuber");
     }
 }
