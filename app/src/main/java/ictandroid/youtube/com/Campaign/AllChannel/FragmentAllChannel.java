@@ -28,10 +28,11 @@ import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentAllChannel extends Fragment implements GetSubscriberListener {
+public class FragmentAllChannel extends Fragment implements GetListSubscriberListener {
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
@@ -115,19 +116,14 @@ public class FragmentAllChannel extends Fragment implements GetSubscriberListene
         });
     }
 
+
     @Override
-    public void onCompletedSubcriber(SubChannelItem subChannelItem) {
-        Log.d("AAAAA", "onEvent: getsubok");
-//        appArrayList = appArrayListAllChanel;
-//        campaignChanelAdapter = new CampaignChanelAdapter(getContext(),appArrayListAllChanel);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        campaignChanelAdapter.notifyDataSetChanged();
-//        recyclerView.setAdapter(campaignChanelAdapter);
+    public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
+        Log.d("LISTTTT",listSubscribers.size()+"");
     }
 
     @Override
-    public void onErrorSubcripber(String error) {
-        Log.d("AAAAA", "onEvent: getsuber");
+    public void onErrorListSubcripber(String error) {
+
     }
 }
