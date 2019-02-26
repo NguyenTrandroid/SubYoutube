@@ -23,7 +23,9 @@ import com.google.api.services.youtube.model.Channel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Map;
 
@@ -68,8 +70,8 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         init();
         InitViewPager();
         initAction();
+        setPoints();
         sEdit=new SLoading(this);
-//
         callingYoutube = new CallingYoutube(this,1);
 //        callingYoutube.checkSubscriberFromApi("UCnSMr4hcl6E3Yh2n1MTNnhg");
 //        openYoutube("UCJXs5fI5Xa5S9d1cimdI9_A");
@@ -77,6 +79,17 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
 
 
 
+    }
+    private void setPoints() {
+        DocumentReference reference = db.collection("USER").document(auth.getUid());
+        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    tvCoin.setText(String.valueOf(documentSnapshot.get("points")));
+                }
+            }
+        });
     }
 
     @Override

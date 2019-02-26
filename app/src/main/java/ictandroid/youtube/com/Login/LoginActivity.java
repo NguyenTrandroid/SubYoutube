@@ -36,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.functions.FirebaseFunctions;
 
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -46,8 +47,10 @@ import ictandroid.youtube.com.MainActivity;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class LoginActivity extends AppCompatActivity implements GetResultApiListener {
+public class LoginActivity extends AppCompatActivity implements GetResultApiListener{
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -63,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     public static String useravt = "avt";
     private CallingYoutube callingYoutube;
     String idchannelchecking="";
+    private final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
 
     @Override
@@ -149,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         relativeLayout = findViewById(R.id.rl_login);
         if (getIntent().getStringExtra("action") != null) {
             relativeLayout.setVisibility(View.VISIBLE);
+            CallingYoutube.mCredential=null;
         } else {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
             imageView.setAnimation(animation);
@@ -225,6 +230,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Tsssststs", "onActivityResult: "+requestCode+"/"+resultCode);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -239,6 +245,14 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             }
         }else {
             callingYoutube.activityResult(requestCode,resultCode,data);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_PERMISSION_GET_ACCOUNTS){
+            callingYoutube.chooseAccount();
         }
     }
 
@@ -271,6 +285,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                     }
                 });
     }
+
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -356,6 +371,8 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             }
         });
     }
+
+
 //    private void kiemtra() {
 //        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());
 //        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
