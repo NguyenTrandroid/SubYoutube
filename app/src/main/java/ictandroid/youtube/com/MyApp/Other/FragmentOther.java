@@ -210,11 +210,17 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
                             }
-                            if("points".equals(entry.getKey()))
+                            TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
+                            if(CONST.COIN!=-1)
                             {
-                                String coin = entry.getValue().toString();
-                                TextView tvCoin = getActivity().findViewById(R.id.tv_coin);
-                                tvCoin.setText(coin);
+                                txtCoin = getActivity().findViewById(R.id.tv_coin);
+                                txtCoin.setText(CONST.COIN+"");
+                            }
+                            else {
+                                if ("points".equals(entry.getKey())) {
+                                    String coin = entry.getValue().toString();
+                                    txtCoin.setText(coin);
+                                }
                             }
                         }
                         arrayList = arrayListAllChanel;
@@ -235,17 +241,6 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
 
     @Override
     public void onCompletedDataOther(List<String> lisIdChannel) {
-
-//        for (int i =0; i<lisIdChannel.size();i++)
-//        {
-//            arrayList.get(i).setChanelId(lisIdChannel.get(i));
-//        }
-//
-//        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        myChanelAdapter.notifyDataSetChanged();
-//        recyclerView.setAdapter(myChanelAdapter);
         dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",lisIdChannel);
     }
 

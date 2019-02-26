@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
@@ -33,33 +35,55 @@ import ictandroid.youtube.com.Utils.GetData.Interface.GetSubListener;
 import ictandroid.youtube.com.Utils.GetData.Models.ListSub.SubItem;
 
 public class FragmentInCampaign extends Fragment implements GetSubListener {
+    //view
     View view;
     RecyclerView recyclerView;
+    //variable
     MyChanelAdapter myChanelAdapter;
-    ArrayList<ItemMyChanel> arrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemMyChanel> arrayList = new ArrayList<>();
+    ArrayList<ItemMyChanel> arrayListAllChanel;
+    ArrayList<ItemMyChanel> arrayList;
     String uid;
     DataChannel dataChannel;
+    //api
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore db;
+    DocumentReference docRef;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        InitOnCreate();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-        FirebaseAuth firebaseAuth;
-        firebaseAuth = FirebaseAuth.getInstance();
-        uid = firebaseAuth.getUid();
-        dataChannel=new DataChannel();
-        loadApp();
+
+        InitView();
+        InitAction();
+
         return view;
     }
-    private void loadApp() {
+    private void InitOnCreate()
+    {
+        db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        uid = firebaseAuth.getUid();
+        arrayListAllChanel = new ArrayList<>();
+        arrayList = new ArrayList<>();
+        dataChannel =new DataChannel();
+    }
+    private void InitView()
+    {
         recyclerView = view.findViewById(R.id.rv_listCampaign);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("USER").document(uid);
+    }
+    private void InitAction()
+    {
+        loadApp();
+    }
+    private void loadApp() {
+        docRef = db.collection("USER").document(uid);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -83,6 +107,19 @@ public class FragmentInCampaign extends Fragment implements GetSubListener {
                                     itemMyChanel.setSoLuotSub("9999");
                                     if (!itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
+                                }
+                            }
+                            TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
+                            if(CONST.COIN!=-1)
+                            {
+
+                                txtCoin.setText(CONST.COIN+"");
+                            }
+                            else
+                            {
+                                if ("points".equals(entry.getKey())) {
+                                    String coin = entry.getValue().toString();
+                                    txtCoin.setText(coin);
                                 }
                             }
                         }
