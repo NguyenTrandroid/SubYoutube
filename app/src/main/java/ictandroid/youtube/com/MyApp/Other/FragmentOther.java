@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -208,6 +209,12 @@ public class FragmentOther extends Fragment implements GetDataOtherListener, Get
                                     if (itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
+                            }
+                            if("points".equals(entry.getKey()))
+                            {
+                                String coin = entry.getValue().toString();
+                                TextView tvCoin = getActivity().findViewById(R.id.tv_coin);
+                                tvCoin.setText(coin);
                             }
                         }
                         arrayList = arrayListAllChanel;
