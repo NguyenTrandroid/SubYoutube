@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,10 +44,12 @@ import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Interface.GetInfoChanelListener;
+import ictandroid.youtube.com.Utils.GetData.Interface.GetListSubscriberListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.ChanelItem;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoChanel.Item;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentOther extends Fragment {
+public class FragmentOther extends Fragment implements GetListSubscriberListener {
     View view;
     RecyclerView recyclerView;
     ImageView imageView;
@@ -176,18 +179,27 @@ public class FragmentOther extends Fragment {
                                     itemMyChanel.setNameChanel(allData.get("tenchannel"));
                                     itemMyChanel.setDiem(allData.get("points"));
                                     itemMyChanel.setLinkIcon(allData.get("linkanh"));
-                                    itemMyChanel.setSoLuotSub("9999");
+                                    //itemMyChanel.setSoLuotSub("9999");
                                     if (itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
                             }
                         }
                         arrayList = arrayListAllChanel;
+                        List<String> listIdChannel = new ArrayList<>();
+
+                        for (int i=0;i<arrayList.size();i++)
+                        {
+                            listIdChannel.add(arrayList.get(i).getChanelId());
+                        }
+                        dataChannel.getListSubscripbers(getContext(),"AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M",listIdChannel);
+                        //Need add
                         myChanelAdapter = new MyChanelAdapter(getContext(),arrayListAllChanel);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         myChanelAdapter.notifyDataSetChanged();
                         recyclerView.setAdapter(myChanelAdapter);
+                        //
                     }
                 } catch (Exception s) {
 
@@ -197,4 +209,13 @@ public class FragmentOther extends Fragment {
     }
 
 
+    @Override
+    public void onCompletedListSubcriber(List<SubChannelItem> listSubscribers) {
+        Log.d("LISSSSSSSTTTTT",listSubscribers.size()+"");
+    }
+
+    @Override
+    public void onErrorListSubcripber(String error) {
+
+    }
 }
