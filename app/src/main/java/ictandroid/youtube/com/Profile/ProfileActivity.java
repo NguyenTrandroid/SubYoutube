@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -43,7 +44,9 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
+import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
+import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.Login.LoginActivity;
 import ictandroid.youtube.com.R;
 
@@ -90,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseFirestore db;
+    private CloudFunction cloudFunction;
     private ArrayList<ItemHistory> listHistory;
 
     @Override
@@ -99,9 +103,10 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        cloudFunction = new CloudFunction();
         listHistory = new ArrayList<>();
         setPoints();
-//        loadHistory();
+        loadHistory();
         tvNameProfile.setText(auth.getCurrentUser().getDisplayName());
         Glide.with(this).load(auth.getCurrentUser().getPhotoUrl()).into(ivAvata);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -124,29 +129,32 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-//    private void loadHistory() {
-//        listHistory.clear();
-//        DocumentReference reference = db.collection("HISTORY").document(auth.getUid());
-//        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                ArrayList<String> listChannel = (ArrayList<String>) documentSnapshot.get("channelid");
-//                for (int i = 0; i < listChannel.size(); i++) {
-//                    String[] str = listChannel.get(i).split("<ict>");
-//                    listHistory.add(new ItemHistory(str[0], str[1], "0"));
-//                    Log.d("AAA",str[0]+""+str[1]);
-//                }
-//                Log.d("AAA",listHistory.size()+"");
-//                HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
-//                GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
-//                rvHistory.setLayoutManager(layoutManager);
-//                rvHistory.setItemAnimator(new DefaultItemAnimator());
-//                rvHistory.setAdapter(historyAdapter);
-//
-//
-//            }
-//        });
-//    }
+    private void loadHistory() {
+        listHistory.clear();
+        DocumentReference docRef = db.collection("HISTORY").document(auth.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<String> listChannel = (ArrayList<String>) task.getResult().getData().get("channelid");
+                    for (int i = 0; i < listChannel.size(); i++) {
+                        String[] str = listChannel.get(i).split("<ict>");
+                        listHistory.add(new ItemHistory(str[0], str[1],str[2], "0"));
+                    }
+                    Log.d("AAA",listHistory.size()+"");
+                    HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                    GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
+                    rvHistory.setLayoutManager(layoutManager);
+                    rvHistory.setItemAnimator(new DefaultItemAnimator());
+                    rvHistory.setAdapter(historyAdapter);
+                    }else {
+                        /////////////////////
+
+                    }
+                }
+        });
+    }
+
 
     @OnClick({R.id.rl_history, R.id.rl_contacadmin, R.id.tv_logout, R.id.iv_back, R.id.iv_back_red, R.id.tv_clear})
     public void onViewClicked(View view) {
@@ -186,6 +194,17 @@ public class ProfileActivity extends AppCompatActivity {
                 rlInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_clear:
+                cloudFunction.clearHistory(new ICloundFunction() {
+                    @Override
+                    public void onSuccess() {
+                        rlHistory1.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                });
                 break;
         }
     }

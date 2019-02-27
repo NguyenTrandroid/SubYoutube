@@ -72,6 +72,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     SLoading sEdit;
     GetSubFromCampaignListener getSubFromCampaignListener;
     GetSubFromCampaignV2Listener getSubFromCampaignV2Listener;
+    PagerCampaignAdapter pagerCampaignAdapter;
     GetKeySearchCampaign getKeySearchCampaign;
 
     @Override
@@ -196,7 +197,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     }
 
     private void InitViewPager() {
-        PagerCampaignAdapter pagerCampaignAdapter = new PagerCampaignAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        pagerCampaignAdapter = new PagerCampaignAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewpager.setAdapter(pagerCampaignAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -349,7 +350,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        cloudFunction.addHistory(document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
+                        cloudFunction.addHistory(channeldi+"<ict>"+document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
                     }else {
                         /////////////////////
 

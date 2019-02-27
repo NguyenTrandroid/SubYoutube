@@ -32,6 +32,7 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import ictandroid.youtube.com.Campaign.AllChannel.FragmentAllChannel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
@@ -52,6 +53,8 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         this.arrayList = arrayList;
         myChannelInterface= (MyChannelInterface) context;
         onChannelClick = (OnChannelClick) context;
+        dialogRemove = new Dialog(context);
+        dialogEdit=new Dialog(context);
         FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
@@ -98,7 +101,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 /**
                  * gỡ bỏ kênh ra khỏi chiến dịch
                  */
-                dialogRemove = new Dialog(context);
                 Objects.requireNonNull(dialogRemove.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogRemove.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -128,7 +130,9 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 dialogRemove.setCanceledOnTouchOutside(false);
                 Button btOk = dialogRemove.findViewById(R.id.bt_ok);
                 Button btCancle = dialogRemove.findViewById(R.id.bt_cancel);
-                dialogRemove.show();
+                if(!dialogRemove.isShowing()&&!dialogEdit.isShowing()){
+                    dialogRemove.show();
+                }
                 btOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,6 +140,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                          *gỡ bỏ kênh
                          */
                         myChannelInterface.delete(itemChanel.getChanelId());
+                        dialogRemove.dismiss();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +157,6 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                 /**
                  * thay đổi lượt đăng kí
                  */
-                dialogEdit = new Dialog(context);
                 Objects.requireNonNull(dialogEdit.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogEdit.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -199,7 +203,9 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                             /**
                              *
                              */
-                            dialogEdit.show();
+                            if(!dialogRemove.isShowing()&&!dialogEdit.isShowing()){
+                                dialogEdit.show();
+                            }
                             ivCong.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

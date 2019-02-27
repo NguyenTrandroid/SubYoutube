@@ -362,7 +362,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        cloudFunction.addHistory(document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
+                        cloudFunction.addHistory(channeldi+"<ict>"+document.getData().get("tenchannel")+"<ict>"+document.getData().get("linkanh"));
                     }else {
                         /////////////////////
 

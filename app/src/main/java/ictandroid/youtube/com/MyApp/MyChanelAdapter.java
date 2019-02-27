@@ -51,6 +51,9 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
         this.arrayList = arrayList;
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        dialogEdit=new Dialog(context);
+        dialogAdd=new Dialog(context);
+        dialogRemove=new Dialog(context);
     }
 
     @NonNull
@@ -87,7 +90,6 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 /**
                  * gõ bỏ kênh ra khỏi chiến dịch
                  */
-                dialogRemove = new Dialog(context);
                 Objects.requireNonNull(dialogRemove.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogRemove.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -117,7 +119,9 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 dialogRemove.setCanceledOnTouchOutside(false);
                 Button btOk = dialogRemove.findViewById(R.id.bt_ok);
                 Button btCancle = dialogRemove.findViewById(R.id.bt_cancel);
-                dialogRemove.show();
+                if(!dialogRemove.isShowing()&&!dialogEdit.isShowing()&&!dialogAdd.isShowing()){
+                    dialogRemove.show();
+                }
                 btOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -142,7 +146,6 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 /**
                  * thay đổi lượt đăng kí
                  */
-                dialogEdit = new Dialog(context);
                 Objects.requireNonNull(dialogEdit.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogEdit.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -190,7 +193,9 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                             /**
                              *
                              */
-                            dialogEdit.show();
+                            if(!dialogRemove.isShowing()&&!dialogEdit.isShowing()&&!dialogAdd.isShowing()){
+                                dialogEdit.show();
+                            }
                             ivCong.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -253,7 +258,6 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                 /**
                  * đưa app vào chiến dịch
                  */
-                dialogAdd = new Dialog(context);
                 Objects.requireNonNull(dialogAdd.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialogAdd.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -298,7 +302,9 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                             /**
                              *
                              */
-                            dialogAdd.show();
+                            if(!dialogRemove.isShowing()&&!dialogEdit.isShowing()&&!dialogAdd.isShowing()){
+                                dialogAdd.show();
+                            }
                             btOk.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
