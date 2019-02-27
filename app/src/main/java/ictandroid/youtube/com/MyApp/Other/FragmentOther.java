@@ -102,8 +102,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
         db = FirebaseFirestore.getInstance();
         uid = firebaseAuth.getUid();
         dataChannel = new DataChannel();
-        arrayListAllChanel = new ArrayList<>();
-        arrayList = new ArrayList<>();
+
     }
 
     private void InitAction() {
@@ -180,7 +179,8 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                     if (e != null) {
                         return;
                     }
-                    arrayListAllChanel.clear();
+                    arrayListAllChanel = new ArrayList<>();
+                    arrayList = new ArrayList<>();
                     if (snapshot != null && snapshot.exists()) {
                         for (Map.Entry<String, Object> entry : snapshot.getData().entrySet()) {
                             if ("listadd".equals(entry.getKey())) {
