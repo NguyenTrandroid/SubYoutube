@@ -72,6 +72,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     SLoading sEdit;
     GetSubFromCampaignListener getSubFromCampaignListener;
     GetSubFromCampaignV2Listener getSubFromCampaignV2Listener;
+    GetKeySearchCampaign getKeySearchCampaign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,32 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     }
 
     private void initAction() {
+        svCamp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(CONST.IDFragment!=null)
+                {
+                    FragmentAllChannel fragmentAllChannel = (FragmentAllChannel) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":0");
+                    if(fragmentAllChannel !=null)
+                    {
+                        getKeySearchCampaign = fragmentAllChannel;
+                        getKeySearchCampaign.onGetKey(s);
+                    }
+                    FragmentMyChannel fragmentMyChannel = (FragmentMyChannel) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":1");
+                    if(fragmentMyChannel !=null)
+                    {
+                        getKeySearchCampaign = fragmentMyChannel;
+                        getKeySearchCampaign.onGetKey(s);
+                    }
+                }
+                return false;
+            }
+        });
 
     }
 

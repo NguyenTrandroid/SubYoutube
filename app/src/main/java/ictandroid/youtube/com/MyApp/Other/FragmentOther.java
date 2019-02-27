@@ -40,13 +40,14 @@ import java.util.Objects;
 
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Dialog.SLoading;
+import ictandroid.youtube.com.MyApp.GetKeySearchMyChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentOther extends Fragment implements GetSubFomActivityListener, AddChannelOnFirebaseListener {
+public class FragmentOther extends Fragment implements GetSubFomActivityListener, AddChannelOnFirebaseListener, GetKeySearchMyChanel {
     //view
     View view;
     RecyclerView recyclerView;
@@ -87,6 +88,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
             String getIDFragment = this.getTag();
             String[] output = getIDFragment.split(":", 4);
             CONST.tagFragmentOther = output[2];
+            CONST.IDFragment = output[2];
         }
         //
         InitView();
@@ -259,5 +261,33 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     @Override
     public void onCompletedAddChannel(String idChannel) {
         idChannelCheckAdd = idChannel;
+    }
+
+    @Override
+    public void onGetKey(String keySearch) {
+        Log.d("AAAAA", "onQueryTextChange: 2 "+keySearch);
+        ArrayList<ItemMyChanel> listTemp = new ArrayList<>();
+        listTemp = new ArrayList<>();
+        listTemp.clear();
+        if (arrayList != null) {
+            if (keySearch.length() == 0) {
+                listTemp.addAll(arrayList);
+            } else {
+                for (ItemMyChanel itemChanel : arrayList) {
+                    try {
+                        if (itemChanel.getNameChanel().toLowerCase().contains(keySearch.toLowerCase())) {
+                            listTemp.add(itemChanel);
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+            myChanelAdapter = new MyChanelAdapter(getContext(), listTemp);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            myChanelAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(myChanelAdapter);
+        }
     }
 }

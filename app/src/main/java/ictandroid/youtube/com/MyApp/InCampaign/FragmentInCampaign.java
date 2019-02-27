@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 import ictandroid.youtube.com.CONST;
+import ictandroid.youtube.com.MyApp.GetKeySearchMyChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 import ictandroid.youtube.com.Utils.GetData.SubscribersOnMyApp;
 
-public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2Listener {
+public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2Listener, GetKeySearchMyChanel {
     //view
     View view;
     RecyclerView recyclerView;
@@ -61,6 +63,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
             String getIDFragment = this.getTag();
             String[] output = getIDFragment.split(":", 4);
             CONST.tagFragmentOther = output[2];
+            CONST.IDFragment = output[2];
         }
 
 
@@ -161,5 +164,33 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         myChanelAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(myChanelAdapter);
+    }
+
+    @Override
+    public void onGetKey(String keySearch) {
+        Log.d("AAAAA", "onQueryTextChange: 1 "+keySearch);
+        ArrayList<ItemMyChanel> listTemp = new ArrayList<>();
+        listTemp = new ArrayList<>();
+        listTemp.clear();
+        if (arrayList != null) {
+            if (keySearch.length() == 0) {
+                listTemp.addAll(arrayList);
+            } else {
+                for (ItemMyChanel itemChanel : arrayList) {
+                    try {
+                        if (itemChanel.getNameChanel().toLowerCase().contains(keySearch.toLowerCase())) {
+                            listTemp.add(itemChanel);
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+            myChanelAdapter = new MyChanelAdapter(getContext(), listTemp);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            myChanelAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(myChanelAdapter);
+        }
     }
 }

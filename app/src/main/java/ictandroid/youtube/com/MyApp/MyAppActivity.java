@@ -67,6 +67,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     AddChannelOnFirebaseListener addChannelOnFirebaseListener;
     DocumentReference docRef;
     FirebaseFirestore db;
+    GetKeySearchMyChanel getKeySearchMyChanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,32 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     }
 
     private void initAction() {
+        svMyapp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(CONST.IDFragment!=null)
+                {
+                    FragmentInCampaign fragmentInCampaign = (FragmentInCampaign) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":0");
+                    if(fragmentInCampaign !=null)
+                    {
+                        getKeySearchMyChanel = fragmentInCampaign;
+                        getKeySearchMyChanel.onGetKey(s);
+                    }
+                    FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":1");
+                    if(fragmentOther !=null)
+                    {
+                        getKeySearchMyChanel = fragmentOther;
+                        getKeySearchMyChanel.onGetKey(s);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void init() {

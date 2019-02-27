@@ -26,13 +26,14 @@ import java.util.List;
 
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
+import ictandroid.youtube.com.Campaign.GetKeySearchCampaign;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.SubcribersOnCampaign;
 import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2Listener {
+public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2Listener, GetKeySearchCampaign {
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
@@ -54,6 +55,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
             String getIDFragment = this.getTag();
             String[] output = getIDFragment.split(":", 4);
             CONST.tagFragmentMyChannel = output[2];
+            CONST.IDFragment = output[2];
         }
         loadApp();
         return view;
@@ -148,5 +150,33 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         campaignChanelAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(campaignChanelAdapter);
+    }
+
+    @Override
+    public void onGetKey(String keySearch) {
+        Log.d("AAAAA", "onQueryTextChange: 1 "+keySearch);
+        ArrayList<ItemChanel> listTemp = new ArrayList<>();
+        listTemp = new ArrayList<>();
+        listTemp.clear();
+        if (appArrayList != null) {
+            if (keySearch.length() == 0) {
+                listTemp.addAll(appArrayList);
+            } else {
+                for (ItemChanel itemChanel : appArrayList) {
+                    try {
+                        if (itemChanel.getNameChanel().toLowerCase().contains(keySearch.toLowerCase())) {
+                            listTemp.add(itemChanel);
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+            campaignChanelAdapter = new CampaignChanelAdapter(getContext(),listTemp);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            campaignChanelAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(campaignChanelAdapter);
+        }
     }
 }
