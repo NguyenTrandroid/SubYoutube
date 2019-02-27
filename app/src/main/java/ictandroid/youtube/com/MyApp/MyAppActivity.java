@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.MyApp.InCampaign.FragmentInCampaign;
 import ictandroid.youtube.com.MyApp.InCampaign.GetSubFromActivityV2Listener;
+import ictandroid.youtube.com.MyApp.Other.AddChannelOnFirebaseListener;
 import ictandroid.youtube.com.MyApp.Other.FragmentOther;
 import ictandroid.youtube.com.MyApp.Other.GetSubFomActivityListener;
 import ictandroid.youtube.com.R;
@@ -51,6 +53,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     SLoading sEdit;
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
+    AddChannelOnFirebaseListener addChannelOnFirebaseListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,19 +147,21 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         Item item = chanelItem.getItems().get(0);
         cloudFunction.addChannel(item.getId(),item.getSnippet().getThumbnails().getMedium().getUrl(),
                 item.getSnippet().getTitle(),"0","0");
-        if(FragmentOther.sLoadingAddChannel !=null)
-        {
-            FragmentOther.sLoadingAddChannel.dismiss();
-        }
-        if(FragmentOther.dialogAdd !=null)
-        {
-            FragmentOther.dialogAdd.cancel();
+        if (CONST.tagFragmentOther != null) {
+            FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
+            if (fragmentOther != null) {
+                addChannelOnFirebaseListener = (AddChannelOnFirebaseListener) fragmentOther;
+                addChannelOnFirebaseListener.onCompletedAddChannel(chanelItem.getItems().get(0).getId());
+            }
         }
     }
 
     @Override
     public void onInfoError(String error) {
-
+        if(FragmentOther.sLoadingAddChannel!=null)
+        {
+            FragmentOther.sLoadingAddChannel.dismiss();
+        }
     }
 
     @Override

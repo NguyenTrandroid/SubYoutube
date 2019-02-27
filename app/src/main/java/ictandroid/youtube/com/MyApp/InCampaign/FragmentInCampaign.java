@@ -74,8 +74,6 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
-        arrayListAllChanel = new ArrayList<>();
-        arrayList = new ArrayList<>();
         subscribersOnMyApp = new SubscribersOnMyApp();
     }
     private void InitView()
@@ -96,7 +94,8 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                     if (e != null) {
                         return;
                     }
-                    arrayListAllChanel.clear();
+                    arrayListAllChanel = new ArrayList<>();
+                    arrayList = new ArrayList<>();
                     if (snapshot != null && snapshot.exists()) {
                         for (Map.Entry<String, Object> entry : snapshot.getData().entrySet()) {
                             if ("listadd".equals(entry.getKey())) {
@@ -127,9 +126,6 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                                 }
                             }
                         }
-                        arrayList.clear();
-                        arrayList = arrayListAllChanel;
-
                         arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
                         for(int i=0;i<arrayList.size();i++)

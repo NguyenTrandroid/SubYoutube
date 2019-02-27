@@ -32,10 +32,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
@@ -44,7 +46,7 @@ import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
 
-public class FragmentOther extends Fragment implements GetSubFomActivityListener {
+public class FragmentOther extends Fragment implements GetSubFomActivityListener, AddChannelOnFirebaseListener {
     //view
     View view;
     RecyclerView recyclerView;
@@ -57,6 +59,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     ArrayList<ItemMyChanel> arrayList;
     String uid;
     DataChannel dataChannel;
+    String idChannelCheckAdd;
     //api
     DocumentReference docRef;
     FirebaseFirestore db;
@@ -80,8 +83,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_channel, container, false);
-        if(CONST.tagFragmentOther==null)
-        {
+        if (CONST.tagFragmentOther == null) {
             String getIDFragment = this.getTag();
             String[] output = getIDFragment.split(":", 4);
             CONST.tagFragmentOther = output[2];
@@ -197,26 +199,23 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                                 }
                             }
                             TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
-                            if(CONST.COIN!=-1)
-                            {
+                            if (CONST.COIN != -1) {
                                 txtCoin = getActivity().findViewById(R.id.tv_coin);
-                                txtCoin.setText(CONST.COIN+"");
-                            }
-                            else {
+                                txtCoin.setText(CONST.COIN + "");
+                            } else {
                                 if ("points".equals(entry.getKey())) {
                                     String coin = entry.getValue().toString();
                                     txtCoin.setText(coin);
                                 }
                             }
                         }
-                        arrayList.clear();
                         arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
-                        for(int i=0;i<arrayList.size();i++)
-                        {
+                        for (int i = 0; i < arrayList.size(); i++) {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        dataChannel.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
+                        dataChannel.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+
                     }
                 } catch (Exception s) {
 
@@ -228,12 +227,9 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
 
     @Override
     public void onCompletedSubFromActivity(List<SubChannelItem> lisSubChannelItem) {
-        for(int i=0;i<lisSubChannelItem.size();i++)
-        {
-            for(int j=0;j<arrayList.size();j++)
-            {
-                if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
-                {
+        for (int i = 0; i < lisSubChannelItem.size(); i++) {
+            for (int j = 0; j < arrayList.size(); j++) {
+                if (lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId())) {
                     arrayList.get(j)
                             .setSoLuotSub(lisSubChannelItem.get(i)
                                     .getItems()
@@ -249,6 +245,18 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         myChanelAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(myChanelAdapter);
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (idChannelCheckAdd != null && idChannelCheckAdd.equals(arrayList.get(i).getChanelId())) {
+                if (sLoadingAddChannel != null)
+                    sLoadingAddChannel.dismiss();
+                if (dialogAdd != null)
+                    dialogAdd.cancel();
+            }
+        }
+    }
 
+    @Override
+    public void onCompletedAddChannel(String idChannel) {
+        idChannelCheckAdd = idChannel;
     }
 }

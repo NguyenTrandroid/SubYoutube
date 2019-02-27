@@ -34,19 +34,24 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
     View view;
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
-    ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemChanel> appArrayList = new ArrayList<>();
+    ArrayList<ItemChanel> appArrayListAllChanel;
+    ArrayList<ItemChanel> appArrayList;
     String uid;
     DataChannelOnCampaign dataChannelOnCampaign;
+    CollectionReference docRef;
+    FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
+        recyclerView = view.findViewById(R.id.rv_listCampaign);
         if(CONST.tagFragmentMyChannel==null)
         {
             String getIDFragment = this.getTag();
@@ -54,16 +59,13 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
             CONST.tagFragmentMyChannel = output[2];
         }
 
-        FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
         loadApp();
         return view;
     }
     private void loadApp() {
-        recyclerView = view.findViewById(R.id.rv_listCampaign);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference docRef = db.collection("LIST");
+        docRef = db.collection("LIST");
         docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -72,8 +74,9 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
                         Log.d("DATAAA", "ERROR");
                         return;
                     }
+                    appArrayListAllChanel = new ArrayList<>();
+                    appArrayList = new ArrayList<>();
                     if (queryDocumentSnapshots != null) {
-                        appArrayListAllChanel.clear();
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < documentSnapshots.size(); i++) {
                             ItemChanel itemApp = new ItemChanel();
@@ -97,9 +100,8 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
                         {
                             listIdChannel.add(appArrayList.get(i).getChanelId());
                         }
-                        dataChannelOnCampaign =new DataChannelOnCampaign();
+                        dataChannelOnCampaign = new DataChannelOnCampaign();
                         dataChannelOnCampaign.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
-
                     }
                 } catch (Exception s) {
 
