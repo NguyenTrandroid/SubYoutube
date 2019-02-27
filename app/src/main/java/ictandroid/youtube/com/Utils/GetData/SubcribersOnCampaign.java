@@ -78,6 +78,6 @@ public class SubcribersOnCampaign {
         }
     }
     private void errorGetSubcribersOfChannel(Throwable error) {
-        subscriberOnCampaignV2Listener.onErrorListSubcripberCampaignV2(error.getLocalizedMessage());
+        //subscriberOnCampaignV2Listener.onErrorListSubcripberCampaignV2(error.getLocalizedMessage());
     }
 }
