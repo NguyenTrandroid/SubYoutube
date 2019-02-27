@@ -78,6 +78,6 @@ public class DataChannelOnCampaign {
         }
     }
     private void errorGetSubcribersOfChannel(Throwable error) {
-        subscriberOnCampaignListener.onErrorListSubcripberCampaign(error.getLocalizedMessage());
+        //subscriberOnCampaignListener.onErrorListSubcripberCampaign(error.getLocalizedMessage());
     }
 }
