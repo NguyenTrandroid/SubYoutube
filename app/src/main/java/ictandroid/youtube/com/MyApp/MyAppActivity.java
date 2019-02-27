@@ -201,6 +201,17 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    if(FragmentOther.dialogAdd!=null)
+                                    {
+                                        FragmentOther.dialogAdd.cancel();
+                                    }
+                                    if(FragmentOther.sLoadingAddChannel!=null)
+                                    {
+                                        FragmentOther.sLoadingAddChannel.dismiss();
+                                    }
+                                }
                             }
 
                         }
