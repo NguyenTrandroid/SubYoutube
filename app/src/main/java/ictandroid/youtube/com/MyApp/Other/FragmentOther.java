@@ -209,6 +209,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                                 }
                             }
                         }
+                        Log.d("SSSS",arrayListAllChanel.size()+"");
                         arrayList = arrayListAllChanel;
                         List<String> listIdChannel = new ArrayList<>();
                         for (int i = 0; i < arrayList.size(); i++) {

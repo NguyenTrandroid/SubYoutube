@@ -1,6 +1,8 @@
 package ictandroid.youtube.com.MyApp;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +13,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +65,8 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
     AddChannelOnFirebaseListener addChannelOnFirebaseListener;
+    DocumentReference docRef;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +76,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         init();
         initViewPager();
         initAction();
-        cloudFunction= new CloudFunction();
+        cloudFunction = new CloudFunction();
         auth = FirebaseAuth.getInstance();
         sEdit = new SLoading(this);
     }
@@ -105,6 +118,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         svMyapp.clearFocus();
 
     }
+
     public void backvip(View view) {
         onBackPressed();
     }
@@ -145,21 +159,62 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     public void onInfoCompleted(ChanelItem chanelItem) {
         cloudFunction = new CloudFunction();
         Item item = chanelItem.getItems().get(0);
-        cloudFunction.addChannel(item.getId(),item.getSnippet().getThumbnails().getMedium().getUrl(),
-                item.getSnippet().getTitle(),"0","0");
-        if (CONST.tagFragmentOther != null) {
-            FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
-            if (fragmentOther != null) {
-                addChannelOnFirebaseListener = (AddChannelOnFirebaseListener) fragmentOther;
-                addChannelOnFirebaseListener.onCompletedAddChannel(chanelItem.getItems().get(0).getId());
+        db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("USER").document(auth.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
+                            if ("listadd".equals(entry.getKey())) {
+                                Map<String, Object> nestedData = (Map<String, Object>) entry.getValue();
+                                int sizeHash = 0;
+                                boolean existed = false;
+                                Log.d("VALUE", "item: " + item.getId());
+                                for (Map.Entry<String, Object> entryNested : nestedData.entrySet()) {
+                                    sizeHash++;
+                                    if (entryNested.getKey().equals(item.getId()) && sizeHash != nestedData.size()) {
+                                        Log.d("FFFF", "trufng");
+                                        if (FragmentOther.sLoadingAddChannel != null) {
+                                            FragmentOther.sLoadingAddChannel.dismiss();
+                                        }
+                                        if (FragmentOther.dialogAdd != null) {
+                                            FragmentOther.dialogAdd.cancel();
+                                        }
+                                    }
+                                    if (entryNested.getKey().equals(item.getId())) {
+                                        existed = true;
+                                    }
+
+                                }
+                                if (!existed) {
+                                    cloudFunction.addChannel(item.getId(), item.getSnippet().getThumbnails().getMedium().getUrl(),
+                                            item.getSnippet().getTitle(), "0", "0");
+                                    if (CONST.tagFragmentOther != null) {
+                                        FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
+                                        if (fragmentOther != null) {
+                                            addChannelOnFirebaseListener = (AddChannelOnFirebaseListener) fragmentOther;
+                                            addChannelOnFirebaseListener.onCompletedAddChannel(chanelItem.getItems().get(0).getId());
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    } else {
+
+                    }
+                }
             }
-        }
+        });
     }
 
     @Override
     public void onInfoError(String error) {
-        if(FragmentOther.sLoadingAddChannel!=null)
-        {
+        if (FragmentOther.sLoadingAddChannel != null) {
             FragmentOther.sLoadingAddChannel.dismiss();
         }
     }
