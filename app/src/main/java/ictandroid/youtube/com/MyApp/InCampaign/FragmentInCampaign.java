@@ -107,7 +107,6 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                                     itemMyChanel.setNameChanel(allData.get("tenchannel"));
                                     itemMyChanel.setDiem(allData.get("points"));
                                     itemMyChanel.setLinkIcon(allData.get("linkanh"));
-                                    itemMyChanel.setSoLuotSub("9999");
                                     if (!itemMyChanel.getDiem().equals("0"))
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
