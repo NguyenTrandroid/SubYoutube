@@ -64,7 +64,7 @@
                 android:layout_height="@dimen/dp25"
                 android:layout_below="@id/rl_infoChanel"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/cancel" />
+                app:srcCompat="@drawable/exit" />
 
             <ImageView
                 android:visibility="gone"
@@ -74,7 +74,7 @@
                 android:layout_height="@dimen/dp25"
                 android:layout_below="@id/rl_infoChanel"
                 android:layout_toLeftOf="@id/iv_remove"
-                android:src="@drawable/expand" />
+                app:srcCompat="@drawable/edit" />
 
             <ImageView
                 android:id="@+id/iv_bellD"
