@@ -345,6 +345,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
 
     @Override
     public void onCheckSubFail() {
+        skiemtra.dismiss();
         kiemtra();
     }
 
