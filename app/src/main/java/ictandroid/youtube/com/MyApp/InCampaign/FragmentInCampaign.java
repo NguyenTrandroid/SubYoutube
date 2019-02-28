@@ -27,6 +27,7 @@ import java.util.Map;
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.MyApp.GetKeySearchMyChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
+import ictandroid.youtube.com.MyApp.MyAppActivity;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
@@ -129,12 +130,19 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                             }
                         }
                         arrayList = arrayListAllChanel;
+                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        myChanelAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(myChanelAdapter);
+
                         List<String> listIdChannel = new ArrayList<>();
-                        for(int i=0;i<arrayList.size();i++)
-                        {
+                        for (int i = 0; i < arrayList.size(); i++) {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
-                        subscribersOnMyApp.getListSubscripbers(getContext(),CONST.KEY,listIdChannel);
+                        subscribersOnMyApp = new SubscribersOnMyApp();
+                        subscribersOnMyApp.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+
                     }
                 } catch (Exception s) {
 
@@ -164,6 +172,10 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         myChanelAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(myChanelAdapter);
+        if(MyAppActivity.sEdit!=null)
+        {
+            MyAppActivity.sEdit.dismiss();
+        }
     }
 
     @Override

@@ -73,13 +73,6 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
         InitOnCreate();
     }
 
-    void handleSendText(Intent intent) {
-        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (sharedText != null) {
-            Log.d("SHARE", sharedText);
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,6 +105,9 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     private void InitAction() {
         loadApp();
         addApp();
+        if (CONST.SHARE_LINK != null) {
+            imageView.performClick();
+        }
     }
 
     private void addApp() {
@@ -144,6 +140,9 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                 dialogAdd.setContentView(R.layout.dialog_add_chanel);
                 dialogAdd.setCanceledOnTouchOutside(false);
                 EditText editText = dialogAdd.findViewById(R.id.ed_input);
+                if (CONST.SHARE_LINK != null) {
+                    editText.setText(CONST.SHARE_LINK);
+                }
                 Button buttonOK = dialogAdd.findViewById(R.id.bt_thaydoi);
                 Button buttonCancle = dialogAdd.findViewById(R.id.bt_cancel);
                 dialogAdd.show();
@@ -153,6 +152,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                         /**
                          * add kênh
                          */
+                        CONST.SHARE_LINK = null;
                         if (!editText.getText().toString().isEmpty() && editText.getText() != null && !editText.getText().equals("")) {
                             sLoadingAddChannel = new SLoading(getContext());
                             sLoadingAddChannel.show();
@@ -166,6 +166,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                     @Override
                     public void onClick(View v) {
                         dialogAdd.dismiss();
+                        CONST.SHARE_LINK = null;
                     }
                 });
 
@@ -211,12 +212,18 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                                 }
                             }
                         }
-                        Log.d("SSSS",arrayListAllChanel.size()+"");
                         arrayList = arrayListAllChanel;
+                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        myChanelAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(myChanelAdapter);
+
                         List<String> listIdChannel = new ArrayList<>();
                         for (int i = 0; i < arrayList.size(); i++) {
                             listIdChannel.add(arrayList.get(i).getChanelId());
                         }
+                        dataChannel = new DataChannel();
                         dataChannel.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
 
                     }
@@ -265,7 +272,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
 
     @Override
     public void onGetKey(String keySearch) {
-        Log.d("AAAAA", "onQueryTextChange: 2 "+keySearch);
+        Log.d("AAAAA", "onQueryTextChange: 2 " + keySearch);
         ArrayList<ItemMyChanel> listTemp = new ArrayList<>();
         listTemp = new ArrayList<>();
         listTemp.clear();

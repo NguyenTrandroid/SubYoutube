@@ -129,7 +129,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                          *gõ bỏ kênh
                          */
                         myChannelInterface.delete(itemChanel.getChanelId());
-                        dialogRemove.dismiss();
+                        dialogRemove.cancel();
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {

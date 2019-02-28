@@ -41,9 +41,11 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.MainActivity;
+import ictandroid.youtube.com.MyApp.MyAppActivity;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
@@ -82,7 +84,15 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent intent = getIntent();
+                String action = intent.getAction();
+                String type = intent.getType();
+
+                if (Intent.ACTION_SEND.equals(action) && type != null) {
+                    if ("text/plain".equals(type))
+                        handleSendText(intent); // Handle text being sent
+                } else
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
             @Override
@@ -320,7 +330,15 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     @Override
     public void onGetInfoChannel(Channel infoChannel) {
         kiemtra();
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type))
+                handleSendText(intent); // Handle text being sent
+        } else
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
@@ -370,6 +388,15 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 }
             }
         });
+    }
+    void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            Intent intentMyApp = new Intent(LoginActivity.this, MyAppActivity.class);
+            intentMyApp.putExtra(CONST.SHARE_INTENT,CONST.SHARE_INTENT);
+            CONST.SHARE_LINK = sharedText;
+            startActivity(intentMyApp);
+        }
     }
 
 

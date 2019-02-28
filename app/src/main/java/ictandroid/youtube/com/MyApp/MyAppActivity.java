@@ -61,7 +61,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     SearchView svMyapp;
     CloudFunction cloudFunction;
     FirebaseAuth auth;
-    SLoading sEdit;
+    public static SLoading sEdit;
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
     AddChannelOnFirebaseListener addChannelOnFirebaseListener;
@@ -107,6 +107,10 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
             }
         });
         viewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        if(CONST.SHARE_INTENT.equals(getIntent().getStringExtra(CONST.SHARE_INTENT)))
+        {
+            viewpager.setCurrentItem(1);
+        }
     }
 
     private void initAction() {
@@ -156,7 +160,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         cloudFunction.removeMyChannel(channelid, new ICloundFunction() {
             @Override
             public void onSuccess() {
-                sEdit.dismiss();
+                //sEdit.dismiss();
             }
 
             @Override
@@ -172,7 +176,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         cloudFunction.addPointMyChannel(channelid, point, new ICloundFunction() {
             @Override
             public void onSuccess() {
-                sEdit.dismiss();
+                //sEdit.dismiss();
             }
 
             @Override
