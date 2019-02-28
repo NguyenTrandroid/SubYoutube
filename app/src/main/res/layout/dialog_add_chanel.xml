@@ -53,7 +53,6 @@
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="OK"
                 android:textSize="@dimen/dp20"
-                android:textStyle="bold"
                 android:textColor="@color/white" />
 
             <Button
@@ -64,7 +63,6 @@
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="HỦY"
-                android:textStyle="bold"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/black" />
         </LinearLayout>

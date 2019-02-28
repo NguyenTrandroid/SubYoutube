@@ -28,7 +28,7 @@
             <ImageView
                 android:layout_marginRight="@dimen/dp10"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/tru"
+                app:srcCompat="@drawable/ic_right"
                 android:id="@+id/iv_tru"
                 android:layout_width="@dimen/dp20"
                 android:layout_height="@dimen/dp20" />
@@ -47,7 +47,7 @@
             <ImageView
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/cong"
+                app:srcCompat="@drawable/ic_left"
                 android:id="@+id/iv_cong"
                 android:layout_width="@dimen/dp20"
                 android:layout_height="@dimen/dp20" />
@@ -69,7 +69,6 @@
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="Cập nhật"
-                android:textStyle="bold"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/white" />
 
@@ -81,7 +80,6 @@
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="HỦY BỎ"
-                android:textStyle="bold"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/black" />
         </LinearLayout>

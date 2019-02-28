@@ -13,13 +13,13 @@
         android:background="@color/red1">
 
         <ImageView
-            android:onClick="backvip"
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp50"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp10"
-            android:src="@drawable/ic_back" />
+            android:onClick="backvip"
+            app:srcCompat="@drawable/ic_back" />
 
         <ImageView
             android:id="@+id/iv_coin"
@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp10"
-            android:src="@drawable/coin" />
+            app:srcCompat="@drawable/ic_dollar" />
 
         <TextView
             android:id="@+id/tv_coin"
@@ -54,29 +54,33 @@
         android:layout_height="@dimen/dp50"
         android:layout_below="@id/rl_toolbar"
         android:background="@color/red1">
+
         <android.support.v7.widget.SearchView
             android:id="@+id/svCamp"
-            app:searchHintIcon="@drawable/ic_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.SearchView>
+            app:searchHintIcon="@drawable/ic_search"></android.support.v7.widget.SearchView>
+
         <RelativeLayout
-            android:background="#ff0"
-            android:layout_toRightOf="@id/svCamp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/svCamp"
+            android:background="#ff0">
 
         </RelativeLayout>
 
     </RelativeLayout>
+
     <android.support.design.widget.TabLayout
-        app:tabTextAppearance="@style/CustomTextStyle"
-        app:tabSelectedTextColor="#fff"
-        android:background="@color/red"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp50"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/red"
+        app:tabSelectedTextColor="#fff"
+        app:tabTextAppearance="@style/CustomTextStyle">
+
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -88,21 +92,23 @@
             android:text="KÊNH CỦA TÔI" />
 
 
-
     </android.support.design.widget.TabLayout>
+
     <ImageView
-        android:layout_marginBottom="@dimen/dp7"
-        android:src="@color/gray"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_width="@dimen/dp2"
-        android:layout_height="@dimen/dp35" />
+        android:layout_height="@dimen/dp35"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp7"
+        android:src="@color/gray" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:layout_below="@id/rl_searchcamp"
-        android:layout_above="@id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:layout_above="@id/tabLayout"
+        android:layout_below="@id/rl_searchcamp">
+    </android.support.v4.view.ViewPager>
 
 
 </RelativeLayout>

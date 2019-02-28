@@ -97,7 +97,7 @@
                 android:layout_marginLeft="@dimen/dp5"
                 android:layout_marginTop="@dimen/dp30"
                 android:layout_toRightOf="@id/tv_coin"
-                android:src="@drawable/coin" />
+                android:src="@drawable/ic_dollar" />
 
             <ImageView
                 android:id="@+id/iv_line1"

@@ -38,7 +38,6 @@
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="CÓ"
                 android:textSize="@dimen/dp20"
-                android:textStyle="bold"
                 android:textColor="@color/white" />
 
             <Button
@@ -50,7 +49,6 @@
                 android:fontFamily="@font/avant_garde_bold"
                 android:text="HỦY"
                 android:textSize="@dimen/dp20"
-                android:textStyle="bold"
                 android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>

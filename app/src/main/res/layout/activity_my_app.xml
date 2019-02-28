@@ -19,7 +19,7 @@
             android:layout_height="@dimen/dp50"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp10"
-            android:src="@drawable/ic_back" />
+            app:srcCompat="@drawable/ic_back" />
 
         <ImageView
             android:id="@+id/iv_coin"
@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp10"
-            android:src="@drawable/coin" />
+            app:srcCompat="@drawable/ic_dollar" />
 
         <TextView
             android:id="@+id/tv_coin"
