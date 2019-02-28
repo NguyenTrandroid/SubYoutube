@@ -152,50 +152,55 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    ArrayList<String> listChannel = (ArrayList<String>) task.getResult().getData().get("channelid");
-                    for (int i = 0; i < listChannel.size(); i++) {
-                        String[] str = listChannel.get(i).split("<ict>");
-                        listHistory.add(new ItemHistory(str[0], str[1],str[2], "0"));
-                    }
-                    Log.d("AAA",listHistory.size()+"");
+                    if(task.getResult().getData()!=null && task.getResult().getData().get("channelid")!=null)
+                    {
+                        ArrayList<String> listChannel = (ArrayList<String>) task.getResult().getData().get("channelid");
+
+                        for (int i = 0; i < listChannel.size(); i++) {
+                            String[] str = listChannel.get(i).split("<ict>");
+                            listHistory.add(new ItemHistory(str[0], str[1],str[2], "0"));
+                        }
+                        Log.d("AAA",listHistory.size()+"");
 
 
-                    List<String> listIdChannel = new ArrayList<>();
-                    for (int i = 0; i < listHistory.size(); i++) {
-                        listIdChannel.add(listHistory.get(i).getChannelid());
-                    }
+                        List<String> listIdChannel = new ArrayList<>();
+                        for (int i = 0; i < listHistory.size(); i++) {
+                            listIdChannel.add(listHistory.get(i).getChannelid());
+                        }
 
 
-                    subcribersOnCampaign = new SubcribersOnHistory();
-                    subcribersOnCampaign.getListSubscripbers(new SubscriberOnCampaignV2Listener() {
-                        @Override
-                        public void onCompletedListSubcriberCampaignV2(List<SubChannelItem> listSubscribers) {
-                            for (int i = 0; i < listSubscribers.size(); i++) {
-                                for (int j = 0; j < listHistory.size(); j++) {
-                                    if (listSubscribers.get(i).getItems().get(0).getId().equals(listHistory.get(j).getChannelid())) {
-                                        listHistory.get(j)
-                                                .setSub(listSubscribers.get(i)
-                                                        .getItems()
-                                                        .get(0)
-                                                        .getStatistics()
-                                                        .getSubscriberCount());
+                        subcribersOnCampaign = new SubcribersOnHistory();
+                        subcribersOnCampaign.getListSubscripbers(new SubscriberOnCampaignV2Listener() {
+                            @Override
+                            public void onCompletedListSubcriberCampaignV2(List<SubChannelItem> listSubscribers) {
+                                for (int i = 0; i < listSubscribers.size(); i++) {
+                                    for (int j = 0; j < listHistory.size(); j++) {
+                                        if (listSubscribers.get(i).getItems().get(0).getId().equals(listHistory.get(j).getChannelid())) {
+                                            listHistory.get(j)
+                                                    .setSub(listSubscribers.get(i)
+                                                            .getItems()
+                                                            .get(0)
+                                                            .getStatistics()
+                                                            .getSubscriberCount());
 
+                                        }
                                     }
                                 }
+
+                                historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                                layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
+                                rvHistory.setLayoutManager(layoutManager);
+                                rvHistory.setItemAnimator(new DefaultItemAnimator());
+                                rvHistory.setAdapter(historyAdapter);
                             }
 
-                            historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
-                            layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
-                            rvHistory.setLayoutManager(layoutManager);
-                            rvHistory.setItemAnimator(new DefaultItemAnimator());
-                            rvHistory.setAdapter(historyAdapter);
-                        }
+                            @Override
+                            public void onErrorListSubcripberCampaignV2(String error) {
 
-                        @Override
-                        public void onErrorListSubcripberCampaignV2(String error) {
+                            }
+                        }, CONST.KEY, listIdChannel);
+                    }
 
-                        }
-                    }, CONST.KEY, listIdChannel);
                     }else {
                         /////////////////////
 
