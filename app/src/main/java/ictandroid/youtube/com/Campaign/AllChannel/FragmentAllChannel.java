@@ -11,30 +11,41 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.GetKeySearchCampaign;
 import ictandroid.youtube.com.Campaign.ItemChanel;
+import ictandroid.youtube.com.Dialog.SLoading;
+import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.Profile.HistoryAdapter;
 import ictandroid.youtube.com.Profile.ItemHistory;
 import ictandroid.youtube.com.Profile.ProfileActivity;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.DataChannelOnCampaign;
 import ictandroid.youtube.com.Utils.GetData.SubcribersOnCampaign;
 import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnMyAppListener;
 import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
@@ -44,13 +55,25 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     RecyclerView recyclerView;
     CampaignChanelAdapter campaignChanelAdapter;
     ArrayList<ItemChanel> appArrayListAllChanel = new ArrayList<>();
-    ArrayList<ItemChanel> appArrayList;
+    ArrayList<ItemChanel> appArrayList = new ArrayList<>();
     ArrayList<ItemChanel> appArrayListtemp;
     SubcribersOnCampaign subcribersOnCampaign;
     boolean isloaded=false;
+    boolean isend=false;
+    FirebaseFirestore db ;
+    DocumentSnapshot lastVisible;
+    int scroll=0;
+    SLoading loadmore;
+    GridLayoutManager gridLayoutManager;
+    CollectionReference docRef;
+    FirebaseAuth auth;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db=FirebaseFirestore.getInstance();
+        loadmore = new SLoading(getContext());
+        gridLayoutManager = new GridLayoutManager(getContext(),1);
+        auth=FirebaseAuth.getInstance();
         isloaded=false;
     }
 
@@ -59,6 +82,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
         recyclerView = view.findViewById(R.id.rv_listCampaign);
+        campaignChanelAdapter = new CampaignChanelAdapter(getContext(), appArrayList);
         if(CONST.tagFragmentMyChannel==null)
         {
             String getIDFragment = this.getTag();
@@ -66,109 +90,214 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
             CONST.tagFragmentMyChannel = output[2];
             CONST.IDFragment = output[2];
         }
+        initScrollListener();
         loadApp();
+        loadmore();
+
+
         return view;
     }
 
-
-
-    public void loadApp() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference docRef = db.collection("LIST");
-        docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-
-                    try {
-                        if (e != null) {
-                            return;
+    private void loadmore2() {
+        if(!isend&&!isloaded) {
+            loadmore.show();
+            isloaded=true;
+            Query next = db.collection("LIST")
+                    .orderBy("points").startAt("1")
+                    .startAfter(lastVisible)
+                    .limit(7);
+            next.get()
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("testquery", "onFailure: " + e);
                         }
-                        if (queryDocumentSnapshots != null) {
-                            Log.d("OKASDNCAS", "onEvent: ");
+                    })
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                            Log.d("testquery", "onFailure: " + documentSnapshots.size());
+                            // ...
+
+                            // Get the last visible document
                             appArrayListAllChanel.clear();
-                            List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                             for (int i = 0; i < documentSnapshots.size(); i++) {
                                 ItemChanel itemApp = new ItemChanel();
-                                itemApp.setDiem((String) documentSnapshots.get(i).getData().get("points"));
-                                itemApp.setDoUuTien((String) documentSnapshots.get(i).getData().get("douutien"));
-                                itemApp.setLinkIcon((String) documentSnapshots.get(i).getData().get("linkanh"));
-                                itemApp.setTime((String) documentSnapshots.get(i).getData().get("time"));
-                                itemApp.setUserId((String) documentSnapshots.get(i).getData().get("userid"));
-                                itemApp.setNameChanel((String) documentSnapshots.get(i).getData().get("tenchannel"));
-                                itemApp.setChanelId(documentSnapshots.get(i).getId());
-                                if (Integer.parseInt(itemApp.getDiem()) > 0) {
-                                    appArrayListAllChanel.add(itemApp);
-                                }
+                                Log.d("testquery", documentSnapshots.getDocuments().get(i).get("tenchannel") + "");
+                                itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
+                                itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
+                                itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
+                                itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
+                                itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
+                                itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
+                                itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
+
+                                appArrayListAllChanel.add(itemApp);
+
+                            }
+                            appArrayList.addAll(appArrayListAllChanel);
+                            Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
+                            try {
+                                lastVisible = documentSnapshots.getDocuments()
+                                        .get(documentSnapshots.size() - 1);
+                            }catch (Exception e){
+                                Log.d("testquerys", "end");
+                                isend=true;
                             }
 
-                            Collections.sort(appArrayListAllChanel, new Comparator<ItemChanel>() {
-                                @Override
-                                public int compare(ItemChanel itemApp, ItemChanel t1) {
-                                    Integer b = Integer.parseInt(itemApp.getDoUuTien());
-                                    Integer a = Integer.parseInt(t1.getDoUuTien());
-                                    int sizeCmp = a.compareTo(b);
-                                    if (sizeCmp != 0) {
-                                        return sizeCmp;
-
-                                    }
-                                    Long c = Long.parseLong(itemApp.getTime());
-                                    Long d = Long.parseLong(t1.getTime());
-                                    int nrOfToppingsCmp = c.compareTo(d);
-                                    if (nrOfToppingsCmp != 0) {
-                                        return nrOfToppingsCmp;
-                                    }
-                                    return itemApp.getNameChanel().compareTo(t1.getNameChanel());
-                                }
-                            });
-                            /**
-                             *
-                             */
-//                        initView();
-                            /**
-                             *
-                             */
-                            appArrayList  = new ArrayList<>();
-                            appArrayList = appArrayListAllChanel;
                             List<String> listIdChannel = new ArrayList<>();
                             for (int i = 0; i < appArrayListAllChanel.size(); i++) {
                                 listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
                             }
 
-//                                isloaded=true;
-                                subcribersOnCampaign = new SubcribersOnCampaign();
-                                subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+                            subcribersOnCampaign = new SubcribersOnCampaign();
+                            subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+
+//                            campaignChanelAdapter.notifyDataSetChanged();
+//                            isloaded=false;
+                            loadmore.dismiss();
+
+                        }
+                    });
+        }
+    }
+    private void initScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = gridLayoutManager.getItemCount();
+                int lastVisible = gridLayoutManager.findLastVisibleItemPosition();
+
+                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+                if (totalItemCount > 0 && endHasBeenReached) {
+                    loadmore2();
+                }
+
+            }
+        });
+}
+    public void loadmore(){
+        Query first = db.collection("LIST")
+                .orderBy("points").startAt("1")
+                .limit(7);
+
+        first.get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("testquery", "onFailure: "+e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        // ...
+
+                        // Get the last visible document
+                        appArrayListAllChanel.clear();
+                        Log.d("testquery", "loadmore1");
+                        for (int i = 0; i < documentSnapshots.size(); i++) {
+                            ItemChanel itemApp = new ItemChanel();
+                            itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
+                            itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
+                            itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
+                            itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
+                            itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
+                            itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
+                            itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
+
+                            appArrayListAllChanel.add(itemApp);
 
 
                         }
-                    } catch (Exception s) {
 
+                        lastVisible = documentSnapshots.getDocuments()
+                                .get(documentSnapshots.size() -1);
+                        appArrayList.addAll(appArrayListAllChanel);
+                        List<String> listIdChannel = new ArrayList<>();
+                        for (int i = 0; i < appArrayListAllChanel.size(); i++) {
+                            listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
+                        }
+                        recyclerView.setLayoutManager(gridLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(campaignChanelAdapter);
+                        subcribersOnCampaign = new SubcribersOnCampaign();
+                        subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+//
                     }
+                });
+
+    }
+    private void loadApp() {
+        docRef = db.collection("LIST");
+        docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                try {
+                    if (e != null) {
+                        Log.d("DATAAA", "ERROR");
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
+                        for (int i = 0; i < documentSnapshots.size(); i++) {
+                            if(documentSnapshots.get(i).getData().get("userid").equals(auth.getUid())){
+                                if(Integer.parseInt(documentSnapshots.get(i).getData().get("points")+"")==0){
+                                    for (int j = 0; j < appArrayList.size(); j++) {
+                                        if(appArrayList.get(j).getChanelId().equals(documentSnapshots.get(i).getId())){
+                                            appArrayList.remove(j);
+                                            campaignChanelAdapter.notifyItemRemoved(j);
+                                        }
+                                    }
+                                }else {
+                                    for (int j = 0; j < appArrayList.size(); j++) {
+                                        if(appArrayList.get(j).getChanelId().equals(documentSnapshots.get(i).getId())){
+                                            appArrayList.get(j).setDiem(documentSnapshots.get(i).get("points")+"");
+                                            campaignChanelAdapter.notifyItemChanged(j);
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+                        }
+                    }
+                } catch (Exception s) {
+
                 }
+            }
         });
     }
 
     @Override
     public void onCompletedSubV2FromActivity(List<SubChannelItem> lisSubChannelItem) {
-            for (int i = 0; i < lisSubChannelItem.size(); i++) {
-                for (int j = 0; j < appArrayList.size(); j++) {
-                    if (lisSubChannelItem.get(i).getItems().get(0).getId().equals(appArrayList.get(j).getChanelId())) {
-                        appArrayList.get(j)
-                                .setSoLuotSub(lisSubChannelItem.get(i)
-                                        .getItems()
-                                        .get(0)
-                                        .getStatistics()
-                                        .getSubscriberCount());
+        for (int i = 0; i < lisSubChannelItem.size(); i++) {
+            for (int j = 0; j < appArrayList.size(); j++) {
+                if (lisSubChannelItem.get(i).getItems().get(0).getId().equals(appArrayList.get(j).getChanelId())) {
+                    appArrayList.get(j)
+                            .setSoLuotSub(lisSubChannelItem.get(i)
+                                    .getItems()
+                                    .get(0)
+                                    .getStatistics()
+                                    .getSubscriberCount());
 
-                    }
                 }
             }
+        }
 
-            campaignChanelAdapter = new CampaignChanelAdapter(getContext(), appArrayList);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            campaignChanelAdapter.notifyDataSetChanged();
-            recyclerView.setAdapter(campaignChanelAdapter);
+        for (int i = 0; i <appArrayList.size() ; i++) {
 
+            Log.d("testquerys", appArrayList.get(i).getNameChanel()+"/"+appArrayList.get(i).getSoLuotSub());
+        }
+        campaignChanelAdapter.notifyDataSetChanged();
+        isloaded=false;
     }
 
     @Override

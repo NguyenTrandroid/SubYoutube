@@ -70,6 +70,7 @@ public class SubcribersOnCampaign {
         Log.d("GETSUBer","COMPLETED");
     }
     private void responseGetSubcribersOfChannel(SubChannelItem itemSub) {
+        Log.d("GETSUBer", itemSub.toString());
         subChannelItem = itemSub;
         listSubChannelItem.add(subChannelItem);
         if(listSubChannelItem.size()==sizeListSubscribers)

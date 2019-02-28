@@ -47,6 +47,9 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        uid = firebaseAuth.getUid();
+        loadApp();
     }
     @Nullable
     @Override
@@ -61,9 +64,6 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
             CONST.IDFragment = output[2];
         }
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        uid = firebaseAuth.getUid();
-        loadApp();
         return view;
     }
     private void loadApp() {
@@ -81,17 +81,19 @@ public class FragmentMyChannel extends Fragment implements GetSubFromCampaignLis
                     if (queryDocumentSnapshots != null) {
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < documentSnapshots.size(); i++) {
-                            ItemChanel itemApp = new ItemChanel();
-                            itemApp.setDiem((String) documentSnapshots.get(i).getData().get("points"));
-                            itemApp.setDoUuTien((String) documentSnapshots.get(i).getData().get("douutien"));
-                            itemApp.setLinkIcon((String) documentSnapshots.get(i).getData().get("linkanh"));
-                            itemApp.setTime((String) documentSnapshots.get(i).getData().get("time"));
-                            itemApp.setUserId((String) documentSnapshots.get(i).getData().get("userid"));
-                            itemApp.setNameChanel((String) documentSnapshots.get(i).getData().get("tenchannel"));
-                            itemApp.setChanelId(documentSnapshots.get(i).getId());
-                            if (Integer.parseInt(itemApp.getDiem()) > 0) {
-                                if(itemApp.getUserId().equals(uid)){
-                                    appArrayListAllChanel.add(itemApp);
+                            if(documentSnapshots.get(i).getData().get("userid").equals(uid)) {
+                                ItemChanel itemApp = new ItemChanel();
+                                itemApp.setDiem((String) documentSnapshots.get(i).getData().get("points"));
+                                itemApp.setDoUuTien((String) documentSnapshots.get(i).getData().get("douutien"));
+                                itemApp.setLinkIcon((String) documentSnapshots.get(i).getData().get("linkanh"));
+                                itemApp.setTime((String) documentSnapshots.get(i).getData().get("time"));
+                                itemApp.setUserId((String) documentSnapshots.get(i).getData().get("userid"));
+                                itemApp.setNameChanel((String) documentSnapshots.get(i).getData().get("tenchannel"));
+                                itemApp.setChanelId(documentSnapshots.get(i).getId());
+                                if (Integer.parseInt(itemApp.getDiem()) > 0) {
+                                    if (itemApp.getUserId().equals(uid)) {
+                                        appArrayListAllChanel.add(itemApp);
+                                    }
                                 }
                             }
                         }
