@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -58,6 +59,8 @@ import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem
 import ictandroid.youtube.com.Utils.GetData.SubcribersOnCampaign;
 import ictandroid.youtube.com.Utils.GetData.SubcribersOnHistory;
 import ictandroid.youtube.com.Utils.GetData.SubscribersOnMyApp;
+
+import static ictandroid.youtube.com.Login.LoginActivity.isConnectingToInternet;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -249,21 +252,25 @@ public class ProfileActivity extends AppCompatActivity {
                 rlInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_clear:
-                sLoadingHistory.show();
-                cloudFunction.clearHistory(new ICloundFunction() {
-                    @Override
-                    public void onSuccess() {
-                        listHistory.clear();
-                        historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
-                        rvHistory.setAdapter(historyAdapter);
-                        sLoadingHistory.dismiss();
-                    }
+                if(!isConnectingToInternet(this)){
+                    Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                }else {
+                    sLoadingHistory.show();
+                    cloudFunction.clearHistory(new ICloundFunction() {
+                        @Override
+                        public void onSuccess() {
+                            listHistory.clear();
+                            historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                            rvHistory.setAdapter(historyAdapter);
+                            sLoadingHistory.dismiss();
+                        }
 
-                    @Override
-                    public void onFailed() {
-                        sLoadingHistory.dismiss();
-                    }
-                });
+                        @Override
+                        public void onFailed() {
+                            sLoadingHistory.dismiss();
+                        }
+                    });
+                }
                 break;
         }
     }

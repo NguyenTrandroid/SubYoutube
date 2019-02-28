@@ -42,6 +42,7 @@ import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.MyApp.GetKeySearchMyChanel;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
+import ictandroid.youtube.com.MyApp.MyAppActivity;
 import ictandroid.youtube.com.MyApp.MyChanelAdapter;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.GetData.DataChannel;
@@ -213,11 +214,11 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                             }
                         }
                         arrayList = arrayListAllChanel;
-                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        myChanelAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(myChanelAdapter);
+//                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+//                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                        myChanelAdapter.notifyDataSetChanged();
+//                        recyclerView.setAdapter(myChanelAdapter);
 
                         List<String> listIdChannel = new ArrayList<>();
                         for (int i = 0; i < arrayList.size(); i++) {
@@ -255,6 +256,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         myChanelAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(myChanelAdapter);
+        MyAppActivity.sLoading.dismiss();
         for (int i = 0; i < arrayList.size(); i++) {
             if (idChannelCheckAdd != null && idChannelCheckAdd.equals(arrayList.get(i).getChanelId())) {
                 if (sLoadingAddChannel != null)

@@ -35,6 +35,8 @@ import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.R;
 
+import static ictandroid.youtube.com.Login.LoginActivity.isConnectingToInternet;
+
 public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHolder>  {
     Context context;
     ArrayList<ItemMyChanel> arrayList;
@@ -128,8 +130,15 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                         /**
                          *gõ bỏ kênh
                          */
-                        myChannelInterface.delete(itemChanel.getChanelId());
-                        dialogRemove.cancel();
+                        if(!isConnectingToInternet(context)){
+                            Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+
+                            dialogRemove.cancel();
+                        }else {
+
+                            myChannelInterface.delete(itemChanel.getChanelId());
+                            dialogRemove.cancel();
+                        }
                     }
                 });
                 btCancle.setOnClickListener(new View.OnClickListener() {
@@ -234,11 +243,18 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                     /**
                                      *cập nhật điểm
                                      */
-                                    int pointsChanel = Integer.parseInt((String) tvDiem.getText());
-                                    capnhatdiem(pointsChanel,itemChanel.getChanelId());
-                                    Log.d("AAAAA", "onClick: user:   " + pointsUser);
-                                    Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
-                                    dialogEdit.dismiss();
+                                    if(!isConnectingToInternet(context)){
+                                        Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+
+                                        dialogEdit.dismiss();
+                                    }else {
+                                        int pointsChanel = Integer.parseInt((String) tvDiem.getText());
+                                        capnhatdiem(pointsChanel,itemChanel.getChanelId());
+                                        Log.d("AAAAA", "onClick: user:   " + pointsUser);
+                                        Log.d("AAAAA", "onClick: chanel: " + pointsChanel);
+                                        dialogEdit.dismiss();
+                                    }
+
                                 }
                             });
                             btCancle.setOnClickListener(new View.OnClickListener() {

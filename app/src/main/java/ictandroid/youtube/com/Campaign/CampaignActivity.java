@@ -61,15 +61,15 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     ViewPager viewpager;
     @BindView(R.id.svCamp)
     SearchView svCamp;
-    SLoading sopenyoutube;
-    SLoading skiemtra;
+    public static SLoading sopenyoutube;
+    public static SLoading skiemtra;
     boolean intentyoutube =false;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth =FirebaseAuth.getInstance();
     CloudFunction cloudFunction = new CloudFunction();
     CallingYoutube callingYoutube;
     String idchannelchecking="";
-    SLoading sEdit;
+    public  static SLoading sEdit;
     GetSubFromCampaignListener getSubFromCampaignListener;
     GetSubFromCampaignV2Listener getSubFromCampaignV2Listener;
     PagerCampaignAdapter pagerCampaignAdapter;
@@ -378,7 +378,6 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         cloudFunction.removeMyChannel(channelid, new ICloundFunction() {
             @Override
             public void onSuccess() {
-                sEdit.dismiss();
 
 
             }
@@ -396,7 +395,6 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         cloudFunction.addPointMyChannel(channelid, point, new ICloundFunction() {
             @Override
             public void onSuccess() {
-                sEdit.dismiss();
             }
 
             @Override

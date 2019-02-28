@@ -61,7 +61,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     SearchView svMyapp;
     CloudFunction cloudFunction;
     FirebaseAuth auth;
-    public static SLoading sEdit;
+    public static SLoading sLoading;
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
     AddChannelOnFirebaseListener addChannelOnFirebaseListener;
@@ -79,7 +79,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         initAction();
         cloudFunction = new CloudFunction();
         auth = FirebaseAuth.getInstance();
-        sEdit = new SLoading(this);
+        sLoading = new SLoading(this);
     }
 
     private void initViewPager() {
@@ -156,7 +156,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void delete(String channelid) {
-        sEdit.show();
+        sLoading.show();
         cloudFunction.removeMyChannel(channelid, new ICloundFunction() {
             @Override
             public void onSuccess() {
@@ -165,14 +165,14 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
             @Override
             public void onFailed() {
-                sEdit.dismiss();
+                sLoading.dismiss();
             }
         });
     }
 
     @Override
     public void addpoint(String channelid, int point) {
-        sEdit.show();
+        sLoading.show();
         cloudFunction.addPointMyChannel(channelid, point, new ICloundFunction() {
             @Override
             public void onSuccess() {
@@ -181,7 +181,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
             @Override
             public void onFailed() {
-                sEdit.dismiss();
+                sLoading.dismiss();
             }
         });
     }

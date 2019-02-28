@@ -1,6 +1,9 @@
 package ictandroid.youtube.com.Login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +23,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.api.services.youtube.model.Channel;
 import com.google.firebase.auth.AuthCredential;
@@ -36,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.functions.FirebaseFunctions;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -184,9 +190,23 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         }
     }
 
+    public static boolean isConnectingToInternet(Context context) {
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
     private void kiemtrakhoitao() {
-        db.collection("USER").document(auth.getUid())
-                .get().addOnFailureListener(new OnFailureListener() {
+        if(!isConnectingToInternet(LoginActivity.this)){
+            Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+            relativeLayout.setVisibility(View.VISIBLE);
+        }
+        db.collection("USER").document(auth.getUid()).get()
+                .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 cloudFunction.addNewUser(icAddNewUser);
@@ -195,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                                      @Override
                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                          if (task.isSuccessful()) {
-                                             if (task.getResult().exists()) {
+                                               if (task.getResult().exists()) {
                                                  callingYoutube.getChannelFromApi();
                                                  kiemtrataikhoan();
 

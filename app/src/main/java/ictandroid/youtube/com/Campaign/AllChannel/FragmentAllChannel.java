@@ -1,5 +1,8 @@
 package ictandroid.youtube.com.Campaign.AllChannel;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,10 +41,12 @@ import java.util.List;
 import java.util.Map;
 
 import ictandroid.youtube.com.CONST;
+import ictandroid.youtube.com.Campaign.CampaignActivity;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.GetKeySearchCampaign;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.Dialog.SLoading;
+import ictandroid.youtube.com.Login.LoginActivity;
 import ictandroid.youtube.com.MyApp.ItemMyChanel;
 import ictandroid.youtube.com.Profile.HistoryAdapter;
 import ictandroid.youtube.com.Profile.ItemHistory;
@@ -61,6 +67,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     SubcribersOnCampaign subcribersOnCampaign;
     ArrayList<String> old = new ArrayList<>();
     boolean isloaded=false;
+    boolean isloaded2=false;
     boolean isend=false;
     FirebaseFirestore db ;
     DocumentSnapshot lastVisible;
@@ -101,9 +108,12 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     }
 
     private void loadmore2() {
-        if(!isend&&!isloaded) {
-            loadmore.show();
+        Log.d("testqueradsy", "onFailure: "  );
+        if(!isend) {
             isloaded=true;
+            Log.d("testqueradsy", "onFailure: "  );
+            loadmore.dismiss();
+            loadmore.show();
             Query next = db.collection("LIST")
                     .orderBy("douutien")
                     .orderBy("time")
@@ -120,10 +130,14 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot documentSnapshots) {
-                            Log.d("testquery", "onFailure: " + documentSnapshots.size());
+
                             // ...
 
                             // Get the last visible document
+                            if(!isConnectingToInternet(getContext())){
+                                Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+                                loadmore.dismiss();
+                            }
                             DocumentReference docRef = db.collection("USERSUB").document(auth.getUid());
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -138,48 +152,52 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                                 }
                                             }
                                         }
-                                    }
-                            appArrayListAllChanel.clear();
+                                        appArrayListAllChanel.clear();
 
-                            for (int i = 0; i < documentSnapshots.size(); i++) {
-                                ItemChanel itemApp = new ItemChanel();
-                                Log.d("testquery", documentSnapshots.getDocuments().get(i).get("tenchannel") + "");
-                                itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
-                                itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
-                                itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
-                                itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
-                                itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
-                                itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
-                                itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
-                                if(!old.contains(itemApp.getChanelId())) {
-                                    appArrayListAllChanel.add(itemApp);
-                                }
+                                        for (int i = 0; i < documentSnapshots.size(); i++) {
+                                            ItemChanel itemApp = new ItemChanel();
+                                            Log.d("testquery", documentSnapshots.getDocuments().get(i).get("tenchannel") + "");
+                                            itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
+                                            itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
+                                            itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
+                                            itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
+                                            itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
+                                            itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
+                                            itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
+                                            if(!old.contains(itemApp.getChanelId())&&Integer.parseInt(itemApp.getDiem())>0) {
+                                                appArrayListAllChanel.add(itemApp);
+                                            }
 
-                            }
-                            appArrayList.addAll(appArrayListAllChanel);
-                            Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
-                            try {
-                                lastVisible = documentSnapshots.getDocuments()
-                                        .get(documentSnapshots.size() - 1);
-                            }catch (Exception e){
-                                Log.d("testquerys", "end");
-                                isend=true;
-                            }
-                            if(appArrayList.size()==0){
-                                loadmore2();
-                            }
+                                        }
+                                        appArrayList.addAll(appArrayListAllChanel);
+                                        Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
+                                        try {
+                                            lastVisible = documentSnapshots.getDocuments()
+                                                    .get(documentSnapshots.size() - 1);
+                                        }catch (Exception e){
+                                            isend=true;
+                                        }
+                                        Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
 
-                            List<String> listIdChannel = new ArrayList<>();
-                            for (int i = 0; i < appArrayListAllChanel.size(); i++) {
-                                listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
-                            }
+                                        if(appArrayList.size()==0){
+                                            Log.d("testquerys", lastVisible+"");
+                                            isloaded=false;
+                                            loadmore2();
+                                        }
 
-                            subcribersOnCampaign = new SubcribersOnCampaign();
-                            subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+                                        List<String> listIdChannel = new ArrayList<>();
+                                        for (int i = 0; i < appArrayListAllChanel.size(); i++) {
+                                            listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
+                                        }
+
+                                        subcribersOnCampaign = new SubcribersOnCampaign();
+                                        subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
 
 //                            campaignChanelAdapter.notifyDataSetChanged();
 //                            isloaded=false;
-                            loadmore.dismiss();
+                                    }
+                                    loadmore.dismiss();
+
 
                                 }});
 
@@ -187,28 +205,54 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                     });
         }
     }
+    public static boolean isConnectingToInternet(Context context) {
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
     private void initScrollListener() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+//                int visibleItemCount = gridLayoutManager.getChildCount();
+//                int totalItemCount = gridLayoutManager.getItemCount();
+//                int pastVisibleItems = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
+//                Log.d("scrollsss", "onScrollStateChanged: "+
+//                        gridLayoutManager.getSpanSizeLookup());
+//
+//                if(pastVisibleItems+visibleItemCount >= totalItemCount){
+//                    if(!isloaded) {
+//                        loadmore2();
+//                    }
+//                }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+              int visibleItemCount = gridLayoutManager.getChildCount();
                 int totalItemCount = gridLayoutManager.getItemCount();
-                int lastVisible = gridLayoutManager.findLastVisibleItemPosition();
+                int pastVisibleItems = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
+                Log.d("scrollsss", "onScrollStateChanged: "+
+                        gridLayoutManager.getSpanSizeLookup());
 
-                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
-                if (totalItemCount > 0 && endHasBeenReached) {
-                    loadmore2();
+                if(pastVisibleItems+visibleItemCount >= totalItemCount){
+                    if(!isloaded) {
+                        loadmore2();
+                    }
                 }
-
             }
         });
 }
     public void loadmore(){
+        isloaded2=true;
         Query first = db.collection("LIST")
                 .orderBy("douutien")
                 .orderBy("time")
@@ -268,7 +312,9 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                 Log.d("testquery", appArrayListAllChanel.size()+"");
 
                                 appArrayList.addAll(appArrayListAllChanel);
-                                if(appArrayList.size()==0){
+                                Log.d("nhaaaaa", appArrayList.size()+"");
+
+                                if(appArrayList.size()<=0){
                                     loadmore2();
                                 }
                                 List<String> listIdChannel = new ArrayList<>();
@@ -303,6 +349,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                         List<DocumentSnapshot> documentSnapshots = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < documentSnapshots.size(); i++) {
                             if(documentSnapshots.get(i).getData().get("userid").equals(auth.getUid())){
+                                CampaignActivity.sEdit.dismiss();
                                 if(Integer.parseInt(documentSnapshots.get(i).getData().get("points")+"")==0){
                                     for (int j = 0; j < appArrayList.size(); j++) {
                                         if(appArrayList.get(j).getChanelId().equals(documentSnapshots.get(i).getId())){
@@ -335,8 +382,10 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
             @Override
             public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 try {
-                    for (Map.Entry<String, Object> entry : documentSnapshot.getData().entrySet()) {
 
+                    CampaignActivity.skiemtra.dismiss();
+                    CampaignActivity.sopenyoutube.dismiss();
+                    for (Map.Entry<String, Object> entry : documentSnapshot.getData().entrySet()) {
                         if (entry.getValue().equals("finished")) {
                             for (int j = 0; j < appArrayList.size(); j++) {
                                 if (appArrayList.get(j).getChanelId().equals(entry.getKey())) {
@@ -370,13 +419,9 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                 }
             }
         }
-
-        for (int i = 0; i <appArrayList.size() ; i++) {
-
-            Log.d("testquerys", appArrayList.get(i).getNameChanel()+"/"+appArrayList.get(i).getSoLuotSub());
-        }
         campaignChanelAdapter.notifyDataSetChanged();
-        isloaded=false;
+        if(isloaded2){
+        isloaded=false;}
     }
 
     @Override
@@ -400,7 +445,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                 }
             }
             campaignChanelAdapter = new CampaignChanelAdapter(getContext(),listTemp);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setLayoutManager(gridLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             campaignChanelAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(campaignChanelAdapter);
