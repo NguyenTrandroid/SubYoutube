@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        nhat {
+            keyAlias 'nhat'
+            keyPassword 'Sdt0909228923'
+            storeFile file('C:/Users/trann/Desktop/keystore.jks')
+            storePassword 'Sdt0909228923'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "ictandroid.youtube.com"
@@ -23,6 +31,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.nhat
         }
     }
     compileOptions {
@@ -32,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:design:27.+'
@@ -47,7 +56,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     implementation 'com.google.firebase:firebase-functions:16.1.3'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     //jSoup
     implementation 'org.jsoup:jsoup:1.11.3'
     //Retrofit
@@ -65,12 +73,9 @@ dependencies {
     //Butter Knife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
     //Circle image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:3.0.3'
-
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.google.android.gms:play-services-auth:10.2.1'
     implementation 'pub.devrel:easypermissions:0.4.1'

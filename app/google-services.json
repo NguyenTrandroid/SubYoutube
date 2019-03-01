@@ -55,6 +55,22 @@
           }
         },
         {
+          "client_id": "414566880411-b9acviqs1m9fmmkicv7aojesk7dl9v47.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "5c6aae31b8d0f1f7aba8ae2ce3f54caa639abb07"
+          }
+        },
+        {
+          "client_id": "414566880411-2sq1prkivu73nb280769h15dcs8ch37u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ictandroid.youtube.com",
+            "certificate_hash": "9381bc62fa8f87b136353332673890a1fff2896b"
+          }
+        },
+        {
           "client_id": "414566880411-iqsr9h47adinh70kiifjc1jcls2dsi4d.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -37,7 +37,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp10"
             android:layout_toLeftOf="@id/iv_coin"
-            android:text="15,000"
+            android:text="100"
             android:textColor="#FFFF"
             android:textSize="@dimen/sp20" />
 

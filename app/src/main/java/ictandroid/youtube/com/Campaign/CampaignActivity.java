@@ -139,14 +139,13 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                             } else {
                                 String idchannel =String.valueOf(entry.getKey());
                                 idchannelchecking=idchannel;
-                                Log.d("xawjndqw", idchannel);
+                                Log.d("xawjndqwss", idchannel);
                                 callingYoutube.checkSubscriberFromApi(idchannel);
 
                             }
 
                         }
                     }else {
-                        /////////////////////
 
                     }
                 }
@@ -293,6 +292,8 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                         startActivity(intent);
                     }
                     intentyoutube=true;
+
+
                 }
 
             }
@@ -311,7 +312,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
 
     @Override
     public void onCheckSub(boolean existed) {
-        Log.d("xawjndqw", existed+"");
+        Log.d("xawjndqwss", existed+"");
         if(existed){
             cloudFunction.addPointUser(1);
             cloudFunction.addUserSub(idchannelchecking, "finished", new ICloundFunction() {

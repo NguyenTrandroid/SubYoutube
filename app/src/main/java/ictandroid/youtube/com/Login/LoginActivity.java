@@ -1,11 +1,20 @@
 package ictandroid.youtube.com.Login;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -16,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -47,6 +57,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import ictandroid.youtube.com.BuildConfig;
 import ictandroid.youtube.com.CONST;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
@@ -58,7 +69,7 @@ import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class LoginActivity extends AppCompatActivity implements GetResultApiListener{
+public class LoginActivity extends AppCompatActivity implements GetResultApiListener,EasyPermissions.PermissionCallbacks{
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -93,6 +104,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
+                kiemtra();
                 Intent intent = getIntent();
                 String action = intent.getAction();
                 String type = intent.getType();
@@ -102,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                         handleSendText(intent); // Handle text being sent
                 } else
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             }
 
             @Override
@@ -180,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 if ("text/plain".equals(type))
                 {
                     if (auth.getCurrentUser() != null) {
-                        kiemtrakhoitao();
+                        callingYoutube.getChannelFromApi();
                     } else {
                         relativeLayout.setVisibility(View.VISIBLE);
                     }
@@ -198,7 +211,9 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                     @Override
                     public void onFinish() {
                         if (auth.getCurrentUser() != null) {
-                            kiemtrakhoitao();
+//                            kiemtrakhoitao();
+
+                            callingYoutube.getChannelFromApi();
                         } else {
                             relativeLayout.setVisibility(View.VISIBLE);
                         }
@@ -224,18 +239,31 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
             relativeLayout.setVisibility(View.VISIBLE);
         }
+
         db.collection("USER").document(auth.getUid()).get()
                 .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+
                 cloudFunction.addNewUser(icAddNewUser);
             }
         }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                      @Override
                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                          if (task.isSuccessful()) {
+
                                                if (task.getResult().exists()) {
-                                                 callingYoutube.getChannelFromApi();
+                                                   kiemtra();
+                                                   Intent intent = getIntent();
+                                                   String action = intent.getAction();
+                                                   String type = intent.getType();
+
+                                                   if (Intent.ACTION_SEND.equals(action) && type != null) {
+                                                       if ("text/plain".equals(type))
+                                                           handleSendText(intent); // Handle text being sent
+                                                   } else
+                                                       startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                   finish();
                                                  kiemtrataikhoan();
 
                                              } else {
@@ -300,10 +328,44 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==REQUEST_PERMISSION_GET_ACCOUNTS){
-            callingYoutube.chooseAccount();
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            callingYoutube.getChannelFromApi();
+
+        } else {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
+                    Manifest.permission.GET_ACCOUNTS)) {
+                // now, user has denied permission (but not permanently!)
+
+            } else {
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle("Permissions Required")
+                        .setMessage("You have forcefully denied some of the required permissions " +
+                                "for this action. Please open settings, go to permissions and allow them.")
+                        .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        Uri.fromParts("package", getPackageName(), null));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show();
+
+            }
+
         }
     }
+
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         // [START_EXCLUDE silent]
@@ -315,7 +377,8 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            kiemtrakhoitao();
+
+                            callingYoutube.getChannelFromApi();
 //                            addNewUser();
                             // Sign in success, update UI with the signed-in user's information
 //                            Log.d(TAG, "signInWithCredential:success");
@@ -363,22 +426,21 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     }
 
     public void signUp(View view) {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        Intent intent;
+        String url ="https://accounts.google.com/signup";
+        try {
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+
+        }
     }
 
     @Override
     public void onGetInfoChannel(Channel infoChannel) {
-        kiemtra();
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type))
-                handleSendText(intent); // Handle text being sent
-        } else
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();
+        Log.d("xawjndqw", "ádasdasd");
+       kiemtrakhoitao();
     }
 
     @Override
@@ -442,6 +504,16 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             CONST.SHARE_LINK = sharedText;
             startActivity(intentMyApp);
         }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        EasyPermissions.somePermissionPermanentlyDenied(this,perms);
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
     }
 
 
