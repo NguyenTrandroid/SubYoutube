@@ -42,13 +42,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import ictandroid.youtube.com.CONST;
+import ictandroid.youtube.com.Campaign.AllChannel.FragmentAllChannel;
+import ictandroid.youtube.com.Campaign.AllChannel.GetSubFromCampaignV2Listener;
 import ictandroid.youtube.com.Campaign.CampaignChanelAdapter;
 import ictandroid.youtube.com.Campaign.ItemChanel;
 import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.Dialog.SLoading;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.Login.LoginActivity;
+import ictandroid.youtube.com.MyApp.InCampaign.GetSubFromActivityV2Listener;
 import ictandroid.youtube.com.R;
+import ictandroid.youtube.com.Utils.GetData.Interface.SubscriberOnCampaignV2Listener;
+import ictandroid.youtube.com.Utils.GetData.Models.InfoSubChannel.SubChannelItem;
+import ictandroid.youtube.com.Utils.GetData.SubcribersOnCampaign;
+import ictandroid.youtube.com.Utils.GetData.SubcribersOnHistory;
+import ictandroid.youtube.com.Utils.GetData.SubscribersOnMyApp;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -95,12 +104,19 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CloudFunction cloudFunction;
     private ArrayList<ItemHistory> listHistory;
+    private SLoading sLoadingHistory;
+    SubcribersOnHistory subcribersOnCampaign;
+    HistoryAdapter historyAdapter ;
+    GridLayoutManager layoutManager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        sLoadingHistory=new SLoading(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         cloudFunction = new CloudFunction();
@@ -142,11 +158,44 @@ public class ProfileActivity extends AppCompatActivity {
                         listHistory.add(new ItemHistory(str[0], str[1],str[2], "0"));
                     }
                     Log.d("AAA",listHistory.size()+"");
-                    HistoryAdapter historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
-                    GridLayoutManager layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
-                    rvHistory.setLayoutManager(layoutManager);
-                    rvHistory.setItemAnimator(new DefaultItemAnimator());
-                    rvHistory.setAdapter(historyAdapter);
+
+
+                    List<String> listIdChannel = new ArrayList<>();
+                    for (int i = 0; i < listHistory.size(); i++) {
+                        listIdChannel.add(listHistory.get(i).getChannelid());
+                    }
+
+
+                    subcribersOnCampaign = new SubcribersOnHistory();
+                    subcribersOnCampaign.getListSubscripbers(new SubscriberOnCampaignV2Listener() {
+                        @Override
+                        public void onCompletedListSubcriberCampaignV2(List<SubChannelItem> listSubscribers) {
+                            for (int i = 0; i < listSubscribers.size(); i++) {
+                                for (int j = 0; j < listHistory.size(); j++) {
+                                    if (listSubscribers.get(i).getItems().get(0).getId().equals(listHistory.get(j).getChannelid())) {
+                                        listHistory.get(j)
+                                                .setSub(listSubscribers.get(i)
+                                                        .getItems()
+                                                        .get(0)
+                                                        .getStatistics()
+                                                        .getSubscriberCount());
+
+                                    }
+                                }
+                            }
+
+                            historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                            layoutManager = new GridLayoutManager(ProfileActivity.this, 1);
+                            rvHistory.setLayoutManager(layoutManager);
+                            rvHistory.setItemAnimator(new DefaultItemAnimator());
+                            rvHistory.setAdapter(historyAdapter);
+                        }
+
+                        @Override
+                        public void onErrorListSubcripberCampaignV2(String error) {
+
+                        }
+                    }, CONST.KEY, listIdChannel);
                     }else {
                         /////////////////////
 
@@ -154,6 +203,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
         });
     }
+
 
 
     @OnClick({R.id.rl_history, R.id.rl_contacadmin, R.id.tv_logout, R.id.iv_back, R.id.iv_back_red, R.id.tv_clear})
@@ -194,15 +244,19 @@ public class ProfileActivity extends AppCompatActivity {
                 rlInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_clear:
+                sLoadingHistory.show();
                 cloudFunction.clearHistory(new ICloundFunction() {
                     @Override
                     public void onSuccess() {
-                        rlHistory1.setVisibility(View.INVISIBLE);
+                        listHistory.clear();
+                        historyAdapter = new HistoryAdapter(ProfileActivity.this, listHistory);
+                        rvHistory.setAdapter(historyAdapter);
+                        sLoadingHistory.dismiss();
                     }
 
                     @Override
                     public void onFailed() {
-
+                        sLoadingHistory.dismiss();
                     }
                 });
                 break;

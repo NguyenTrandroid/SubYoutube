@@ -278,6 +278,7 @@ public class CallingYoutube {
         @Override
         protected void onCancelled() {
             sLoading.dismiss();
+            getResultApiListener.onCheckSubFail();
             Log.d("tessstssts", "onCancelled: ");
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {

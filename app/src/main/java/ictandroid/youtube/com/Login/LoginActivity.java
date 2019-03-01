@@ -372,6 +372,12 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             });
         }
     }
+
+    @Override
+    public void onCheckSubFail() {
+
+    }
+
     private void addHistory(String channeldi) {
         DocumentReference docRef = db.collection("LIST").document(channeldi);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

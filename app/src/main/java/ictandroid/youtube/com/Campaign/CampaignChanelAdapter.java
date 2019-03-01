@@ -85,7 +85,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
         holder.rlCarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (itemChanel.getUserId() != uid) {
+                if (!itemChanel.getUserId().equals(auth.getUid())) {
                     onChannelClick.OnClicked(itemChanel.getChanelId());
                 }
             }

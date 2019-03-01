@@ -342,6 +342,12 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
             });
         }
     }
+
+    @Override
+    public void onCheckSubFail() {
+        kiemtra();
+    }
+
     private void addHistory(String channeldi) {
         DocumentReference docRef = db.collection("LIST").document(channeldi);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

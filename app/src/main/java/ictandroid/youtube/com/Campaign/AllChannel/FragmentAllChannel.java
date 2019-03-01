@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,6 +59,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     ArrayList<ItemChanel> appArrayList = new ArrayList<>();
     ArrayList<ItemChanel> appArrayListtemp;
     SubcribersOnCampaign subcribersOnCampaign;
+    ArrayList<String> old = new ArrayList<>();
     boolean isloaded=false;
     boolean isend=false;
     FirebaseFirestore db ;
@@ -103,6 +105,8 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
             loadmore.show();
             isloaded=true;
             Query next = db.collection("LIST")
+                    .orderBy("douutien")
+                    .orderBy("time")
                     .orderBy("points").startAt("1")
                     .startAfter(lastVisible)
                     .limit(7);
@@ -120,7 +124,23 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                             // ...
 
                             // Get the last visible document
+                            DocumentReference docRef = db.collection("USERSUB").document(auth.getUid());
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Boolean haves = false;
+                                            for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
+                                                if (String.valueOf(entry.getValue()).equals("finished")) {
+                                                    old.add(String.valueOf(entry.getKey()));
+                                                }
+                                            }
+                                        }
+                                    }
                             appArrayListAllChanel.clear();
+
                             for (int i = 0; i < documentSnapshots.size(); i++) {
                                 ItemChanel itemApp = new ItemChanel();
                                 Log.d("testquery", documentSnapshots.getDocuments().get(i).get("tenchannel") + "");
@@ -131,8 +151,9 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                 itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
                                 itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
                                 itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
-
-                                appArrayListAllChanel.add(itemApp);
+                                if(!old.contains(itemApp.getChanelId())) {
+                                    appArrayListAllChanel.add(itemApp);
+                                }
 
                             }
                             appArrayList.addAll(appArrayListAllChanel);
@@ -143,6 +164,9 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                             }catch (Exception e){
                                 Log.d("testquerys", "end");
                                 isend=true;
+                            }
+                            if(appArrayList.size()==0){
+                                loadmore2();
                             }
 
                             List<String> listIdChannel = new ArrayList<>();
@@ -156,6 +180,8 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 //                            campaignChanelAdapter.notifyDataSetChanged();
 //                            isloaded=false;
                             loadmore.dismiss();
+
+                                }});
 
                         }
                     });
@@ -184,7 +210,8 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 }
     public void loadmore(){
         Query first = db.collection("LIST")
-                .orderBy("points").startAt("1")
+                .orderBy("douutien")
+                .orderBy("time")
                 .limit(7);
 
         first.get()
@@ -200,35 +227,63 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                         // ...
 
                         // Get the last visible document
-                        appArrayListAllChanel.clear();
-                        Log.d("testquery", "loadmore1");
-                        for (int i = 0; i < documentSnapshots.size(); i++) {
-                            ItemChanel itemApp = new ItemChanel();
-                            itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
-                            itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
-                            itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
-                            itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
-                            itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
-                            itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
-                            itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
+                        DocumentReference docRef = db.collection("USERSUB").document(auth.getUid());
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Boolean haves=false;
+                                        for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
+                                            if(String.valueOf(entry.getValue()).equals("finished")){
+                                                old.add(String.valueOf(entry.getKey()));
+                                            }
+                                        }
+                                    }
+                                }
+                                appArrayListAllChanel.clear();
 
-                            appArrayListAllChanel.add(itemApp);
+                                lastVisible = documentSnapshots.getDocuments()
+                                        .get(documentSnapshots.size() -1);
+                                for (int i = 0; i < documentSnapshots.size(); i++) {
+                                    ItemChanel itemApp = new ItemChanel();
+                                    itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
+                                    itemApp.setDoUuTien((String) documentSnapshots.getDocuments().get(i).getData().get("douutien"));
+                                    itemApp.setLinkIcon((String) documentSnapshots.getDocuments().get(i).getData().get("linkanh"));
+                                    itemApp.setTime((String) documentSnapshots.getDocuments().get(i).getData().get("time"));
+                                    itemApp.setUserId((String) documentSnapshots.getDocuments().get(i).getData().get("userid"));
+                                    itemApp.setNameChanel((String) documentSnapshots.getDocuments().get(i).getData().get("tenchannel"));
+                                    itemApp.setChanelId(documentSnapshots.getDocuments().get(i).getId());
+
+                                    Log.d("testquery", "loadmore1");
+                                    if(!old.contains(itemApp.getChanelId())&&Integer.parseInt(itemApp.getDiem())>0) {
+
+                                        appArrayListAllChanel.add(itemApp);
+                                    }
 
 
-                        }
 
-                        lastVisible = documentSnapshots.getDocuments()
-                                .get(documentSnapshots.size() -1);
-                        appArrayList.addAll(appArrayListAllChanel);
-                        List<String> listIdChannel = new ArrayList<>();
-                        for (int i = 0; i < appArrayListAllChanel.size(); i++) {
-                            listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
-                        }
-                        recyclerView.setLayoutManager(gridLayoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(campaignChanelAdapter);
-                        subcribersOnCampaign = new SubcribersOnCampaign();
-                        subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+                                }
+                                Log.d("testquery", appArrayListAllChanel.size()+"");
+
+                                appArrayList.addAll(appArrayListAllChanel);
+                                if(appArrayList.size()==0){
+                                    loadmore2();
+                                }
+                                List<String> listIdChannel = new ArrayList<>();
+                                for (int i = 0; i < appArrayListAllChanel.size(); i++) {
+                                    listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
+                                }
+                                recyclerView.setLayoutManager(gridLayoutManager);
+                                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                recyclerView.setAdapter(campaignChanelAdapter);
+                                subcribersOnCampaign = new SubcribersOnCampaign();
+                                subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
+                            }
+
+                        });
+
 //
                     }
                 });
@@ -269,6 +324,30 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 
                         }
                     }
+                } catch (Exception s) {
+
+                }
+            }
+        });
+        DocumentReference doc2;
+        doc2 = db.collection("USERSUB").document(auth.getUid());
+        doc2.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                try {
+                    for (Map.Entry<String, Object> entry : documentSnapshot.getData().entrySet()) {
+
+                        if (entry.getValue().equals("finished")) {
+                            for (int j = 0; j < appArrayList.size(); j++) {
+                                if (appArrayList.get(j).getChanelId().equals(entry.getKey())) {
+                                    appArrayList.remove(j);
+                                    campaignChanelAdapter.notifyItemRemoved(j);
+                                }
+                            }
+                        }
+
+                    }
+
                 } catch (Exception s) {
 
                 }
