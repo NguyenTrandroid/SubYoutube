@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import ictandroid.youtube.com.R;
@@ -36,7 +37,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(@NonNull HistoryAdapter.ViewHolder holder, int position) {
         holder.ivBellV.setVisibility(View.VISIBLE);
         holder.tvName.setText(arrayList.get(position).getName());
-        holder.tvSoSub.setText(arrayList.get(position).getSub()+" subscribers");
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        try {
+            holder.tvSoSub.setText(formatter.format(Long.parseLong(arrayList.get(position).getSub())) + " subscribers");
+
+        } catch (Exception e){
+
+        }
         Glide.with(context).load(arrayList.get(position).getLinkAvatar()).into(holder.ivAvatar);
 
     }

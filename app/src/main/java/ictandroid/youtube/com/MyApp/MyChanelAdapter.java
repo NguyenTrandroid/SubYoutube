@@ -26,6 +26,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -83,7 +84,13 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
         }
 
         holder.tvName.setText(itemChanel.getNameChanel());
-        holder.tvSoSub.setText(itemChanel.getSoLuotSub()+" subscribers");
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        try {
+            holder.tvSoSub.setText(formatter.format(Long.parseLong(itemChanel.getSoLuotSub())) + " subscribers");
+
+        } catch (Exception e){
+
+        }
         Glide.with(context).load(itemChanel.getLinkIcon()).into(holder.ivIcon);
 
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
