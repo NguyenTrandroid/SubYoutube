@@ -21,6 +21,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Campaign.CampaignActivity"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
