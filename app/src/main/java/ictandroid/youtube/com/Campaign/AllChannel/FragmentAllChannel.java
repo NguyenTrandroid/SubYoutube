@@ -14,11 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,6 +73,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     boolean isloaded=false;
     boolean isloaded2=false;
     boolean isend=false;
+    boolean loadmorefix=false;
     FirebaseFirestore db ;
     DocumentSnapshot lastVisible;
     int scroll=0;
@@ -76,6 +81,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     GridLayoutManager gridLayoutManager;
     CollectionReference docRef;
     FirebaseAuth auth;
+    SpinKitView a;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,18 +114,19 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
     }
 
     private void loadmore2() {
+        loadmorefix=false;
         Log.d("testqueradsy", "onFailure: "  );
         if(!isend) {
             isloaded=true;
-            Log.d("testqueradsy", "onFailure: "  );
-            loadmore.dismiss();
-            loadmore.show();
+//            Log.d("testqueradsy", "onFailure: "  );
+//            loadmore.dismiss();
+//            loadmore.show();
             Query next = db.collection("LIST")
                     .orderBy("douutien")
                     .orderBy("time")
                     .orderBy("points").startAt("1")
                     .startAfter(lastVisible)
-                    .limit(7);
+                    .limit(20);
             next.get()
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -134,10 +141,13 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                             // ...
 
                             // Get the last visible document
-                            if(!isConnectingToInternet(getContext())){
-                                Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
-                                loadmore.dismiss();
-                            }
+                            try {
+
+                                if (!isConnectingToInternet(getContext())) {
+                                    Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+//                                loadmore.dismiss();
+                                }
+                            }catch (Exception e){}
                             DocumentReference docRef = db.collection("USERSUB").document(auth.getUid());
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -178,13 +188,12 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                             isend=true;
                                         }
                                         Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
-
+                                        loadmorefix=true;
                                         if(appArrayList.size()==0){
                                             Log.d("testquerys", lastVisible+"");
                                             isloaded=false;
                                             loadmore2();
                                         }
-
                                         List<String> listIdChannel = new ArrayList<>();
                                         for (int i = 0; i < appArrayListAllChanel.size(); i++) {
                                             listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
@@ -196,7 +205,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 //                            campaignChanelAdapter.notifyDataSetChanged();
 //                            isloaded=false;
                                     }
-                                    loadmore.dismiss();
+//                                    loadmore.dismiss();
 
 
                                 }});
@@ -253,10 +262,16 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 }
     public void loadmore(){
         isloaded2=true;
+        a = view.findViewById(R.id.spin_kit);
+        a.setVisibility(View.VISIBLE);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(campaignChanelAdapter);
+        recyclerView.setVisibility(View.INVISIBLE);
         Query first = db.collection("LIST")
                 .orderBy("douutien")
                 .orderBy("time")
-                .limit(7);
+                .limit(20);
 
         first.get()
                 .addOnFailureListener(new OnFailureListener() {
@@ -321,9 +336,6 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                 for (int i = 0; i < appArrayListAllChanel.size(); i++) {
                                     listIdChannel.add(appArrayListAllChanel.get(i).getChanelId());
                                 }
-                                recyclerView.setLayoutManager(gridLayoutManager);
-                                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                                recyclerView.setAdapter(campaignChanelAdapter);
                                 subcribersOnCampaign = new SubcribersOnCampaign();
                                 subcribersOnCampaign.getListSubscripbers(getContext(), CONST.KEY, listIdChannel);
                             }
@@ -420,6 +432,15 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
             }
         }
         campaignChanelAdapter.notifyDataSetChanged();
+        if(appArrayList.size()>5) {
+            a.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }else {
+            if(loadmorefix){
+                a.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
         if(isloaded2){
         isloaded=false;}
     }

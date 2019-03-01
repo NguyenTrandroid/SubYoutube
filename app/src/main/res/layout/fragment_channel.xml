@@ -4,9 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rv_listCampaign" />
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Circle"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp100"
+        android:layout_gravity="center"
+        app:SpinKit_Color="#EC5353" />
 
 </RelativeLayout>
