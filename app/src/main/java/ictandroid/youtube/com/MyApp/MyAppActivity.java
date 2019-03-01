@@ -197,6 +197,9 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Toast.makeText(MyAppActivity.this, "Channel đã tồn tại!!!", Toast.LENGTH_LONG).show();
+                        if(FragmentOther.sLoadingAddChannel!=null) {
+                            FragmentOther.sLoadingAddChannel.dismiss();
+                        }
                     } else {
                         cloudFunction.addChannel(item.getId(), item.getSnippet().getThumbnails().getMedium().getUrl(),
                                 item.getSnippet().getTitle(), "0", "0");
@@ -215,19 +218,19 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(MyAppActivity.this, "Lấy dữ liệu thất bại!", Toast.LENGTH_LONG).show();
-            if(FragmentOther.dialogAdd!=null)
-            {
-                FragmentOther.dialogAdd.cancel();
-            }
-            if(FragmentOther.sLoadingAddChannel!=null) {
-                FragmentOther.sLoadingAddChannel.dismiss();
-            }
+                        if (FragmentOther.dialogAdd != null) {
+                            FragmentOther.dialogAdd.cancel();
+                        }
+                        if (FragmentOther.sLoadingAddChannel != null) {
+                            FragmentOther.sLoadingAddChannel.dismiss();
+                        }
                     }
                 });
     }
 
     @Override
     public void onInfoError(String error) {
+        Toast.makeText(this, "Link channel không đúng!!!", Toast.LENGTH_LONG).show();
         if (FragmentOther.sLoadingAddChannel != null) {
             FragmentOther.sLoadingAddChannel.dismiss();
         }
