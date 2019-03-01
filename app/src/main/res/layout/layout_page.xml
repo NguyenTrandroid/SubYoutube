@@ -7,15 +7,15 @@
     <ImageView
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp310"
+        android:layout_height="@dimen/dp284"
         app:srcCompat="@drawable/rectangle_three" />
     <ImageView
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         app:srcCompat="@drawable/rectangle_tow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp313" />
     <RelativeLayout
         android:id="@+id/rl_page"
         android:layout_centerHorizontal="true"
@@ -24,17 +24,17 @@
         android:layout_height="wrap_content">
         <ImageView
             app:srcCompat="@drawable/rectangle_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="@dimen/dp287"
+            android:layout_height="@dimen/dp337" />
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_marginTop="@dimen/dp60"
+            android:layout_marginTop="@dimen/dp55"
             android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="@dimen/dp90"
+            android:layout_height="@dimen/dp90" />
         <TextView
             android:id="@+id/tv_name"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/dp25"
             android:textSize="@dimen/sp25"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/iv_logo"

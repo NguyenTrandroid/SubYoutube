@@ -23,11 +23,12 @@
         android:layout_marginRight="@dimen/dp30" />
 
     <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+        android:layout_marginBottom="@dimen/dp50"
+        android:layout_above="@id/tv_home"
         android:layout_centerHorizontal="true"
         android:id="@+id/dots_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/view_pager"
         android:layout_marginTop="40dp"
         app:dotsColor="#FFFF"
         app:dotsCornerRadius="@dimen/dp8"
@@ -38,6 +39,7 @@
     </com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator>
 
     <TextView
+        android:id="@+id/tv_home"
         android:layout_marginBottom="@dimen/dp50"
         android:textColor="@color/white"
         android:textSize="@dimen/dp25"

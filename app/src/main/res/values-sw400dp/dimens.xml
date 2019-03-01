@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<dimen name="dp313">298dp</dimen>
     <dimen name="dp0">0dp</dimen>
+<dimen name="dp310">295dp</dimen>
+<dimen name="dp337">320dp</dimen>
 <dimen name="dp400">380dp</dimen>
 <dimen name="dp0.5">0dp</dimen>
     <dimen name="dp320">304dp</dimen>

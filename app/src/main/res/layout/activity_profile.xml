@@ -128,8 +128,8 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_arrow_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/dp25"
+                    android:layout_height="@dimen/dp25" />
 
             </RelativeLayout>
 
@@ -161,8 +161,8 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_arrow_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/dp25"
+                    android:layout_height="@dimen/dp25" />
 
             </RelativeLayout>
             <ImageView
@@ -177,7 +177,7 @@
                 android:id="@+id/tv_logout"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp20"
-                android:layout_marginBottom="@dimen/dp20"
+                android:layout_marginBottom="@dimen/dp10"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:textColor="@color/red"
@@ -211,6 +211,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp50">
                 <TextView
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:layout_alignParentBottom="true"
                     android:id="@+id/tv_clear"
                     android:textSize="@dimen/sp25"
                     android:textColor="@color/red"
@@ -224,8 +226,8 @@
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_back_red"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/dp25"
+                    android:layout_height="@dimen/dp25" />
             </RelativeLayout>
 
 
