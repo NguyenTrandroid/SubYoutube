@@ -18,15 +18,15 @@
     <ImageView
         android:id="@+id/iv_welcome"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp200"
+        android:layout_height="@dimen/dp160"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ic_welcome_to" />
 
     <android.support.v7.widget.CardView
         android:layout_marginLeft="@dimen/dp45"
         android:layout_marginRight="@dimen/dp45"
-        android:layout_marginTop="@dimen/dp130"
-        android:layout_marginBottom="@dimen/dp130"
+        android:layout_marginTop="@dimen/dp120"
+        android:layout_marginBottom="@dimen/dp120"
         android:id="@+id/cv_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
