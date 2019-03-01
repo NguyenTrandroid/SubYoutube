@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -65,7 +66,6 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     GetSubFomActivityListener getSubFomActivityListener;
     GetSubFromActivityV2Listener getSubFromActivityV2Listener;
     AddChannelOnFirebaseListener addChannelOnFirebaseListener;
-    DocumentReference docRef;
     FirebaseFirestore db;
     GetKeySearchMyChanel getKeySearchMyChanel;
 
@@ -192,7 +192,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         Item item = chanelItem.getItems().get(0);
         db = FirebaseFirestore.getInstance();
 
-        DocumentReference docRef = db.collection("USER").document(auth.getUid());
+        DocumentReference docRef = db.collection("LIST").document(auth.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -234,6 +234,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                                 }
                                 else
                                 {
+                                    Toast.makeText(MyAppActivity.this, "Thêm channel thất bại! Channel đã tồn tại", Toast.LENGTH_LONG).show();
                                     if(FragmentOther.dialogAdd!=null)
                                     {
                                         FragmentOther.dialogAdd.cancel();
