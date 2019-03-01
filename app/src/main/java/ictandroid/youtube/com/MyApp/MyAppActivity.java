@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -107,8 +108,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
             }
         });
         viewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        if(CONST.SHARE_INTENT.equals(getIntent().getStringExtra(CONST.SHARE_INTENT)))
-        {
+        if (CONST.SHARE_INTENT.equals(getIntent().getStringExtra(CONST.SHARE_INTENT))) {
             viewpager.setCurrentItem(1);
         }
     }
@@ -122,17 +122,14 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if(CONST.IDFragment!=null)
-                {
+                if (CONST.IDFragment != null) {
                     FragmentInCampaign fragmentInCampaign = (FragmentInCampaign) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":0");
-                    if(fragmentInCampaign !=null)
-                    {
+                    if (fragmentInCampaign != null) {
                         getKeySearchMyChanel = fragmentInCampaign;
                         getKeySearchMyChanel.onGetKey(s);
                     }
                     FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.IDFragment + ":1");
-                    if(fragmentOther !=null)
-                    {
+                    if (fragmentOther != null) {
                         getKeySearchMyChanel = fragmentOther;
                         getKeySearchMyChanel.onGetKey(s);
                     }
@@ -192,67 +189,41 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
         Item item = chanelItem.getItems().get(0);
         db = FirebaseFirestore.getInstance();
 
-        DocumentReference docRef = db.collection("LIST").document(auth.getUid());
+        DocumentReference docRef = db.collection("LIST").document(item.getId());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        for (Map.Entry<String, Object> entry : task.getResult().getData().entrySet()) {
-                            if ("listadd".equals(entry.getKey())) {
-                                Map<String, Object> nestedData = (Map<String, Object>) entry.getValue();
-                                int sizeHash = 0;
-                                boolean existed = false;
-                                Log.d("VALUE", "item: " + item.getId());
-                                for (Map.Entry<String, Object> entryNested : nestedData.entrySet()) {
-                                    sizeHash++;
-                                    if (entryNested.getKey().equals(item.getId()) && sizeHash != nestedData.size()) {
-                                        Log.d("FFFF", "trufng");
-                                        if (FragmentOther.sLoadingAddChannel != null) {
-                                            FragmentOther.sLoadingAddChannel.dismiss();
-                                        }
-                                        if (FragmentOther.dialogAdd != null) {
-                                            FragmentOther.dialogAdd.cancel();
-                                        }
-                                    }
-                                    if (entryNested.getKey().equals(item.getId())) {
-                                        existed = true;
-                                    }
-
-                                }
-                                if (!existed) {
-                                    cloudFunction.addChannel(item.getId(), item.getSnippet().getThumbnails().getMedium().getUrl(),
-                                            item.getSnippet().getTitle(), "0", "0");
-                                    if (CONST.tagFragmentOther != null) {
-                                        FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
-                                        if (fragmentOther != null) {
-                                            addChannelOnFirebaseListener = (AddChannelOnFirebaseListener) fragmentOther;
-                                            addChannelOnFirebaseListener.onCompletedAddChannel(chanelItem.getItems().get(0).getId());
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    Toast.makeText(MyAppActivity.this, "Thêm channel thất bại! Channel đã tồn tại", Toast.LENGTH_LONG).show();
-                                    if(FragmentOther.dialogAdd!=null)
-                                    {
-                                        FragmentOther.dialogAdd.cancel();
-                                    }
-                                    if(FragmentOther.sLoadingAddChannel!=null)
-                                    {
-                                        FragmentOther.sLoadingAddChannel.dismiss();
-                                    }
-                                }
-                            }
-
-                        }
+                        Toast.makeText(MyAppActivity.this, "Channel đã tồn tại!!!", Toast.LENGTH_LONG).show();
                     } else {
-
+                        cloudFunction.addChannel(item.getId(), item.getSnippet().getThumbnails().getMedium().getUrl(),
+                                item.getSnippet().getTitle(), "0", "0");
+                        if (CONST.tagFragmentOther != null) {
+                            FragmentOther fragmentOther = (FragmentOther) getSupportFragmentManager().findFragmentByTag("android:switcher:" + CONST.tagFragmentOther + ":1");
+                            if (fragmentOther != null) {
+                                addChannelOnFirebaseListener = (AddChannelOnFirebaseListener) fragmentOther;
+                                addChannelOnFirebaseListener.onCompletedAddChannel(chanelItem.getItems().get(0).getId());
+                            }
+                        }
                     }
                 }
             }
-        });
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MyAppActivity.this, "Lấy dữ liệu thất bại!", Toast.LENGTH_LONG).show();
+            if(FragmentOther.dialogAdd!=null)
+            {
+                FragmentOther.dialogAdd.cancel();
+            }
+            if(FragmentOther.sLoadingAddChannel!=null) {
+                FragmentOther.sLoadingAddChannel.dismiss();
+            }
+                    }
+                });
     }
 
     @Override
