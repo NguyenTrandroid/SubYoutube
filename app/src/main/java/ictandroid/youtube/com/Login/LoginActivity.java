@@ -84,6 +84,9 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         /**
          *
          */
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
         initView();
         cloudFunction = new CloudFunction();
         callingYoutube=new CallingYoutube(this);
@@ -127,9 +130,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 .build();
         // [END config_signin]
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        mFunctions = FirebaseFunctions.getInstance();
+
 //        signOut();
 
 
@@ -171,22 +172,40 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             relativeLayout.setVisibility(View.VISIBLE);
             CallingYoutube.mCredential=null;
         } else {
-            Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
-            imageView.setAnimation(animation);
-            CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                }
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            String type = intent.getType();
 
-                @Override
-                public void onFinish() {
+            if (Intent.ACTION_SEND.equals(action) && type != null) {
+                if ("text/plain".equals(type))
+                {
                     if (auth.getCurrentUser() != null) {
                         kiemtrakhoitao();
                     } else {
                         relativeLayout.setVisibility(View.VISIBLE);
                     }
                 }
-            }.start();
+            }
+            else
+            {
+                Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
+                imageView.setAnimation(animation);
+                CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        if (auth.getCurrentUser() != null) {
+                            kiemtrakhoitao();
+                        } else {
+                            relativeLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }.start();
+            }
+
         }
     }
 
