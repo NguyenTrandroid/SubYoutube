@@ -96,8 +96,6 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvClear;
     @BindView(R.id.rl_history1)
     RelativeLayout rlHistory1;
-    @BindView(R.id.tv_title)
-    ImageView tvTitle;
     @BindView(R.id.iv_back_red)
     ImageView ivBackRed;
     @BindView(R.id.rv_history)
