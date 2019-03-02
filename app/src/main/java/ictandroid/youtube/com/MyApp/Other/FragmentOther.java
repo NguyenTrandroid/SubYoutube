@@ -266,7 +266,7 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                 if (sLoadingAddChannel != null)
                     sLoadingAddChannel.dismiss();
                 if (dialogAdd != null)
-                    dialogAdd.cancel();
+                    dialogAdd.dismiss();
             }
         }
     }
