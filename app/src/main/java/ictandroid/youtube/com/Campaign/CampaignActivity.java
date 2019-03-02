@@ -117,7 +117,6 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
     protected void onResume() {
         super.onResume();
         if(intentyoutube){
-            Log.d("testresume", "onResume: ");
             intentyoutube=false;
             kiemtra();
         }
@@ -148,7 +147,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
 
                         }
                     }else {
-
+                        skiemtra.dismiss();
                     }
                 }
             }

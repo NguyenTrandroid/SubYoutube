@@ -64,6 +64,7 @@ import ictandroid.youtube.com.CloudFunction;
 import ictandroid.youtube.com.ICloundFunction;
 import ictandroid.youtube.com.MainActivity;
 import ictandroid.youtube.com.MyApp.MyAppActivity;
+import ictandroid.youtube.com.Profile.ProfileActivity;
 import ictandroid.youtube.com.R;
 import ictandroid.youtube.com.Utils.CallingYoutube.CallingYoutube;
 import ictandroid.youtube.com.Utils.CallingYoutube.GetResultApiListener;
@@ -185,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         relativeLayout = findViewById(R.id.rl_login);
         if (getIntent().getStringExtra("action") != null) {
             relativeLayout.setVisibility(View.VISIBLE);
-            CallingYoutube.mCredential=null;
+            CallingYoutube.mCredential.setSelectedAccountName(null);
         } else {
             Intent intent = getIntent();
             String action = intent.getAction();
@@ -268,11 +269,35 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                                      @Override
                                      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                          if (task.isSuccessful()) {
-
                                                if (task.getResult().exists()) {
-                                                   kiemtra();
+                                                   if(Integer.parseInt(task.getResult().getData().get("enable")+"")==0){
+                                                       Toast.makeText(LoginActivity.this, "Account disable", Toast.LENGTH_SHORT).show();
 
-                                                 kiemtrataikhoan();
+                                                       auth.signOut();
+                                                       mGoogleSignInClient.signOut().addOnCompleteListener(LoginActivity.this,
+                                                               new OnCompleteListener<Void>() {
+                                                                   @Override
+                                                                   public void onComplete(@NonNull Task<Void> task) {
+                                                                       relativeLayout.setVisibility(View.VISIBLE);
+                                                                       CallingYoutube.mCredential.setSelectedAccountName(null);
+                                                                   }
+
+
+                                                               });
+                                                   }else {
+                                                       kiemtra();
+                                                       Intent intent = getIntent();
+                                                       String action = intent.getAction();
+                                                       String type = intent.getType();
+
+                                                       if (Intent.ACTION_SEND.equals(action) && type != null) {
+                                                           if ("text/plain".equals(type))
+                                                               handleSendText(intent); // Handle text being sent
+                                                       } else {
+                                                           startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                           finish();
+                                                       }
+                                                   }
 
                                              } else {
                                                  cloudFunction.addNewUser(icAddNewUser);
@@ -304,20 +329,11 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
 
                         Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
                         startActivity(intent);
-                        finishAffinity();
+                        finish();
                     }
                     else
                     {
-                        Intent intent = getIntent();
-                        String action = intent.getAction();
-                        String type = intent.getType();
 
-                        if (Intent.ACTION_SEND.equals(action) && type != null) {
-                            if ("text/plain".equals(type))
-                                handleSendText(intent); // Handle text being sent
-                        } else
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
                     }
                     userpoint = Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
                     username = String.valueOf(documentSnapshot.get("name"));
