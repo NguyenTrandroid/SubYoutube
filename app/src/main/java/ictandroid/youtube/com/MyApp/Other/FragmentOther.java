@@ -214,11 +214,15 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                             }
                         }
                         arrayList = arrayListAllChanel;
-//                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-//                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//                        myChanelAdapter.notifyDataSetChanged();
-//                        recyclerView.setAdapter(myChanelAdapter);
+                        if(arrayList.size()==0)
+                        {
+                            myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            myChanelAdapter.notifyDataSetChanged();
+                            recyclerView.setAdapter(myChanelAdapter);
+                        }
+
 
                         List<String> listIdChannel = new ArrayList<>();
                         for (int i = 0; i < arrayList.size(); i++) {

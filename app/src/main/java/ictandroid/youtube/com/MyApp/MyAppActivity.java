@@ -249,7 +249,11 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onErrorListSubcripber(String error) {
-
+        if(sLoading!=null)
+        {
+            sLoading.dismiss();
+            Log.d("ERRRORR","er1");
+        }
     }
 
     @Override
@@ -265,6 +269,10 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onErrorListSubcripberV2(String error) {
-
+        if(sLoading!=null)
+        {
+            sLoading.dismiss();
+            Log.d("ERRRORR","er2");
+        }
     }
 }

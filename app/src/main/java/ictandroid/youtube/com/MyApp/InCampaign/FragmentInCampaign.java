@@ -115,6 +115,7 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                                         arrayListAllChanel.add(itemMyChanel);
                                 }
                             }
+                            Log.d("SIZEEEE: ",arrayListAllChanel.size()+"");
                             TextView txtCoin = getActivity().findViewById(R.id.tv_coin);
                             if(CONST.COIN!=-1)
                             {
@@ -130,11 +131,15 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
                             }
                         }
                         arrayList = arrayListAllChanel;
-//                        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-//                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-//                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//                        myChanelAdapter.notifyDataSetChanged();
-//                        recyclerView.setAdapter(myChanelAdapter);
+                        if(arrayList.size()==0)
+                        {
+                            myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            myChanelAdapter.notifyDataSetChanged();
+                            recyclerView.setAdapter(myChanelAdapter);
+                        }
+
 
                         List<String> listIdChannel = new ArrayList<>();
                         for (int i = 0; i < arrayList.size(); i++) {
@@ -153,25 +158,37 @@ public class FragmentInCampaign extends Fragment implements GetSubFromActivityV2
 
     @Override
     public void onCompletedSubV2FromActivity(List<SubChannelItem> lisSubChannelItem) {
-        for(int i=0;i<lisSubChannelItem.size();i++)
+        if(arrayList.size()!=0)
         {
-            for(int j=0;j<arrayList.size();j++)
+            for(int i=0;i<lisSubChannelItem.size();i++)
             {
-                if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
+                for(int j=0;j<arrayList.size();j++)
                 {
-                    arrayList.get(j).setSoLuotSub(lisSubChannelItem.get(i)
-                    .getItems()
-                    .get(0)
-                    .getStatistics()
-                    .getSubscriberCount());
+                    if(lisSubChannelItem.get(i).getItems().get(0).getId().equals(arrayList.get(j).getChanelId()))
+                    {
+                        arrayList.get(j).setSoLuotSub(lisSubChannelItem.get(i)
+                                .getItems()
+                                .get(0)
+                                .getStatistics()
+                                .getSubscriberCount());
+                    }
                 }
             }
+            myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            myChanelAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(myChanelAdapter);
         }
-        myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        myChanelAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(myChanelAdapter);
+        else
+        {
+            myChanelAdapter = new MyChanelAdapter(getContext(), arrayList);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            myChanelAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(myChanelAdapter);
+        }
+
         MyAppActivity.sLoading.dismiss();
     }
 
