@@ -101,13 +101,13 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         mFunctions = FirebaseFunctions.getInstance();
-        initView();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        initView();
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
@@ -271,16 +271,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
 
                                                if (task.getResult().exists()) {
                                                    kiemtra();
-                                                   Intent intent = getIntent();
-                                                   String action = intent.getAction();
-                                                   String type = intent.getType();
 
-                                                   if (Intent.ACTION_SEND.equals(action) && type != null) {
-                                                       if ("text/plain".equals(type))
-                                                           handleSendText(intent); // Handle text being sent
-                                                   } else
-                                                       startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                                   finish();
                                                  kiemtrataikhoan();
 
                                              } else {
@@ -306,11 +297,27 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     if (Integer.parseInt(String.valueOf(documentSnapshot.get("enable"))) == 0) {
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra("action", "account disable");
+
                         Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
                         startActivity(intent);
                         finishAffinity();
+                    }
+                    else
+                    {
+                        Intent intent = getIntent();
+                        String action = intent.getAction();
+                        String type = intent.getType();
+
+                        if (Intent.ACTION_SEND.equals(action) && type != null) {
+                            if ("text/plain".equals(type))
+                                handleSendText(intent); // Handle text being sent
+                        } else
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
                     userpoint = Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
                     username = String.valueOf(documentSnapshot.get("name"));
@@ -393,7 +400,6 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             callingYoutube.getChannelFromApi();
 //                            addNewUser();
                             // Sign in success, update UI with the signed-in user's information
