@@ -5,7 +5,7 @@ public class CONST {
     public static String tagFragmentMyChannel = null;
     public static final String KEY = "AIzaSyBU_oWEIULi3-n96vWKETYCMsldYDAlz2M";
     public static final String SHARE_INTENT = "SHARE_INTENT";
-    public static String SHARE_LINK = null;
+    public static String SHARE_LINK = "SHARE_LINK";
     public static long COIN = -1;
     public static String IDFragment = null;
     public static int sizeOtherFragment = 0;

@@ -537,10 +537,11 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
-            Intent intentMyApp = new Intent(LoginActivity.this, MyAppActivity.class);
-            intentMyApp.putExtra(CONST.SHARE_INTENT,CONST.SHARE_INTENT);
-            CONST.SHARE_LINK = sharedText;
+
+            Intent intentMyApp = new Intent(LoginActivity.this, MainActivity.class);
+            intentMyApp.putExtra(CONST.SHARE_INTENT,sharedText);
             startActivity(intentMyApp);
+            finishAffinity();
         }
     }
 

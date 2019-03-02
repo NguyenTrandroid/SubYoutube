@@ -18,7 +18,6 @@
         <activity android:name=".Profile.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".MyApp.MyAppActivity"
-            android:launchMode="singleInstance"
             
             android:screenOrientation="portrait" />
         <activity android:name=".Campaign.CampaignActivity"

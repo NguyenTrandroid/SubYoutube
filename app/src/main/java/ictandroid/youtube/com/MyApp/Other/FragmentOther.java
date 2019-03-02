@@ -106,7 +106,8 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
     private void InitAction() {
         loadApp();
         addApp();
-        if (CONST.SHARE_LINK != null) {
+        if(getActivity().getIntent().getStringExtra(CONST.SHARE_LINK)!=null)
+        {
             imageView.performClick();
         }
     }
@@ -141,12 +142,15 @@ public class FragmentOther extends Fragment implements GetSubFomActivityListener
                 dialogAdd.setContentView(R.layout.dialog_add_chanel);
                 dialogAdd.setCanceledOnTouchOutside(false);
                 EditText editText = dialogAdd.findViewById(R.id.ed_input);
-                if (CONST.SHARE_LINK != null) {
-                    editText.setText(CONST.SHARE_LINK);
-                }
+
                 Button buttonOK = dialogAdd.findViewById(R.id.bt_thaydoi);
                 Button buttonCancle = dialogAdd.findViewById(R.id.bt_cancel);
                 dialogAdd.show();
+                if(getActivity().getIntent().getStringExtra(CONST.SHARE_LINK)!=null)
+                {
+                    Log.d("FFFFFFFFF",getActivity().getIntent().getStringExtra(CONST.SHARE_LINK));
+                    editText.setText(getActivity().getIntent().getStringExtra(CONST.SHARE_LINK));
+                }
                 buttonOK.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

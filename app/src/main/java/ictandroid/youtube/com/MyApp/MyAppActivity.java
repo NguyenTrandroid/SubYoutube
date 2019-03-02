@@ -76,6 +76,8 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_app);
+        if (getIntent().getStringExtra(CONST.SHARE_LINK) != null)
+            Log.d("FFFFFFFFF", getIntent().getStringExtra(CONST.SHARE_LINK));
         ButterKnife.bind(this);
         init();
         initViewPager();
@@ -199,7 +201,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Toast.makeText(MyAppActivity.this, "Channel đã tồn tại!!!", Toast.LENGTH_LONG).show();
-                        if(FragmentOther.sLoadingAddChannel!=null) {
+                        if (FragmentOther.sLoadingAddChannel != null) {
                             FragmentOther.sLoadingAddChannel.dismiss();
                         }
                     } else {
@@ -251,10 +253,9 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onErrorListSubcripber(String error) {
-        if(sLoading!=null)
-        {
+        if (sLoading != null) {
             sLoading.dismiss();
-            Log.d("ERRRORR","er1");
+            Log.d("ERRRORR", "er1");
         }
     }
 
@@ -262,7 +263,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     protected void onDestroy() {
         SharedPreferences sharedPreferences = getSharedPreferences(CONST.NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(CONST.KEY,System.currentTimeMillis());
+        editor.putLong(CONST.KEY, System.currentTimeMillis());
         editor.commit();
         super.onDestroy();
     }
@@ -280,10 +281,9 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onErrorListSubcripberV2(String error) {
-        if(sLoading!=null)
-        {
+        if (sLoading != null) {
             sLoading.dismiss();
-            Log.d("ERRRORR","er2");
+            Log.d("ERRRORR", "er2");
         }
     }
 }

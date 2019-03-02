@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -34,6 +35,16 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+        if(getIntent().getStringExtra(CONST.SHARE_INTENT)!=null)
+        {
+            Log.d("GGGGGGG",getIntent().getStringExtra(CONST.SHARE_INTENT));
+                Intent intent = new Intent(MainActivity.this,MyAppActivity.class);
+
+                intent.putExtra(CONST.SHARE_LINK,getIntent().getStringExtra(CONST.SHARE_INTENT));
+                startActivity(intent);
+
+        }
         ButterKnife.bind(this);
         init();
 //        cloudFunction = new CloudFunction();
