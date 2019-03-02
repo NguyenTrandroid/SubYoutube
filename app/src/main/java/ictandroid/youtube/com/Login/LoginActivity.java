@@ -95,12 +95,18 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         /**
          *
          */
+        cloudFunction = new CloudFunction();
+        callingYoutube=new CallingYoutube(this);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         mFunctions = FirebaseFunctions.getInstance();
         initView();
-        cloudFunction = new CloudFunction();
-        callingYoutube=new CallingYoutube(this);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         icAddNewUser = new ICloundFunction() {
             @Override
             public void onSuccess() {
@@ -137,12 +143,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
         /**
          *
          */
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
 
 //        signOut();
 
@@ -211,8 +212,6 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                     @Override
                     public void onFinish() {
                         if (auth.getCurrentUser() != null) {
-//                            kiemtrakhoitao();
-
                             callingYoutube.getChannelFromApi();
                         } else {
                             relativeLayout.setVisibility(View.VISIBLE);

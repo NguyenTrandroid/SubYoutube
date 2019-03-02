@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    signingConfigs {
-        nhat {
-            keyAlias 'nhat'
-            keyPassword 'Sdt0909228923'
-            storeFile file('C:/Users/trann/Desktop/keystore.jks')
-            storePassword 'Sdt0909228923'
-        }
-    }
+//    signingConfigs {
+//        nhat {
+//            keyAlias 'nhat'
+//            keyPassword 'Sdt0909228923'
+//            storeFile file('C:/Users/trann/Desktop/keystore.jks')
+//            storePassword 'Sdt0909228923'
+//        }
+//    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "ictandroid.youtube.com"
@@ -31,7 +31,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.nhat
+            //signingConfig signingConfigs.nhat
         }
     }
     compileOptions {
