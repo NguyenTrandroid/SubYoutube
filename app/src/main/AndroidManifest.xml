@@ -18,19 +18,15 @@
         <activity android:name=".Profile.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".MyApp.MyAppActivity"
-            android:screenOrientation="portrait"
-            android:launchMode= "singleInstance"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".Campaign.CampaignActivity"
-            android:screenOrientation="portrait"
-            android:launchMode= "singleInstance"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Login.LoginActivity"
-            android:screenOrientation="portrait"
-            android:launchMode= "singleInstance">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
