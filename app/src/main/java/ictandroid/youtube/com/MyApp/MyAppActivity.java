@@ -1,5 +1,7 @@
 package ictandroid.youtube.com.MyApp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -250,6 +252,15 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     @Override
     public void onErrorListSubcripber(String error) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPreferences = getSharedPreferences(CONST.NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(CONST.KEY,System.currentTimeMillis());
+        editor.commit();
+        super.onDestroy();
     }
 
     @Override

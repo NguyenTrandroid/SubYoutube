@@ -10,4 +10,6 @@ public class CONST {
     public static String IDFragment = null;
     public static int sizeOtherFragment = 0;
     public static int sizeCampaignInMyApp = 0;
+    public static String NAME = "timeyoutube";
+    public static String TIME = "timeoff";
 }

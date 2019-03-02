@@ -1,7 +1,9 @@
 package ictandroid.youtube.com.Campaign;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -153,6 +155,14 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPreferences = getSharedPreferences(CONST.NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(CONST.KEY,System.currentTimeMillis());
+        editor.commit();
+        super.onDestroy();
+    }
     private void initAction() {
         svCamp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
