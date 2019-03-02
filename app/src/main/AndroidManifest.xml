@@ -16,8 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Profile.ProfileActivity"
-            android:screenOrientation="portrait"
-            android:launchMode= "singleInstance"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".MyApp.MyAppActivity"
             android:screenOrientation="portrait"
             android:launchMode= "singleInstance"/>
@@ -27,8 +26,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode= "singleInstance"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.LoginActivity"
             android:screenOrientation="portrait"

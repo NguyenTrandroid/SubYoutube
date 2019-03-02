@@ -309,9 +309,8 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("action", "account disable");
                         Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
-//                            finishAffinity();
                         startActivity(intent);
-                        finish();
+                        finishAffinity();
                     }
                     userpoint = Integer.parseInt(String.valueOf(documentSnapshot.get("points")));
                     username = String.valueOf(documentSnapshot.get("name"));
