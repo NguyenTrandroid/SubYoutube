@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -202,27 +203,44 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
             }
             else
             {
-                Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
-                imageView.setAnimation(animation);
-                CountDownTimer countDownTimer = new CountDownTimer(4000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        if (auth.getCurrentUser() != null) {
-                            callingYoutube.getChannelFromApi();
-                        } else {
-                            relativeLayout.setVisibility(View.VISIBLE);
+                SharedPreferences sharedPreferences = getSharedPreferences(CONST.NAME,Context.MODE_PRIVATE);
+                if((System.currentTimeMillis()-sharedPreferences.getLong(CONST.KEY,0))>1800000){
+                    Log.d("AAAAA1", "initView: "+sharedPreferences.getLong(CONST.KEY,0)+"__"+(System.currentTimeMillis()-sharedPreferences.getLong(CONST.KEY,0)));
+                    Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation);
+                    imageView.setAnimation(animation);
+                    CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
                         }
+
+                        @Override
+                        public void onFinish() {
+                            if (auth.getCurrentUser() != null) {
+                                callingYoutube.getChannelFromApi();
+                            } else {
+                                relativeLayout.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }.start();
+                } else {
+                    if (auth.getCurrentUser() != null) {
+                        callingYoutube.getChannelFromApi();
+                    } else {
+                        relativeLayout.setVisibility(View.VISIBLE);
                     }
-                }.start();
+                }
             }
 
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPreferences = getSharedPreferences(CONST.NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(CONST.KEY,System.currentTimeMillis());
+        editor.commit();
+        super.onDestroy();
+    }
     public static boolean isConnectingToInternet(Context context) {
 
         ConnectivityManager cm =
