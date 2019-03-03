@@ -180,12 +180,13 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                         }
                                         appArrayList.addAll(appArrayListAllChanel);
                                         Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
-                                        try {
+                                        if(documentSnapshots.getDocuments().size()>0){
                                             lastVisible = documentSnapshots.getDocuments()
                                                     .get(documentSnapshots.size() - 1);
-                                        }catch (Exception e){
+                                        }else {
                                             isend=true;
                                         }
+
                                         Log.d("testsizesss", "onSuccess: "+documentSnapshots.size()+"/"+appArrayListAllChanel.size());
                                         loadmorefix=true;
                                         if(appArrayList.size()==0){
@@ -302,8 +303,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                                 }
                                 appArrayListAllChanel.clear();
 
-                                lastVisible = documentSnapshots.getDocuments()
-                                        .get(documentSnapshots.size() -1);
+
                                 for (int i = 0; i < documentSnapshots.size(); i++) {
                                     ItemChanel itemApp = new ItemChanel();
                                     itemApp.setDiem((String) documentSnapshots.getDocuments().get(i).getData().get("points"));
@@ -323,7 +323,12 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 
 
                                 }
-                                Log.d("testquery", appArrayListAllChanel.size()+"");
+                                if(documentSnapshots.getDocuments().size()>0){
+                                    lastVisible = documentSnapshots.getDocuments()
+                                            .get(documentSnapshots.size() -1);
+                                }else {
+
+                                }
 
                                 appArrayList.addAll(appArrayListAllChanel);
                                 Log.d("nhaaaaa", appArrayList.size()+"");
