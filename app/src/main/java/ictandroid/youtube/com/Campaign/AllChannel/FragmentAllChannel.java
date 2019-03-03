@@ -122,9 +122,8 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
 //            loadmore.dismiss();
 //            loadmore.show();
             Query next = db.collection("LIST")
-                    .orderBy("douutien")
-                    .orderBy("time")
-                    .orderBy("points").startAt("1")
+                    .orderBy("douutien", Query.Direction.DESCENDING)
+                    .orderBy("time", Query.Direction.ASCENDING)
                     .startAfter(lastVisible)
                     .limit(20);
             next.get()
@@ -269,8 +268,8 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
         recyclerView.setAdapter(campaignChanelAdapter);
         recyclerView.setVisibility(View.INVISIBLE);
         Query first = db.collection("LIST")
-                .orderBy("douutien")
-                .orderBy("time")
+                .orderBy("douutien", Query.Direction.DESCENDING)
+                .orderBy("time", Query.Direction.ASCENDING)
                 .limit(20);
 
         first.get()
@@ -431,6 +430,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                 }
             }
         }
+
         campaignChanelAdapter.notifyDataSetChanged();
         if(appArrayList.size()>5) {
             a.setVisibility(View.GONE);
