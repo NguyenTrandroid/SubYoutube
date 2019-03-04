@@ -32,27 +32,27 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     WormDotsIndicator dotsIndicator;
     CloudFunction cloudFunction;
     private InterstitialAd mInterstitialAd;
+    boolean isClick = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("LIFEEE","onCreate1");
+        Log.d("LIFEEE", "onCreate1");
 
         super.onCreate(savedInstanceState);
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-        Log.d("LIFEEE","onCreate2");
+        Log.d("LIFEEE", "onCreate2");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        if(getIntent().getStringExtra(CONST.SHARE_INTENT)!=null)
-        {
-            Log.d("GGGGGGG",getIntent().getStringExtra(CONST.SHARE_INTENT));
-                Intent intent = new Intent(MainActivity.this,MyAppActivity.class);
+        if (getIntent().getStringExtra(CONST.SHARE_INTENT) != null) {
+            Log.d("GGGGGGG", getIntent().getStringExtra(CONST.SHARE_INTENT));
+            Intent intent = new Intent(MainActivity.this, MyAppActivity.class);
 
-                intent.putExtra(CONST.SHARE_LINK,getIntent().getStringExtra(CONST.SHARE_INTENT));
-                startActivity(intent);
+            intent.putExtra(CONST.SHARE_LINK, getIntent().getStringExtra(CONST.SHARE_INTENT));
+            startActivity(intent);
 
         }
         ButterKnife.bind(this);
@@ -103,7 +103,9 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
-                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+                if (isClick)
+                    startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+                isClick = false;
             }
 
             @Override
@@ -120,7 +122,9 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
             public void onAdClosed() {
                 // Code to be executed when the interstitial ad is closed.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+                if (isClick)
+                    startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+                isClick = false;
             }
         });
     }
@@ -146,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     public void sendPageSelect(int page) {
         switch (page) {
             case 0:
+                isClick = true;
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 } else {

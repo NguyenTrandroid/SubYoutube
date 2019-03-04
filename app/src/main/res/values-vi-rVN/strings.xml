@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Youtube Sub Exchange</string>
+    <string name="search">sang đẹp choai =)))</string>
+    <string name="facebook_app_id">412504279295436</string>
+    <string name="interstitial_full_screen">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="login_in_google">ĐĂNG NHẬP QUA TÀI KHOẢN GOOGLE</string>
+    <string name="dont_have_account">Không có tài khoản</string>
+    <string name="sign_up">Đăng Kí</string>
+    <string name="campaign">Chiến dịch</string>
+    <string name="title_campaign">Tổng quan các kênh trong chiến dich</string>
+    <string name="home">Trang chủ</string>
+    <string name="my_channel">Kênh của tôi</string>
+    <string name="title_myChannel">Quản lý các kênh cá nhân</string>
+    <string name="information">Thông tin</string>
+    <string name="title_information">Quản lý thông tin cá nhân</string>
+    <string name="find_channel">Tìm kiếm kênh</string>
+    <string name="all_channel">TẤT CẢ KÊNH</string>
+    <string name="my_channel_onCampaign">KÊNH CỦA TÔI</string>
+    <string name="title_edit">THAY ĐỔI LƯỢT ĐĂNG KÍ</string>
+    <string name="update">CẬP NHẬT</string>
+    <string name="cancel">HUỶ BỎ</string>
+    <string name="title_remove">GỠ BỎ KÊNH RA KHỎI CHIẾN DỊCH</string>
+    <string name="yes">CÓ</string>
+    <string name="put_into_campaign">ĐƯA VÀO CHIẾN DỊCH</string>
+    <string name="add_channels">THÊM KÊNH</string>
+    <string name="link_channel">Địa chỉ kênh:</string>
+    <string name="total_point">TỔNG ĐIỂM HIỆN CÓ</string>
+    <string name="history">LỊCH SỬ ĐĂNG KÍ</string>
+    <string name="contact_admin">LIÊN HỆ ADMIN</string>
+    <string name="log_out">ĐĂNG XUẤT</string>
+    <string name="delete_history">XOÁ LỊCH SỬ</string>
+    <string name="check_your_internet">Kiểm tra kết nối internet của bạn</string>
+    <string name="out_of_points_to_plus">Bạn đã hết điểm để cộng</string>
+    <string name="out_of_points_to_minus">Kênh của bạn đã hết điểm để trừ</string>
+    <string name="loading_video">Đang load video...</string>
+    <string name="received_point">Bạn đã nhận được 10 điểm thưởng</string>
+    <string name="must_view_all_video">Bạn phải xem hết video để lấy điểm thưởng</string>
+    <string name="channel_existed">Kênh đã tồn tại</string>
+    <string name="get_data_failed">Lấy dữ liệu thất bại</string>
+    <string name="succeeded">Thành công</string>
+    <string name="failed">Thất bại</string>
+    <string name="account_disable">Tài khoản đã bị vô hiệu hoá</string>
+</resources>

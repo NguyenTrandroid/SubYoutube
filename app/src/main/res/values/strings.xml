@@ -1,6 +1,43 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Youtube Sub Exchange</string>
     <string name="search">sang đẹp trai</string>
     <string name="facebook_app_id">412504279295436</string>
     <string name="interstitial_full_screen">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="login_in_google">LOGIN IN VIVA GOOGLE ACCOUNT</string>
+    <string name="dont_have_account" tools:ignore="StringEscaping">Don't have an account</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="campaign">Campaign</string>
+    <string name="title_campaign">Overview of channels in the campaign</string>
+    <string name="home">HOME</string>
+    <string name="my_channel">My Channels</string>
+    <string name="title_myChannel">Manage my channels</string>
+    <string name="information">Information</string>
+    <string name="title_information">Personal information management</string>
+    <string name="find_channel">Find a channel</string>
+    <string name="all_channel">ALL CHANNELS</string>
+    <string name="my_channel_onCampaign">MY CHANNELS</string>
+    <string name="title_edit">CHANGE REGISTRATION NUMBER</string>
+    <string name="update">UPDATE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="title_remove">REMOVE THE CHANNEL FROM THE CAMPAIGN</string>
+    <string name="yes">YES</string>
+    <string name="put_into_campaign">PUT INTO CAMPAIGN</string>
+    <string name="add_channels">Add Channel</string>
+    <string name="link_channel">Link channel:</string>
+    <string name="total_point">TOTAL POINTS AVAILABLE</string>
+    <string name="history">REGISTRATION HISTORY</string>
+    <string name="contact_admin">CONTACT ADMIN</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="delete_history">DELETE HISTORY</string>
+    <string name="check_your_internet">Check your internet connection</string>
+    <string name="out_of_points_to_plus">You are out of points to plus</string>
+    <string name="out_of_points_to_minus">Your channel has run out of points to minus</string>
+    <string name="loading_video">Loading video...</string>
+    <string name="received_point">You have received 10 bonus points</string>
+    <string name="must_view_all_video">You must watch all this video to get the bonus points</string>
+    <string name="channel_existed">Channel already exists</string>
+    <string name="get_data_failed">Get data failed</string>
+    <string name="succeeded">Succeeded</string>
+    <string name="failed">Failed</string>
+    <string name="account_disable">The account has been disabled</string>
 </resources>
