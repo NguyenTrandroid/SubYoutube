@@ -2,10 +2,10 @@ package ictandroid.youtube.com.Viewpager;
 
 public class ItemPage {
     int drawbale;
-    String txtName;
-    String content;
+    int txtName;
+    int content;
 
-    public ItemPage(int drawbale, String txtName, String content) {
+    public ItemPage(int drawbale, int txtName, int content) {
         this.drawbale = drawbale;
         this.txtName = txtName;
         this.content = content;
@@ -19,19 +19,19 @@ public class ItemPage {
         this.drawbale = drawbale;
     }
 
-    public String getTxtName() {
+    public int getTxtName() {
         return txtName;
     }
 
-    public void setTxtName(String txtName) {
+    public void setTxtName(int txtName) {
         this.txtName = txtName;
     }
 
-    public String getContent() {
+    public int getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(int content) {
         this.content = content;
     }
 }

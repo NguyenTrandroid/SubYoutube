@@ -243,7 +243,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         btnNhanThuong = findViewById(R.id.btnNhanThuong);
         sopenyoutube = new SLoading(this);
         skiemtra = new SLoading(this);
-        svCamp.setQueryHint(Html.fromHtml("<font color = #ffffff>" + "Find a chanel..." + "</font>"));
+        svCamp.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getString(R.string.find_channel) + "</font>"));
         svCamp.onActionViewExpanded();
         svCamp.setFocusable(false);
         svCamp.clearFocus();

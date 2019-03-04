@@ -144,7 +144,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
     }
 
     private void init() {
-        svMyapp.setQueryHint(Html.fromHtml("<font color = #ffffff>" + "Find a chanel..." + "</font>"));
+        svMyapp.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getString(R.string.find_channel) + "</font>"));
         svMyapp.onActionViewExpanded();
         svMyapp.setFocusable(false);
         svMyapp.clearFocus();

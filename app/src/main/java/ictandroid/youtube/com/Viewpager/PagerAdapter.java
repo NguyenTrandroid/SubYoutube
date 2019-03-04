@@ -20,9 +20,9 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter {
     OnPageSelect onPageSelect;
 
     private static final List<ItemPage> pages =
-            Arrays.asList(new ItemPage(R.drawable.fightlogo, "Campaign","Overview of channels in the campaign"),
-                    new ItemPage(R.drawable.myapps, "My Channels","Manage my channels"),
-                    new ItemPage(R.drawable.user, "Information","Personal information management"));
+            Arrays.asList(new ItemPage(R.drawable.fightlogo, R.string.campaign,R.string.title_campaign),
+                    new ItemPage(R.drawable.myapps, R.string.my_channel,R.string.title_myChannel),
+                    new ItemPage(R.drawable.user, R.string.information,R.string.title_information));
 
 
     @NonNull
@@ -42,7 +42,6 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter {
             @Override
             public void onClick(View v) {
                 onPageSelect.sendPageSelect(position);
-
             }
         });
 
