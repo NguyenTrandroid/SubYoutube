@@ -40,6 +40,14 @@
             android:text="100"
             android:textColor="#FFFF"
             android:textSize="@dimen/sp20" />
+        <Button
+            android:textColor="@color/red"
+            android:text="Nhận thưởng"
+            android:id="@+id/btnNhanThuong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tv_coin"
+            android:layout_marginRight="@dimen/dp20" />
 
         <ImageView
             android:layout_width="match_parent"

@@ -15,12 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Profile.ProfileActivity"
+        <activity
+            android:name=".Profile.ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MyApp.MyAppActivity"
-            
+        <activity
+            android:name=".MyApp.MyAppActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Campaign.CampaignActivity"
+        <activity
+            android:name=".Campaign.CampaignActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
@@ -30,13 +32,26 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
     </application>
+
 </manifest>

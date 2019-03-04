@@ -8,6 +8,10 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 import butterknife.BindView;
@@ -27,11 +31,17 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     @BindView(R.id.dots_indicator)
     WormDotsIndicator dotsIndicator;
     CloudFunction cloudFunction;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("LIFEEE","onCreate1");
+
         super.onCreate(savedInstanceState);
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        Log.d("LIFEEE","onCreate2");
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
@@ -77,6 +87,51 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+            }
+        });
+    }
+
+//    private void loadInterstitialAd()
+//    {
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .build();
+//        mInterstitialAd.loadAd(adRequest);
+//    }
+
     private void init() {
         PagerAdapter adapter = new PagerAdapter();
         viewPager.setAdapter(adapter);
@@ -91,7 +146,12 @@ public class MainActivity extends AppCompatActivity implements OnPageSelect {
     public void sendPageSelect(int page) {
         switch (page) {
             case 0:
-                startActivity(new Intent(MainActivity.this, CampaignActivity.class));
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
+
                 break;
             case 1:
                 startActivity(new Intent(MainActivity.this, MyAppActivity.class));
