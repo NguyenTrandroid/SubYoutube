@@ -44,4 +44,6 @@
     <string name="cancel_oncmapaign">HUỶ BỎ</string>
     <string name="title_view_video">Xem video để nhận 10 điểm thưởng</string>
     <string name="incorrect_link">Địa chỉ kênh không đúng!</string>
+    <string name="in_campaign">CHIẾN DỊCH</string>
+    <string name="other">KHÁC</string>
 </resources>

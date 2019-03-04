@@ -43,4 +43,6 @@
     <string name="cancel_oncmapaign">CANCEL</string>
     <string name="title_view_video">Watch the video to receive 10 bonus points</string>
     <string name="incorrect_link">Channel address is incorrect</string>
+    <string name="in_campaign">IN CAMPAIGN</string>
+    <string name="other">OTHER</string>
 </resources>
