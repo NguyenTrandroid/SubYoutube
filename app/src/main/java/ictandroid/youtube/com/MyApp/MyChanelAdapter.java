@@ -138,7 +138,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                          *gõ bỏ kênh
                          */
                         if(!isConnectingToInternet(context)){
-                            Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
 
                             dialogRemove.cancel();
                         }else {
@@ -223,7 +223,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                         a++;
                                         pointsUser--;
                                     } else {
-                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_plus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(a + "");
                                 }
@@ -239,7 +239,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                         b--;
                                         pointsUser++;
                                     } else {
-                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_minus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(b + "");
                                 }
@@ -251,7 +251,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                      *cập nhật điểm
                                      */
                                     if(!isConnectingToInternet(context)){
-                                        Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
 
                                         dialogEdit.dismiss();
                                     }else {
@@ -355,7 +355,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                         a++;
                                         pointsUser--;
                                     } else {
-                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_plus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(a + "");
                                 }
@@ -371,7 +371,7 @@ public class MyChanelAdapter extends RecyclerView.Adapter<MyChanelAdapter.ViewHo
                                         b--;
                                         pointsUser++;
                                     } else {
-                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_minus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(b + "");
                                 }

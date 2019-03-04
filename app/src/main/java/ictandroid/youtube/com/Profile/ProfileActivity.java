@@ -257,7 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.tv_clear:
                 if(!isConnectingToInternet(this)){
-                    Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
                 }else {
                     sLoadingHistory.show();
                     cloudFunction.clearHistory(new ICloundFunction() {

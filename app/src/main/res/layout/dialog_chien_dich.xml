@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp20"
-            android:text="Đưa vào chiến dịch"
+            android:text="@string/put_into_campaign"
             android:textAllCaps="true"
             android:textColor="@color/red"
             android:textSize="@dimen/dp20" />
@@ -69,18 +69,18 @@
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="Có"
+                android:text="@string/yes"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/white" />
 
             <Button
                 android:layout_marginLeft="@dimen/dp5"
                 android:id="@+id/bt_cancel"
-                android:layout_width="@dimen/dp70"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="HỦY"
+                android:text="@string/cancel"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/black" />
         </LinearLayout>

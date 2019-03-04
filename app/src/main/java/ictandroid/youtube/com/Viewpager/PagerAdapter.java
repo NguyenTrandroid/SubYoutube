@@ -1,6 +1,7 @@
 package ictandroid.youtube.com.Viewpager;
 
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -19,9 +20,9 @@ public class PagerAdapter extends android.support.v4.view.PagerAdapter {
     OnPageSelect onPageSelect;
 
     private static final List<ItemPage> pages =
-            Arrays.asList(new ItemPage(R.drawable.fightlogo, "Campaign", "Tổng quan các kênh trong chiến dịch"),
-                    new ItemPage(R.drawable.myapps, "My Applications", "Quản lý các ứng dụng cá nhân"),
-                    new ItemPage(R.drawable.user, "Infomation", "Quản lý thông tin cá nhân"));
+            Arrays.asList(new ItemPage(R.drawable.fightlogo, "Campaign","Overview of channels in the campaign"),
+                    new ItemPage(R.drawable.myapps, "My Channels","Manage my channels"),
+                    new ItemPage(R.drawable.user, "Information","Personal information management"));
 
 
     @NonNull

@@ -36,7 +36,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:fontFamily="@font/avant_garde"
-                android:text="log in viva google account"
+                android:text="@string/login_in_google"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp18" />
         </android.support.v7.widget.CardView>
@@ -51,7 +51,7 @@
                 android:fontFamily="@font/avant_garde"
                 android:textSize="@dimen/dp18"
                 android:textColor="@color/textred"
-                android:text="Don't have an account?"
+                android:text="@string/dont_have_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -60,7 +60,7 @@
                 android:textColor="@color/white"
                 android:fontFamily="@font/avant_garde"
                 android:textSize="@dimen/dp18"
-                android:text="Sign Up"
+                android:text="@string/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

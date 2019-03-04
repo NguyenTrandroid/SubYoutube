@@ -127,19 +127,19 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
 
             @Override
             public void onFailed() {
-                Toast.makeText(LoginActivity.this, "Check your internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
             }
         };
         icAddUserSub = new ICloundFunction() {
             @Override
             public void onSuccess() {
-                Toast.makeText(LoginActivity.this, "Thanh Cong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.succeeded, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed() {
 
-                Toast.makeText(LoginActivity.this, "That Bai", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
             }
         };
         /**
@@ -254,7 +254,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
     }
     private void kiemtrakhoitao() {
         if(!isConnectingToInternet(LoginActivity.this)){
-            Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
             relativeLayout.setVisibility(View.VISIBLE);
         }
 
@@ -271,7 +271,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                                          if (task.isSuccessful()) {
                                                if (task.getResult().exists()) {
                                                    if(Integer.parseInt(task.getResult().getData().get("enable")+"")==0){
-                                                       Toast.makeText(LoginActivity.this, "Account disable", Toast.LENGTH_SHORT).show();
+                                                       Toast.makeText(LoginActivity.this, R.string.account_disable, Toast.LENGTH_SHORT).show();
 
                                                        auth.signOut();
                                                        mGoogleSignInClient.signOut().addOnCompleteListener(LoginActivity.this,
@@ -305,7 +305,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
 
 
                                          } else {
-                                             Toast.makeText(LoginActivity.this, "check iternet", Toast.LENGTH_SHORT).show();
+                                             Toast.makeText(LoginActivity.this, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
                                          }
                                      }
 
@@ -327,7 +327,7 @@ public class LoginActivity extends AppCompatActivity implements GetResultApiList
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra("action", "account disable");
 
-                        Toast.makeText(LoginActivity.this, "Account Disable", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, R.string.account_disable, Toast.LENGTH_LONG).show();
                         startActivity(intent);
                         finish();
                     }

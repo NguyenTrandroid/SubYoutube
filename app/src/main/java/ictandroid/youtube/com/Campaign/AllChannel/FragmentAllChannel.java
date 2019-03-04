@@ -143,7 +143,7 @@ public class FragmentAllChannel extends Fragment implements GetSubFromCampaignV2
                             try {
 
                                 if (!isConnectingToInternet(getContext())) {
-                                    Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.check_your_internet, Toast.LENGTH_SHORT).show();
 //                                loadmore.dismiss();
                                 }
                             }catch (Exception e){}

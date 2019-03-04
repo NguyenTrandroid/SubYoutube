@@ -4,7 +4,7 @@
     <string name="facebook_app_id">412504279295436</string>
     <string name="interstitial_full_screen">ca-app-pub-3940256099942544/1033173712</string>
     <string name="login_in_google">LOGIN IN VIVA GOOGLE ACCOUNT</string>
-    <string name="dont_have_account" tools:ignore="StringEscaping">Don't have an account</string>
+    <string name="dont_have_account">Dont have an account</string>
     <string name="sign_up">Sign Up</string>
     <string name="campaign">Campaign</string>
     <string name="title_campaign">Overview of channels in the campaign</string>
@@ -40,4 +40,7 @@
     <string name="succeeded">Succeeded</string>
     <string name="failed">Failed</string>
     <string name="account_disable">The account has been disabled</string>
+    <string name="cancel_oncmapaign">CANCEL</string>
+    <string name="title_view_video">Watch the video to receive 10 bonus points</string>
+    <string name="incorrect_link">Channel address is incorrect</string>
 </resources>

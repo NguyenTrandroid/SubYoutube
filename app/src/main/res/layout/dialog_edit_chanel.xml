@@ -16,7 +16,7 @@
             android:layout_marginTop="@dimen/dp20"
             android:layout_gravity="center"
             android:textAllCaps="true"
-            android:text="Thay đổi lượt đăng kí"
+            android:text="@string/title_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <LinearLayout
@@ -68,7 +68,7 @@
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="Cập nhật"
+                android:text="@string/update"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/white" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="HỦY BỎ"
+                android:text="@string/cancel_oncmapaign"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/black" />
         </LinearLayout>

@@ -41,4 +41,7 @@
     <string name="succeeded">Thành công</string>
     <string name="failed">Thất bại</string>
     <string name="account_disable">Tài khoản đã bị vô hiệu hoá</string>
+    <string name="cancel_oncmapaign">HUỶ BỎ</string>
+    <string name="title_view_video">Xem video để nhận 10 điểm thưởng</string>
+    <string name="incorrect_link">Địa chỉ kênh không đúng!</string>
 </resources>

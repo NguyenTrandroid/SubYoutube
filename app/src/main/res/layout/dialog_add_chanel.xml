@@ -16,14 +16,14 @@
             android:layout_marginTop="@dimen/dp20"
             android:layout_gravity="center"
             android:textAllCaps="true"
-            android:text="Thêm kênh"
+            android:text="@string/add_channels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:textSize="@dimen/dp13"
             android:layout_marginTop="@dimen/dp25"
             android:layout_gravity="center"
-            android:text="Địa chỉ kênh:"
+            android:text="@string/link_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
@@ -51,18 +51,18 @@
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_red"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="OK"
+                android:text="Ok"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/white" />
 
             <Button
                 android:layout_marginLeft="@dimen/dp5"
                 android:id="@+id/bt_cancel"
-                android:layout_width="@dimen/dp70"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp35"
                 android:background="@drawable/custom_button_black"
                 android:fontFamily="@font/avant_garde_bold"
-                android:text="HỦY"
+                android:text="@string/cancel"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/black" />
         </LinearLayout>

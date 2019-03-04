@@ -41,11 +41,12 @@
             android:textColor="#FFFF"
             android:textSize="@dimen/sp20" />
         <Button
+            android:background="@drawable/ic_gift_box"
             android:textColor="@color/red"
-            android:text="Nhận thưởng"
             android:id="@+id/btnNhanThuong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dp42"
+            android:layout_height="@dimen/dp42"
             android:layout_toLeftOf="@id/tv_coin"
             android:layout_marginRight="@dimen/dp20" />
 
@@ -92,12 +93,12 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TẤT CẢ KÊNH" />
+            android:text="@string/all_channel" />
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="KÊNH CỦA TÔI" />
+            android:text="@string/my_channel_onCampaign" />
 
 
     </android.support.design.widget.TabLayout>

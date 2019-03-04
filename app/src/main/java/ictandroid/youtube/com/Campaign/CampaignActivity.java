@@ -231,7 +231,7 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                         }
                         else
                         {
-                            Toast.makeText(CampaignActivity.this, "Đang load video....", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CampaignActivity.this, R.string.loading_video, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -517,11 +517,11 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
         loadRewardedVideoAd();
         if(getAwarded)
         {
-            Toast.makeText(this, "Bạn đã nhận được 10 điểm thưởng!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.received_point, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(this, "Phải xem hết video mới nhận được điểm thưởng!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.must_view_all_video, Toast.LENGTH_SHORT).show();
         }
 
     }

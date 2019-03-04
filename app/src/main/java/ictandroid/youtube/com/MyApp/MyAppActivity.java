@@ -200,7 +200,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Toast.makeText(MyAppActivity.this, "Channel đã tồn tại!!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MyAppActivity.this, R.string.channel_existed, Toast.LENGTH_LONG).show();
                         if (FragmentOther.sLoadingAddChannel != null) {
                             FragmentOther.sLoadingAddChannel.dismiss();
                         }
@@ -221,7 +221,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MyAppActivity.this, "Lấy dữ liệu thất bại!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MyAppActivity.this, R.string.get_data_failed, Toast.LENGTH_LONG).show();
                         if (FragmentOther.dialogAdd != null) {
                             FragmentOther.dialogAdd.cancel();
                         }
@@ -234,7 +234,7 @@ public class MyAppActivity extends AppCompatActivity implements MyChanelAdapter.
 
     @Override
     public void onInfoError(String error) {
-        Toast.makeText(this, "Link channel không đúng!!!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.incorrect_link, Toast.LENGTH_LONG).show();
         if (FragmentOther.sLoadingAddChannel != null) {
             FragmentOther.sLoadingAddChannel.dismiss();
         }

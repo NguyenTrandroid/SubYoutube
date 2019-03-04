@@ -148,7 +148,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                          *gỡ bỏ kênh
                          */
                         if(!isConnectingToInternet(context)){
-                            Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
                             dialogRemove.dismiss();
                         }else {
                             myChannelInterface.delete(itemChanel.getChanelId());
@@ -230,7 +230,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                                         a++;
                                         pointsUser--;
                                     } else {
-                                        Toast.makeText(context, "Bạn đã hết điểm để cộng", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_plus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(a + "");
                                 }
@@ -246,7 +246,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                                         b--;
                                         pointsUser++;
                                     } else {
-                                        Toast.makeText(context, "Kênh của bạn đã hết điểm để trừ", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.out_of_points_to_minus, Toast.LENGTH_SHORT).show();
                                     }
                                     tvDiem.setText(b + "");
                                 }
@@ -258,7 +258,7 @@ public class CampaignChanelAdapter extends RecyclerView.Adapter<CampaignChanelAd
                                      *cập nhật điểm
                                      */
                                     if(!isConnectingToInternet(context)){
-                                        Toast.makeText(context, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.check_your_internet, Toast.LENGTH_SHORT).show();
 
                                         dialogEdit.dismiss();
                                     }else {
