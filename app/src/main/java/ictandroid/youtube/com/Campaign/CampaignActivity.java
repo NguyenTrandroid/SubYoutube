@@ -30,6 +30,7 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.api.services.youtube.model.Channel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -166,7 +167,13 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                     }
                 }
             }
-        });
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        skiemtra.dismiss();
+                    }
+                });
     }
 
     @Override
