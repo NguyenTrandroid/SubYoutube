@@ -358,7 +358,13 @@ public class CampaignActivity extends AppCompatActivity implements CampaignChane
                 }
 
             }
-        });
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        sopenyoutube.dismiss();
+                    }
+                });
 
     }
 
